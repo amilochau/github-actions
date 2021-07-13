@@ -35,6 +35,7 @@ jobs:
           projectsToBuild: ${{ env.PROJECTS_BUILD }}
           projectsToPublish: ${{ env.PROJECTS_SDK }}
           versionFile: ${{ env.VERSION_FILE }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Inputs
@@ -44,6 +45,7 @@ jobs:
 | `versionFile` | The path to the file where the version can be found - must be an XML file | **true** |
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
 | `projectsToPublish` | The path to the projects to publish - can be a .csproj or a .sln file | **true** |
+| `githubToken` | The GitHub Token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
 
 ### Outputs
@@ -72,6 +74,7 @@ steps:
     projectsToBuild: ${{ env.PROJECTS_BUILD }}
     projectsToPublish: ${{ env.PROJECTS_SDK }}
     versionFile: ${{ env.VERSION_FILE }}
+    githubToken: ${{ secrets.GITHUB_TOKEN }}
 
 # Use outputs here 
 - name: Check outputs

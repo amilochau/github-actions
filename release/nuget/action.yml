@@ -11,6 +11,9 @@ inputs:
   projectsToPublish:
     description: "The path to the projects to publish - can be a .csproj or a .sln file"
     required: true
+  githubToken:
+    description: "The GitHub Token, typically get from secrets.GITHUB_TOKEN"
+    required: true
   mainBranch:
     description: "The name of the main branch"
     default: 'refs/heads/main'
@@ -72,4 +75,4 @@ runs:
           gh release create ${{ env.VERSION_NUMBER }} --notes "Version ${{ env.VERSION_NUMBER }}" --draft
         fi
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.githubToken }}
