@@ -13,27 +13,34 @@ Use this GitHub action if you want have one or many .NET libraries that you want
 ### Example workflow
 
 ```yaml
-name: My Workflow
+name: Deploy libraries
+
 on: workflow_dispatch
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@main
-    - name: Manage release
-      # Reference the current GitHub Action
-      uses: milochaucom/github-actions/release/nuget@main
-      # Reference the Action variables
-      with:
-        test: true
+      - uses: actions/checkout@main
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          source-url: ${{ env.NUGET_URL }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy libraries
+        uses: milochaucom/github-actions/release/nuget@main
+        with:
+          projectsToBuild: ${{ env.PROJECTS_BUILD }}
+          projectsToPublish: ${{ env.PROJECTS_SDK }}
+          versionFile: ${{ env.VERSION_FILE }}
 ```
 
 ### Inputs
 
 | Input | Description | Required | Default value |
 | ----- | ----------- | -------- | ------------- |
-| `dotnetVersion` | The .NET SDK version to install | **true** |
-| `nugetUrl` | The URL of the NuGet feed | **true** |
 | `versionFile` | The path to the file where the version can be found - must be an XML file | **true** |
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
 | `projectsToPublish` | The path to the projects to publish - can be a .csproj or a .sln file | **true** |
@@ -48,30 +55,26 @@ jobs:
 
 ## Examples
 
-### Using the optional input
-
-This is how to use the optional input.
-
-```yaml
-with:
-  test: true
-```
-
-### Using outputs
-
-Show people how to use your outputs in another action.
-
 ```yaml
 steps:
 - uses: actions/checkout@main
-- name: Manage release
+- name: Setup .NET Core
+  uses: actions/setup-dotnet@v1
+  with:
+    dotnet-version: ${{ inputs.dotnetVersion }}
+    source-url: ${{ inputs.nugetUrl }}
+  env:
+    NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+- name: Deploy libraries
   id: actions_release
     uses: milochaucom/github-actions/release/nuget@main
   with:
-    test: true
+    projectsToBuild: ${{ env.PROJECTS_BUILD }}
+    projectsToPublish: ${{ env.PROJECTS_SDK }}
+    versionFile: ${{ env.VERSION_FILE }}
 
 # Use outputs here 
 - name: Check outputs
     run: |
-    echo "Outputs - ${{ steps.actions_release.outputs.testOutput }}"
+    echo "Version number: ${{ steps.actions_release.outputs.versionNumber }}"
 ```

@@ -2,12 +2,6 @@ name: "Release NuGet packages"
 description: "Package, publish and release .NET libraries as NuGet packages into GitHub Packages"
 author: "Antoine Milochau"
 inputs:
-  dotnetVersion:
-    description: "The .NET SDK version to install"
-    required: true
-  nugetUrl:
-    description: "The URL of the NuGet feed"
-    required: true
   versionFile:
     description: "The path to the file where the version can be found - must be an XML file"
     required: true
@@ -46,21 +40,16 @@ runs:
         echo "::set-output name=versionPrerelease::${{ env.VERSION_PRERELEASE }}"
       shell: bash
     - name: Check prerelease if not main branch
-      if: ${{ github.ref != inputs.mainBranch && env.VERSION_PRERELEASE != 'true' }}
       shell: bash
       run: |
-        echo You can not publish a pre-release package if you are not in the main branch
-        echo Version: ${{ env.VERSION_NUMBER }}
-        echo Pre-release: ${{ env.VERSION_PRERELEASE }}
-        echo Branch: ${{ github.ref }}
-        exit 1
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: ${{ inputs.dotnetVersion }}
-        source-url: ${{ inputs.nugetUrl }}
-      env:
-        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if [${{ github.ref != inputs.mainBranch && env.VERSION_PRERELEASE != 'true' }}]
+        then
+          echo You can not publish a pre-release package if you are not in the main branch
+          echo Version: ${{ env.VERSION_NUMBER }}
+          echo Pre-release: ${{ env.VERSION_PRERELEASE }}
+          echo Branch: ${{ github.ref }}
+          exit 1
+        fi
     - name: Restore dependencies
       shell: bash
       run: dotnet restore ${{ inputs.projectsToBuild }}
@@ -70,11 +59,6 @@ runs:
     - name: Pack SDK
       shell: bash
       run: dotnet pack ${{ inputs.projectsToPublish }} --configuration Release --no-restore --no-build --output ./build
-    - name: Upload SDK as artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: sdk
-        path: ./build
     - name: Publish SDK to GPR
       shell: bash
       run: dotnet nuget push ./build/*.nupkg
