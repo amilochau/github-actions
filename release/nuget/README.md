@@ -30,7 +30,7 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy libraries
-        uses: milochaucom/github-actions/release/nuget@main
+        uses: milochaucom/github-actions/release/nuget@v1
         with:
           projectsToBuild: ${{ env.PROJECTS_BUILD }}
           projectsToPublish: ${{ env.PROJECTS_SDK }}
@@ -69,7 +69,7 @@ steps:
     NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 - name: Deploy libraries
   id: actions_release
-    uses: milochaucom/github-actions/release/nuget@main
+    uses: milochaucom/github-actions/release/nuget@v1
   with:
     projectsToBuild: ${{ env.PROJECTS_BUILD }}
     projectsToPublish: ${{ env.PROJECTS_SDK }}

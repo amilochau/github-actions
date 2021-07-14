@@ -4,8 +4,13 @@
 
 This file lists all the changes in the `github-actions` GitHub actions.
 
-## Version 0.1.0
+## Version 1.0.0
+
+> Current `v1` tag.
+
+> Current `v1.0.0` tag.
 
 New features:
 
-- Introduces a new `release/nuget` GitHub Action, to build and publish .NET libraries with release management
+- Introduces a new `build/netcore` GitHub Action, to build and test .NET Core applications
+- Introduces a new `release/nuget` GitHub Action, to publish .NET libraries with release management
