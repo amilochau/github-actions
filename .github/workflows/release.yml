@@ -28,15 +28,15 @@ jobs:
       - name: Format versions
         id: format-versions
         run: |
-          if [${{ inputs.unstableSuffixVersion }} != '']
+          if [${{ github.event.inputs.unstableSuffixVersion }} != '']
           then
-            longVersion=v${{ inputs.majorVersion }}.${{ inputs.minorVersion }}.${{ inputs.patchVersion }}-${{ inputs.unstableSuffixVersion }}
+            longVersion=v${{ github.event.inputs.majorVersion }}.${{ github.event.inputs.minorVersion }}.${{ github.event.inputs.patchVersion }}-${{ github.event.inputs.unstableSuffixVersion }}
           else
-            longVersion=v${{ inputs.majorVersion }}.${{ inputs.minorVersion }}.${{ inputs.patchVersion }}
+            longVersion=v${{ github.event.inputs.majorVersion }}.${{ github.event.inputs.minorVersion }}.${{ github.event.inputs.patchVersion }}
           fi
           echo "::set-output name=longVersion::$(longVersion)"
 
-          shortVersion=v${{ inputs.majorVersion }}
+          shortVersion=v${{ github.event.inputs.majorVersion }}
           echo "::set-output name=shortVersion::$(shortVersion)"
       - name: Remove precedent tags for short and long versions
         run: |
