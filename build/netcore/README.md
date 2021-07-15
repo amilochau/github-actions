@@ -2,7 +2,7 @@
 
 ## Introduction
 
-`milochaucom/github-actions/build/netcore` is a GitHub Action developed to build and test .NET Core projects.
+`amilochau/github-actions/build/netcore` is a GitHub Action developed to build and test .NET Core projects.
 
 ---
 
@@ -27,7 +27,7 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Build and test projects
-        uses: milochaucom/github-actions/build/netcore@v1
+        uses: amilochau/github-actions/build/netcore@v1
         with:
           projectsToBuild: ${{ env.PROJECTS_BUILD }}
           projectsToTest: ${{ env.PROJECTS_TESTS }}

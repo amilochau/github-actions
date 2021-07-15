@@ -2,7 +2,7 @@
 
 ## Introduction
 
-`github-actions` is a set of GitHub Actions developed to help defining workflows for `milochaucom` organization.
+`github-actions` is a set of GitHub Actions developed to help defining workflows for `amilochau` projects.
 
 ## Getting Started
 
@@ -23,4 +23,4 @@ The following actions are proposed, and can be freely used:
 
 | Path | Usage | Readme |
 | ---- | ----- | ------ |
-| `milochaucom/github-actions/release/nuget@main` | Release .NET libraries as NuGet packages into GitHub Packages | [README.md](./release/nuget/README.md) |
+| `amilochau/github-actions/release/nuget@main` | Release .NET libraries as NuGet packages into GitHub Packages | [README.md](./release/nuget/README.md) |

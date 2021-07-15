@@ -2,7 +2,7 @@
 
 ## Introduction
 
-`milochaucom/github-actions/release/nuget` is a GitHub Action developed to pack .NET libraries as NuGet packages, publish them into GitHub Packages, and create a custom Release in the GitHub repository.
+`amilochau/github-actions/release/nuget` is a GitHub Action developed to pack .NET libraries as NuGet packages, publish them into GitHub Packages, and create a custom Release in the GitHub repository.
 
 ---
 
@@ -30,7 +30,7 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy libraries
-        uses: milochaucom/github-actions/release/nuget@v1
+        uses: amilochau/github-actions/release/nuget@v1
         with:
           projectsToBuild: ${{ env.PROJECTS_BUILD }}
           projectsToPublish: ${{ env.PROJECTS_SDK }}
@@ -69,7 +69,7 @@ steps:
     NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 - name: Deploy libraries
   id: actions_release
-    uses: milochaucom/github-actions/release/nuget@v1
+    uses: amilochau/github-actions/release/nuget@v1
   with:
     projectsToBuild: ${{ env.PROJECTS_BUILD }}
     projectsToPublish: ${{ env.PROJECTS_SDK }}
