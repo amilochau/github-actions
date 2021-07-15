@@ -1,15 +1,15 @@
-name: "Build .NET Core projects"
-description: "Build and test .NET Core projects"
-author: "Antoine Milochau"
+name: Build .NET Core projects
+description: Build and test .NET Core projects
+author: Antoine Milochau
 inputs:
   projectsToBuild:
-    description: "The path to the projects to build - can be a .csproj or a .sln file"
+    description: The path to the projects to build - can be a .csproj or a .sln file
     required: true
   projectsToTest:
-    description: "The path to the projects to test - can be a .csproj or a .sln file"
+    description: The path to the projects to test - can be a .csproj or a .sln file
     required: true
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: Restore dependencies
       shell: bash
