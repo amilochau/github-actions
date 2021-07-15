@@ -12,7 +12,7 @@ on:
       versionPatch:
         description: Patch version - must be changed when you make backwards compatible bug fixes
         required: true
-      versionUunstableSuffix:
+      versionUnstableSuffix:
         description: Unstable suffix version - must be added when you want to create a pre-release
         required: false
         default: ''
@@ -32,15 +32,14 @@ jobs:
       - name: Format versions
         id: format-versions
         run: |
-          if [ -z "${{ github.event.inputs.versionUunstableSuffix }}" ]
+          if [ -z ${{ github.event.inputs.versionUnstableSuffix }} ]
           then
-            versionLong=v${{ github.event.inputs.versionMajor }}.${{ github.event.inputs.versionMinor }}.${{ github.event.inputs.versionPatch }}-${{ github.event.inputs.versionUunstableSuffix }}
+            versionLong=v${{ github.event.inputs.versionMajor }}.${{ github.event.inputs.versionMinor }}.${{ github.event.inputs.versionPatch }}-${{ github.event.inputs.versionUnstableSuffix }}
             echo "::set-output name=versionPrerelease::true"
           else
             versionLong=v${{ github.event.inputs.versionMajor }}.${{ github.event.inputs.versionMinor }}.${{ github.event.inputs.versionPatch }}
             echo "::set-output name=versionPrerelease::false"
           fi
-          echo Prerelease: $versionPrerelease
           echo Set long version to $versionLong
           echo "::set-output name=versionLong::$versionLong"
 
