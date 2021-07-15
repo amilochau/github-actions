@@ -32,7 +32,7 @@ jobs:
       - name: Format versions
         id: format-versions
         run: |
-          if [ ${{ github.event.inputs.versionUnstableSuffix != '' }} ]
+          if [ ${{ github.event.inputs.versionUnstableSuffix }} != '' ];
           then
             versionLong=v${{ github.event.inputs.versionMajor }}.${{ github.event.inputs.versionMinor }}.${{ github.event.inputs.versionPatch }}-${{ github.event.inputs.versionUnstableSuffix }}
             echo "::set-output name=versionPrerelease::$('true')"
