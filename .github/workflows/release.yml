@@ -48,7 +48,7 @@ jobs:
           echo "::set-output name=versionShort::$versionShort"
       - name: Check prerelease if not main branch
         run: |
-          if [ ${{ github.ref != env.MAIN_BRANCH && steps.format-versions.outputs.versionPrerelease != 'true' }} ]
+          if [ ${{ github.ref }} != ${{ env.MAIN_BRANCH }} ] && [ ${{ steps.format-versions.outputs.versionPrerelease }} != 'true' ];
           then
             echo You can not publish a pre-release package if you are not in the main branch
             echo Pre-release: ${{ steps.format-versions.outputs.versionPrerelease }}
