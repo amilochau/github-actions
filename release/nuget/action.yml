@@ -47,7 +47,7 @@ runs:
     - name: Check prerelease if not main branch
       shell: bash
       run: |
-        if [ ${{ github.ref != inputs.mainBranch && env.VERSION_PRERELEASE != 'true' }} ]
+        if [ ${{ github.ref != inputs.mainBranch && env.VERSION_PRERELEASE != 'true' }} ];
         then
           echo You can not publish a pre-release package if you are not in the main branch
           echo Version: ${{ env.VERSION_NUMBER }}
