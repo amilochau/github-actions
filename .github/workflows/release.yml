@@ -24,15 +24,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      versionLong:
-        description: Long version (formatted as vX.Y.Z-s)
-        value: ${{ steps.format-versions.outputs.versionLong }}
-      versionShort:
-        description: Short version (formatted as vX)
-        value: ${{ steps.format-versions.outputs.versionShort }}
-      versionPrerelease:
-        description: If the version is recognized as a prerelease
-        value: ${{ steps.format-versions.outputs.versionPrerelease }}
+      versionLong: ${{ steps.format-versions.outputs.versionLong }}
+      versionShort: ${{ steps.format-versions.outputs.versionShort }}
+      versionPrerelease: ${{ steps.format-versions.outputs.versionPrerelease }}
     steps:
       - uses: actions/checkout@v2
       - name: Format versions
