@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      majorVersion:
+        description: Major version - must be changed when you make incompatible API changes
+        required: true
+      minorVersion:
+        description: Minor version - must be changed when you add functionality in a backward compatible manner
+        required: true
+      patchVersion:
+        description: Patch version - must be changed when you make backwards compatible bug fixes
+        required: true
+      unstableSuffixVersion:
+        description: Unstable suffix version - must be added when you want to create a pre-release
+        required: false
+        default: ''
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      longVersion: ${{ steps.format-versions.outputs.longVersion }}
+      shortVersion: ${{ steps.format-versions.outputs.shortVersion }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Format versions
+        id: format-versions
+        run: |
+          if [${{ inputs.unstableSuffixVersion }} != '']
+          then
+            longVersion=v${{ inputs.majorVersion }}.${{ inputs.minorVersion }}.${{ inputs.patchVersion }}-${{ inputs.unstableSuffixVersion }}
+          else
+            longVersion=v${{ inputs.majorVersion }}.${{ inputs.minorVersion }}.${{ inputs.patchVersion }}
+          fi
+          echo "::set-output name=longVersion::$(longVersion)"
+
+          shortVersion=v${{ inputs.majorVersion }}
+          echo "::set-output name=shortVersion::$(shortVersion)"
+      - name: Remove precedent tags for short and long versions
+        run: |
+          git push origin :refs/tags/{{ steps.format-versions.outputs.shortVersion }}
+          git push origin :refs/tags/{{ steps.format-versions.outputs.longVersion }}
+      - name: Set short and long versions tags
+        run: |
+          git tag -fa {{ steps.format-versions.outputs.shortVersion }}
+          git tag -fa {{ steps.format-versions.outputs.longVersion }}
+          git push origin master --tags
