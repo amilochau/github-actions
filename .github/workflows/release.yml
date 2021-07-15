@@ -70,9 +70,9 @@ jobs:
         run: |
           if [ ${{ steps.format-versions.outputs.versionPrerelease }} == 'true' ];
           then
-            gh release create ${{ steps.format-versions.outputs.versionLong }} --notes "Version ${{ steps.format-versions.outputs.versionLong }}" --draft --prerelease
+            gh release create ${{ steps.format-versions.outputs.versionLong }} --titles "Version ${{ steps.format-versions.outputs.versionLong }}" --notes-file CHANGELOG.md --draft --prerelease
           else
-            gh release create ${{ steps.format-versions.outputs.versionLong }} --notes "Version ${{ steps.format-versions.outputs.versionLong }}" --draft
+            gh release create ${{ steps.format-versions.outputs.versionLong }} --titles "Version ${{ steps.format-versions.outputs.versionLong }}" --notes-file CHANGELOG.md --draft
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
