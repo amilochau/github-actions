@@ -65,7 +65,7 @@ jobs:
           git config --global user.name "Github Actions"
           git tag -fa ${{ steps.format-versions.outputs.versionShort }} -m 'Version ${{ steps.format-versions.outputs.versionLong }}'
           git tag -fa ${{ steps.format-versions.outputs.versionLong }} -m 'Version ${{ steps.format-versions.outputs.versionLong }}'
-          git push origin ${{ env.MAIN_BRANCH }} --tags
+          git push origin --tags
       - name: Create GitHub Release
         run: |
           if [ ${{ steps.format-versions.outputs.versionPrerelease }} == 'true' ];
