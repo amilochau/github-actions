@@ -35,10 +35,10 @@ jobs:
           if [ -z ${{ github.event.inputs.versionUnstableSuffix }} ]
           then
             versionLong=v${{ github.event.inputs.versionMajor }}.${{ github.event.inputs.versionMinor }}.${{ github.event.inputs.versionPatch }}-${{ github.event.inputs.versionUnstableSuffix }}
-            echo "::set-output name=versionPrerelease::true"
+            echo "::set-output name=versionPrerelease::$('true')"
           else
             versionLong=v${{ github.event.inputs.versionMajor }}.${{ github.event.inputs.versionMinor }}.${{ github.event.inputs.versionPatch }}
-            echo "::set-output name=versionPrerelease::false"
+            echo "::set-output name=versionPrerelease::$('false')"
           fi
           echo Set long version to $versionLong
           echo "::set-output name=versionLong::$versionLong"
