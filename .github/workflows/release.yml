@@ -3,51 +3,73 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      majorVersion:
+      versionMajor:
         description: Major version - must be changed when you make incompatible API changes
         required: true
-      minorVersion:
+      versionMinor:
         description: Minor version - must be changed when you add functionality in a backward compatible manner
         required: true
-      patchVersion:
+      versionPatch:
         description: Patch version - must be changed when you make backwards compatible bug fixes
         required: true
-      unstableSuffixVersion:
+      versionUunstableSuffix:
         description: Unstable suffix version - must be added when you want to create a pre-release
         required: false
         default: ''
+
+env:
+  MAIN_BRANCH: 'refs/heads/main'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      longVersion: ${{ steps.format-versions.outputs.longVersion }}
-      shortVersion: ${{ steps.format-versions.outputs.shortVersion }}
+      versionLong:
+        description: Long version (formatted as vX.Y.Z-s)
+        value: ${{ steps.format-versions.outputs.versionLong }}
+      versionShort:
+        description: Short version (formatted as vX)
+        value: ${{ steps.format-versions.outputs.versionShort }}
+      versionPrerelease:
+        description: If the version is recognized as a prerelease
+        value: ${{ steps.format-versions.outputs.versionPrerelease }}
     steps:
       - uses: actions/checkout@v2
       - name: Format versions
         id: format-versions
         run: |
-          if [ -z "${{ github.event.inputs.unstableSuffixVersion }}" ]
+          if [ -z "${{ github.event.inputs.versionUunstableSuffix }}" ]
           then
-            longVersion=v${{ github.event.inputs.majorVersion }}.${{ github.event.inputs.minorVersion }}.${{ github.event.inputs.patchVersion }}-${{ github.event.inputs.unstableSuffixVersion }}
+            versionLong=v${{ github.event.inputs.versionMajor }}.${{ github.event.inputs.versionMinor }}.${{ github.event.inputs.versionPatch }}-${{ github.event.inputs.versionUunstableSuffix }}
+            echo "::set-output name=versionPrerelease::true"
           else
-            longVersion=v${{ github.event.inputs.majorVersion }}.${{ github.event.inputs.minorVersion }}.${{ github.event.inputs.patchVersion }}
+            versionLong=v${{ github.event.inputs.versionMajor }}.${{ github.event.inputs.versionMinor }}.${{ github.event.inputs.versionPatch }}
+            echo "::set-output name=versionPrerelease::false"
           fi
-          echo Set long version to $longVersion
-          echo "::set-output name=longVersion::$longVersion"
+          echo Prerelease: $versionPrerelease
+          echo Set long version to $versionLong
+          echo "::set-output name=versionLong::$versionLong"
 
-          shortVersion=v${{ github.event.inputs.majorVersion }}
-          echo Set short version to $shortVersion
-          echo "::set-output name=shortVersion::$shortVersion"
+          versionShort=v${{ github.event.inputs.versionMajor }}
+          echo Set short version to $versionShort
+          echo "::set-output name=versionShort::$versionShort"
+      - name: Check prerelease if not main branch
+        run: |
+          if [ ${{ github.ref != env.MAIN_BRANCH && steps.format-versions.outputs.versionPrerelease != 'true' }} ]
+          then
+            echo You can not publish a pre-release package if you are not in the main branch
+            echo Pre-release: ${{ steps.format-versions.outputs.versionPrerelease }}
+            echo Branch: ${{ github.ref }}
+            exit 1
+          fi
       - name: Remove precedent tags for short and long versions
         run: |
-          git push origin :refs/tags/${{ steps.format-versions.outputs.shortVersion }}
-          git push origin :refs/tags/${{ steps.format-versions.outputs.longVersion }}
+          git push origin :refs/tags/${{ steps.format-versions.outputs.versionShort }}
+          git push origin :refs/tags/${{ steps.format-versions.outputs.versionLong }}
       - name: Set short and long versions tags
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "Github Actions"
-          git tag -fa ${{ steps.format-versions.outputs.shortVersion }}
-          git tag -fa ${{ steps.format-versions.outputs.longVersion }}
+          git tag -fa ${{ steps.format-versions.outputs.versionShort }}
+          git tag -fa ${{ steps.format-versions.outputs.versionLong }}
           git push origin master --tags
