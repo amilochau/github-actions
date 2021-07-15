@@ -1,8 +1,8 @@
-# Readme - actions-release
+# Readme - github-actions
 
 ## Introduction
 
-`actions-release` is a GitHub Action developed to manage GitHub release.
+`github-actions` is a set of GitHub Actions developed to help defining workflows for `amilochau` projects.
 
 ## Getting Started
 
@@ -17,66 +17,10 @@ Please follow the development good practices, then follow the integration proces
 
 ---
 
-## Usage
+## Actions
 
-Describe how to use your action here.
+The following actions are proposed, and can be freely used:
 
-### Example workflow
-
-```yaml
-name: My Workflow
-on: workflow_dispatch
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@main
-    - name: Manage release
-      # Reference the current GitHub Action
-      uses: milochaucom/actions-release/generic@main
-      # Reference the Action variables
-      with:
-        test: true
-```
-
-### Inputs
-
-| Input | Description |
-|-------|-------------|
-| `test` | A test input |
-
-### Outputs
-
-| Output | Description |
-|--------|-------------|
-| `testOutput` | A test output |
-
-## Examples
-
-### Using the optional input
-
-This is how to use the optional input.
-
-```yaml
-with:
-  test: true
-```
-
-### Using outputs
-
-Show people how to use your outputs in another action.
-
-```yaml
-steps:
-- uses: actions/checkout@main
-- name: Manage release
-  id: actions_release
-  uses: milochaucom/actions-release/generic@main
-  with:
-    test: true
-
-# Use outputs here 
-- name: Check outputs
-    run: |
-    echo "Outputs - ${{ steps.actions_release.outputs.testOutput }}"
-```
+| Path | Usage | Readme |
+| ---- | ----- | ------ |
+| `amilochau/github-actions/release/nuget@main` | Release .NET libraries as NuGet packages into GitHub Packages | [README.md](./release/nuget/README.md) |
