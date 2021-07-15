@@ -57,12 +57,12 @@ jobs:
           fi
       - name: Remove precedent tags for short and long versions
         run: |
-          git push origin :refs/tags/${{ steps.format-versions.outputs.versionShort }} -m Version v${{ steps.format-versions.outputs.versionLong }}
-          git push origin :refs/tags/${{ steps.format-versions.outputs.versionLong }} -m Version v${{ steps.format-versions.outputs.versionLong }}
+          git push origin :refs/tags/${{ steps.format-versions.outputs.versionShort }}
+          git push origin :refs/tags/${{ steps.format-versions.outputs.versionLong }}
       - name: Set short and long versions tags
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "Github Actions"
-          git tag -fa ${{ steps.format-versions.outputs.versionShort }}
-          git tag -fa ${{ steps.format-versions.outputs.versionLong }}
+          git tag -fa ${{ steps.format-versions.outputs.versionShort }} -m Version v${{ steps.format-versions.outputs.versionLong }}
+          git tag -fa ${{ steps.format-versions.outputs.versionLong }} -m Version v${{ steps.format-versions.outputs.versionLong }}
           git push origin master --tags
