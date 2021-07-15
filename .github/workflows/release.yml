@@ -25,10 +25,12 @@ jobs:
       shortVersion: ${{ steps.format-versions.outputs.shortVersion }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Format versions
         id: format-versions
         run: |
-          if [${{ github.event.inputs.unstableSuffixVersion }} != '']
+          if [ -z ${{ github.event.inputs.unstableSuffixVersion }} ]
           then
             longVersion=v${{ github.event.inputs.majorVersion }}.${{ github.event.inputs.minorVersion }}.${{ github.event.inputs.patchVersion }}-${{ github.event.inputs.unstableSuffixVersion }}
           else
