@@ -32,7 +32,7 @@ jobs:
       - name: Format versions
         id: format-versions
         run: |
-          if [ -z ${{ github.event.inputs.versionUnstableSuffix }} ];
+          if [ ${{ github.event.inputs.versionUnstableSuffix }} != '' ];
           then
             versionLong=v${{ github.event.inputs.versionMajor }}.${{ github.event.inputs.versionMinor }}.${{ github.event.inputs.versionPatch }}-${{ github.event.inputs.versionUnstableSuffix }}
             echo "::set-output name=versionPrerelease::$('true')"
@@ -48,7 +48,7 @@ jobs:
           echo "::set-output name=versionShort::$versionShort"
       - name: Check prerelease if not main branch
         run: |
-          if [ ${{ github.ref != env.MAIN_BRANCH && steps.format-versions.outputs.versionPrerelease != 'true' }} ];
+          if [ ${{ github.ref != env.MAIN_BRANCH && steps.format-versions.outputs.versionPrerelease != 'true' }} ]
           then
             echo You can not publish a pre-release package if you are not in the main branch
             echo Pre-release: ${{ steps.format-versions.outputs.versionPrerelease }}
