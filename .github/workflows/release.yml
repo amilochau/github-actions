@@ -34,16 +34,18 @@ jobs:
           else
             longVersion=v${{ github.event.inputs.majorVersion }}.${{ github.event.inputs.minorVersion }}.${{ github.event.inputs.patchVersion }}
           fi
-          echo "::set-output name=longVersion::$(longVersion)"
+          echo Set long version to $longVersion
+          echo "::set-output name=longVersion::$longVersion"
 
           shortVersion=v${{ github.event.inputs.majorVersion }}
-          echo "::set-output name=shortVersion::$(shortVersion)"
+          echo Set short version to $shortVersion
+          echo "::set-output name=shortVersion::$shortVersion"
       - name: Remove precedent tags for short and long versions
         run: |
-          git push origin :refs/tags/{{ steps.format-versions.outputs.shortVersion }}
-          git push origin :refs/tags/{{ steps.format-versions.outputs.longVersion }}
+          git push origin :refs/tags/${{ steps.format-versions.outputs.shortVersion }}
+          git push origin :refs/tags/${{ steps.format-versions.outputs.longVersion }}
       - name: Set short and long versions tags
         run: |
-          git tag -fa {{ steps.format-versions.outputs.shortVersion }}
-          git tag -fa {{ steps.format-versions.outputs.longVersion }}
+          git tag -fa ${{ steps.format-versions.outputs.shortVersion }}
+          git tag -fa ${{ steps.format-versions.outputs.longVersion }}
           git push origin master --tags
