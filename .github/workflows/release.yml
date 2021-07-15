@@ -63,6 +63,16 @@ jobs:
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "Github Actions"
-          git tag -fa ${{ steps.format-versions.outputs.versionShort }} -m Version v${{ steps.format-versions.outputs.versionLong }}
-          git tag -fa ${{ steps.format-versions.outputs.versionLong }} -m Version v${{ steps.format-versions.outputs.versionLong }}
+          git tag -fa ${{ steps.format-versions.outputs.versionShort }} -m 'Version ${{ steps.format-versions.outputs.versionLong }}'
+          git tag -fa ${{ steps.format-versions.outputs.versionLong }} -m 'Version ${{ steps.format-versions.outputs.versionLong }}'
           git push origin master --tags
+      - name: Create GitHub Release
+        run: |
+          if [ ${{ steps.format-versions.outputs.versionPrerelease }} == 'true' ];
+          then
+            gh release create ${{ steps.format-versions.outputs.versionLong }} --notes "Version ${{ steps.format-versions.outputs.versionLong }}" --draft --prerelease
+          else
+            gh release create ${{ steps.format-versions.outputs.versionLong }} --notes "Version ${{ steps.format-versions.outputs.versionLong }}" --draft
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
