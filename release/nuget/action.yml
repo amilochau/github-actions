@@ -72,9 +72,9 @@ runs:
       run: |
         if [ ${{ env.VERSION_PRERELEASE }} == 'true' ];
         then
-          gh release create ${{ env.VERSION_NUMBER }} --notes "Version ${{ env.VERSION_NUMBER }}" --draft --prerelease
+          gh release create ${{ env.VERSION_NUMBER }} --title "Version ${{ env.VERSION_NUMBER }}" --notes-file CHANGELOG.md --draft --prerelease
         else
-          gh release create ${{ env.VERSION_NUMBER }} --notes "Version ${{ env.VERSION_NUMBER }}" --draft
+          gh release create ${{ env.VERSION_NUMBER }} --title "Version ${{ env.VERSION_NUMBER }}" --notes-file CHANGELOG.md --draft
         fi
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}
