@@ -18,6 +18,10 @@ inputs:
     description: The name of the main branch
     default: 'refs/heads/main'
     required: false
+  useNugetOrg:
+    description: Push packages to nuget.org (instead of GitHub Packages)
+    default: false
+    required: false
 outputs:
   versionNumber:
     description: The version as defined in the Git tag
@@ -66,7 +70,13 @@ runs:
       run: dotnet pack ${{ inputs.projectsToPublish }} --configuration Release --no-restore --no-build --output ./build
     - name: Publish SDK to GPR
       shell: bash
-      run: dotnet nuget push ./build/*.nupkg
+      run: |
+        if [ ${{ inputs.useNugetOrg }} == 'true' ];
+        then
+          dotnet nuget push ./build/*.nupkg -k ${{ inputs.githubToken }} -s https://api.nuget.org/v3/index.json
+        else
+          dotnet nuget push ./build/*.nupkg 
+        fi
     - name: Create GitHub Release
       shell: bash
       run: |
