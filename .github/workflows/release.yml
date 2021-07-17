@@ -57,13 +57,22 @@ jobs:
           fi
       - name: Remove precedent tags for short and long versions
         run: |
-          git push origin :refs/tags/${{ steps.format-versions.outputs.versionShort }}
+          if [ ${{ steps.format-versions.outputs.versionPrerelease }} != 'true' ];
+          then
+            git push origin :refs/tags/${{ steps.format-versions.outputs.versionShort }}
+          fi
+
           git push origin :refs/tags/${{ steps.format-versions.outputs.versionLong }}
       - name: Set short and long versions tags
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "Github Actions"
-          git tag -fa ${{ steps.format-versions.outputs.versionShort }} -m 'Version ${{ steps.format-versions.outputs.versionLong }}'
+
+          if [ ${{ steps.format-versions.outputs.versionPrerelease }} != 'true' ];
+          then
+            git tag -fa ${{ steps.format-versions.outputs.versionShort }} -m 'Version ${{ steps.format-versions.outputs.versionLong }}'
+          fi
+
           git tag -fa ${{ steps.format-versions.outputs.versionLong }} -m 'Version ${{ steps.format-versions.outputs.versionLong }}'
           git push origin --tags
       - name: Create GitHub Release

@@ -6,5 +6,8 @@
 
 ## New features
 
-- Introduces a new `build/netcore` GitHub Action, to build and test .NET Core applications
-- Introduces a new `release/nuget` GitHub Action, to publish .NET libraries with release management
+- Adds a new parameter to `release/nuget` to deploy NuGet packages to nuget.org instead of NuGet Packages: `useNugetOrg`
+
+## Bug fixes
+
+- Do not move short version tag when releasing a pre-release

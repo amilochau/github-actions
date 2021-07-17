@@ -1,5 +1,5 @@
 name: Release NuGet packages
-description: Package, publish and release .NET libraries as NuGet packages into GitHub Packages
+description: Package, publish and release .NET libraries as NuGet packages into GitHub Packages or nuget.org
 author: Antoine Milochau
 inputs:
   versionFile:
@@ -12,11 +12,15 @@ inputs:
     description: The path to the projects to publish - can be a .csproj or a .sln file
     required: true
   githubToken:
-    description: The GitHub Token, typically get from secrets.GITHUB_TOKEN
+    description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
   mainBranch:
     description: The name of the main branch
     default: 'refs/heads/main'
+    required: false
+  nugetOrgToken:
+    description: The nuget.org token, typically get from a secret; used to publish projects to nuget.org instead of GitHub Packages
+    default: ''
     required: false
 outputs:
   versionNumber:
@@ -58,15 +62,23 @@ runs:
     - name: Restore dependencies
       shell: bash
       run: dotnet restore ${{ inputs.projectsToBuild }}
-    - name: Build application
+    - name: Build projects
       shell: bash
       run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --no-restore
-    - name: Pack SDK
+    - name: Pack projects
       shell: bash
       run: dotnet pack ${{ inputs.projectsToPublish }} --configuration Release --no-restore --no-build --output ./build
-    - name: Publish SDK to GPR
+    - name: Publish projects to GitHub Packages or nuget.org
       shell: bash
-      run: dotnet nuget push ./build/*.nupkg
+      run: |
+        if [ ${{ inputs.nugetOrgToken }} != '' ];
+        then
+          echo Publish projects to nuget.org
+          dotnet nuget push ./build/*.nupkg -k ${{ inputs.nugetOrgToken }} -s https://api.nuget.org/v3/index.json
+        else
+          echo Publish projects to GitHub Packages
+          dotnet nuget push ./build/*.nupkg 
+        fi
     - name: Create GitHub Release
       shell: bash
       run: |
