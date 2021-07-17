@@ -9,9 +9,6 @@
 1. Installation process
 From your local computer, clone the repository.
 
-- dotnet restore
-- dotnet run
-
 2. Integration process
 Please follow the development good practices, then follow the integration process.
 
