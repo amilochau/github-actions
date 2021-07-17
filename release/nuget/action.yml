@@ -1,5 +1,5 @@
 name: Release NuGet packages
-description: Package, publish and release .NET libraries as NuGet packages into GitHub Packages or nuget.org
+description: Package, publish and release .NET libraries as NuGet packages into GitHub Packages and nuget.org
 author: Antoine Milochau
 inputs:
   versionFile:
@@ -19,7 +19,7 @@ inputs:
     default: 'refs/heads/main'
     required: false
   nugetOrgToken:
-    description: The nuget.org token, typically get from a secret; used to publish projects to nuget.org instead of GitHub Packages
+    description: The nuget.org token, typically get from a secret; used to publish projects to nuget.org
     default: ''
     required: false
 outputs:
@@ -75,10 +75,10 @@ runs:
         then
           echo Publish projects to nuget.org
           dotnet nuget push ./build/*.nupkg -k ${{ inputs.nugetOrgToken }} -s https://api.nuget.org/v3/index.json
-        else
-          echo Publish projects to GitHub Packages
-          dotnet nuget push ./build/*.nupkg 
         fi
+
+        echo Publish projects to GitHub Packages
+        dotnet nuget push ./build/*.nupkg 
     - name: Create GitHub Release
       shell: bash
       run: |
