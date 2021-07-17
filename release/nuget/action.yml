@@ -74,7 +74,7 @@ runs:
         if [ ${{ inputs.nugetOrgToken }} != '' ];
         then
           echo Publish projects to nuget.org
-          dotnet nuget push ./build/*.nupkg -k ${{ inputs.githubToken }} -s https://api.nuget.org/v3/index.json
+          dotnet nuget push ./build/*.nupkg -k ${{ inputs.nugetOrgToken }} -s https://api.nuget.org/v3/index.json
         else
           echo Publish projects to GitHub Packages
           dotnet nuget push ./build/*.nupkg 
