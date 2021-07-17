@@ -45,7 +45,8 @@ jobs:
 | `versionFile` | The path to the file where the version can be found - must be an XML file | **true** |
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
 | `projectsToPublish` | The path to the projects to publish - can be a .csproj or a .sln file | **true** |
-| `githubToken` | The GitHub Token, typically get from `secrets.GITHUB_TOKEN` | **true** |
+| `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
+| `nugetOrgToken` | The nuget.org token, typically get from a secret; used to publish projects to nuget.org instead of GitHub Packages | *false* | `''` |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
 
 ### Outputs
