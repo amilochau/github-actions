@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@main
       - name: Set up a GitHub Release
-        uses: amilochau/github-actions/release/basic@amilochau/create-release-simple
+        uses: amilochau/github-actions/release/basic@v1
         with:
           versionMajor: ${{ github.event.inputs.versionMajor }}
           versionMinor: ${{ github.event.inputs.versionMinor }}
