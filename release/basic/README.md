@@ -15,7 +15,22 @@ Use this GitHub action if you want create complete GitHub Releases, with a manua
 ```yaml
 name: Release
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      versionMajor:
+        description: Major version - must be changed when you make incompatible API changes
+        required: true
+      versionMinor:
+        description: Minor version - must be changed when you add functionality in a backward compatible manner
+        required: true
+      versionPatch:
+        description: Patch version - must be changed when you make backwards compatible bug fixes
+        required: true
+      versionUnstableSuffix:
+        description: Unstable suffix version - must be added when you want to create a pre-release
+        required: false
+        default: ''
 
 jobs:
   release:
