@@ -46,6 +46,7 @@ jobs:
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
 | `projectsToPublish` | The path to the projects to publish - can be a .csproj or a .sln file | **true** |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
+| `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
 | `nugetOrgToken` | The nuget.org token, typically get from a secret; used to publish projects to nuget.org | *false* | `''` |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
 
