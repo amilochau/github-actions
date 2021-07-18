@@ -7,3 +7,4 @@
 ## New features
 
 - Introduces a new custom GitHub Action to focus on creating GitHub Releases with a basic workflow: see `amilochau/github-actions/release/basic`
+- Adds a new `avoidGitHubPrerelease` input for the `release/nuget` GitHub Action, to disable GitHub Release creation on unstable versions

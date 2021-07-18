@@ -16,6 +16,10 @@ on:
         description: Unstable suffix version - must be added when you want to create a pre-release
         required: false
         default: ''
+      createUnstableRelease:
+        description: Create a GitHub Release for unstable version
+        required: false
+        default: false
 
 jobs:
   release:
@@ -24,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@main
       - name: Set up a GitHub Release
-        uses: amilochau/github-actions/release/basic@c650d1f3735822cddf08f3b02794512fccb9dbef
+        uses: amilochau/github-actions/release/basic@amilochau/create-release-simple
         with:
           versionMajor: ${{ github.event.inputs.versionMajor }}
           versionMinor: ${{ github.event.inputs.versionMinor }}

@@ -11,6 +11,10 @@ inputs:
   projectsToPublish:
     description: The path to the projects to publish - can be a .csproj or a .sln file
     required: true
+  avoidGitHubPrerelease:
+    description: Disable GitHub Release creation for unstable version
+    required: false
+    default: true
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
@@ -82,11 +86,12 @@ runs:
     - name: Create GitHub Release
       shell: bash
       run: |
-        if [ ${{ env.VERSION_PRERELEASE }} == 'true' ];
+        if [ ${{ env.VERSION_PRERELEASE }} != 'true' ];
+        then
+          gh release create ${{ env.VERSION_NUMBER }} --title "Version ${{ env.VERSION_NUMBER }}" --notes-file CHANGELOG.md --draft
+        elif [ ${{ inputs.avoidGitHubPrerelease }} != 'true' ];
         then
           gh release create ${{ env.VERSION_NUMBER }} --title "Version ${{ env.VERSION_NUMBER }}" --notes-file CHANGELOG.md --draft --prerelease
-        else
-          gh release create ${{ env.VERSION_NUMBER }} --title "Version ${{ env.VERSION_NUMBER }}" --notes-file CHANGELOG.md --draft
         fi
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}
