@@ -26,6 +26,9 @@ inputs:
     description: The nuget.org token, typically get from a secret; used to publish projects to nuget.org
     default: ''
     required: false
+  verbosity:
+    description: The verbosity of the dotnet CLI
+    default: minimal
 outputs:
   versionNumber:
     description: The version as defined in the Git tag
@@ -65,13 +68,13 @@ runs:
         fi
     - name: Restore dependencies
       shell: bash
-      run: dotnet restore ${{ inputs.projectsToBuild }}
+      run: dotnet restore ${{ inputs.projectsToBuild }} --verbosity ${{ inputs.verbosity }}
     - name: Build projects
       shell: bash
-      run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --no-restore
+      run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --no-restore --verbosity ${{ inputs.verbosity }}
     - name: Pack projects
       shell: bash
-      run: dotnet pack ${{ inputs.projectsToPublish }} --configuration Release --no-restore --no-build --output ./build
+      run: dotnet pack ${{ inputs.projectsToPublish }} --configuration Release --no-restore --no-build --output ./build --verbosity ${{ inputs.verbosity }}
     - name: Publish projects to GitHub Packages or nuget.org
       shell: bash
       run: |
