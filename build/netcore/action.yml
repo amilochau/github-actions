@@ -8,6 +8,9 @@ inputs:
   projectsToTest:
     description: The path to the projects to test - can be a .csproj or a .sln file
     required: true
+  verbosity:
+    description: The verbosity of the dotnet CLI
+    default: minimal
 runs:
   using: composite
   steps:
@@ -16,7 +19,7 @@ runs:
       run: dotnet restore ${{ inputs.projectsToBuild }}
     - name: Build application
       shell: bash
-      run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --no-restore
+      run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --no-restore --verbosity ${{ inputs.verbosity }}
     - name: Test application
       shell: bash
       run: dotnet test ${{ inputs.projectsToTest }} --configuration Release --no-restore --no-build
