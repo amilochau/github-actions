@@ -16,10 +16,10 @@ runs:
   steps:
     - name: Restore dependencies
       shell: bash
-      run: dotnet restore ${{ inputs.projectsToBuild }}
+      run: dotnet restore ${{ inputs.projectsToBuild }} --verbosity ${{ inputs.verbosity }}
     - name: Build application
       shell: bash
       run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --no-restore --verbosity ${{ inputs.verbosity }}
     - name: Test application
       shell: bash
-      run: dotnet test ${{ inputs.projectsToTest }} --configuration Release --no-restore --no-build
+      run: dotnet test ${{ inputs.projectsToTest }} --configuration Release --no-restore --no-build --verbosity ${{ inputs.verbosity }}

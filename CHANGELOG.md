@@ -4,6 +4,6 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
-## New features
+## Minor changes
 
-- Add a `verbosity` parameter for dotnet CLI
+- Use the `verbosity` parameter for dotnet CLI `restore` and `test` commands
