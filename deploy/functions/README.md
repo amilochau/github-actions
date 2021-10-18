@@ -2,24 +2,26 @@
 
 ## Introduction
 
-`amilochau/github-actions/build/netcore` is a GitHub Action developed to build and test .NET Core projects.
+`amilochau/github-actions/deploy/functions` is a GitHub Action developed to deploy Azure Functions applications.
 
 ---
 
 ## Usage
 
-Use this GitHub action if you want have one or many .NET Core projects that you want to build and test, typically in a Continuous Integration process.
+Use this GitHub action if you want have one Azure Functions application that you want to publish, typically in a Continuous Delivery process.
 
 ### Example workflow
 
 ```yaml
-name: Build
+name: Deploy application
 
 on: workflow_dispatch
 
+concurrency: deploy_app_[NAME OF ENV]
+
 jobs:
-  build:
-    name: Build
+  deploy_app:
+    name: Deploy application
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
@@ -27,8 +29,8 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      - name: Build and test projects
-        uses: amilochau/github-actions/build/netcore@v1
+      - name: Deploy application
+        uses: amilochau/github-actions/deploy/application@v1
         with:
           projectsToBuild: ${{ env.PROJECTS_BUILD }}
           projectsToTest: ${{ env.PROJECTS_TESTS }}
@@ -39,8 +41,11 @@ jobs:
 | Input | Description | Required | Default value |
 | ----- | ----------- | -------- | ------------- |
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
-| `projectsToTest` | The path to the projects to test - can be a .csproj or a .sln file | **true** |
 | `verbosity` | The verbosity of the dotnet CLI | *false* | `minimal` |
+| `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
+| `applicationName` | The application name, as defined on Azure | **true** |
+| `projectsToPublishPath` | The path of the projects to publish, relative to the checkout path | **true** |
+| `healthUrl` | The absolute URL of the health endpoint, from the Functions application | **true** |
 
 ### Outputs
 
