@@ -1,0 +1,47 @@
+name: Deploy Azure Functions application
+description: Deploy Azure Functions application
+author: Antoine Milochau
+inputs:
+  projectsToBuild:
+    description: The path to the projects to build - can be a .csproj or a .sln file
+    required: true
+  verbosity:
+    description: The verbosity of the dotnet CLI
+    default: minimal
+  azureCredentials:
+    description: Azure credentials, typically get from secrets.AZURE_CREDENTIALS
+    required: true
+  applicationName:
+    description: The application name, as defined on Azure
+    required: true
+  projectsToPublishPath:
+    description: The path of the projects to publish, relative to the checkout path
+    required: true
+  healthUrl:
+    description: The absolute URL of the health endpoint, from the Functions application
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Build projects
+      shell: bash
+      run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --verbosity ${{ inputs.verbosity }}
+    - name: Login on Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ inputs.azureCredentials }}
+    - name: Download and install Azure Functions Core Tools v3
+      shell: bash
+      run: |
+        wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
+        sudo dpkg -i packages-microsoft-prod.deb
+        sudo apt-get update
+        sudo apt-get install azure-functions-core-tools-3
+    - name: Deploy Azure Functions application
+      shell: bash
+      run: func azure functionapp publish ${{ inputs.applicationName }}
+      working-directory: ${{ inputs.projectsToPublishPath }}
+
+    - name: Check health
+      shell: pwsh
+      run: Invoke-WebRequest ${{ inputs.healthUrl }} -TimeoutSec 120 -MaximumRetryCount 12 -RetryIntervalSec 10
