@@ -4,6 +4,6 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
-## Minor changes
+## New features
 
-- Use the `verbosity` parameter for dotnet CLI `restore` and `test` commands
+- Introduce a new `amilochau/github-actions/deploy/functions` GitHub Actions to deploy Azure Functions applications
