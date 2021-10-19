@@ -46,4 +46,4 @@ runs:
       with:
         inlineScript: |
           az group create --name ${{ inputs.resourceGroupName }} --location ${{ inputs.resourceGroupLocation }}
-          az deployment group create --resource-group ${{ inputs.resourceGroupName }} --template-file ${{ inputs.templatePath }} --parameters ${{ inputs.parametersFilePath }} --parameters templateVersion=${{ steps.format-versions.outputs.templateVersion }}
+          az deployment group create --resource-group ${{ inputs.resourceGroupName }} --template-file ${{ inputs.templateFilePath }} --parameters ${{ inputs.parametersFilePath }} --parameters templateVersion=${{ steps.format-versions.outputs.templateVersion }}
