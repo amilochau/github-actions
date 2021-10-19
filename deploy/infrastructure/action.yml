@@ -1,0 +1,49 @@
+name: Deploy Azure infrastructure
+description: Deploy Azure infrastructure
+author: Antoine Milochau
+inputs:
+  azureTemplateVersion:
+    description: The version of 'azure-templates' to use
+    required: true
+  azureCredentials:
+    description: Azure credentials, typically get from secrets.AZURE_CREDENTIALS
+    required: true
+  resourceGroupName:
+    description: The name of the resource group where to deploy the infrastructure
+    required: true
+  resourceGroupLocation:
+    description: The location of the resource group where to deploy the infrastructure
+    required: true
+  templateFilePath:
+    description: The path of the infrastructure template to deploy
+    required: true
+  parametersFilePath:
+    description: The path of the parameters files to use during deployment
+    required: true
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v2 # For template file
+      with:
+        repository: amilochau/azure-templates
+        ref: ${{ inputs.azureTemplateVersion }}
+        path: templates
+        fetch-depth: 0
+    - name: Login on Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ inputs.azureCredentials }}
+    - name: Determine template version
+      id: format-versions
+      shell: bash
+      run: |
+        templateVersion=$(git describe --tags --match v*.*.*)
+        echo Template version is $templateVersion
+        echo "::set-output name=templateVersion::$templateVersion"
+      working-directory: templates
+    - name: Deploy infrastructure to Azure
+      uses: Azure/cli@1.0.4
+      with:
+        inlineScript: |
+          az group create --name ${{ inputs.resourceGroupName }} --location ${{ inputs.resourceGroupLocation }}
+          az deployment group create --resource-group ${{ inputs.resourceGroupName }} --template-file ${{ inputs.templatePath }} --parameters ${{ inputs.parametersFilePath }} --parameters templateVersion=${{ steps.format-versions.outputs.templateVersion }}

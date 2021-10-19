@@ -33,7 +33,10 @@ jobs:
         uses: amilochau/github-actions/deploy/application@v1
         with:
           projectsToBuild: ${{ env.PROJECTS_BUILD }}
-          projectsToTest: ${{ env.PROJECTS_TESTS }}
+          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+          applicationName: ${{ env.INFRA_APP_NAME }}
+          projectsToPublishPath: ${{ env.PROJECTS_PUBLISH }}
+          healthUrl: ${{ env.INFRA_HEALTH }}
 ```
 
 ### Inputs
