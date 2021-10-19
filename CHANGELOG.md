@@ -7,3 +7,4 @@
 ## New features
 
 - Introduce a new `amilochau/github-actions/deploy/functions` GitHub Actions to deploy Azure Functions applications
+- Introduce a new `amilochau/github-actions/deploy/infrastructure` GitHub Actions to deploy Azure infrastructure
