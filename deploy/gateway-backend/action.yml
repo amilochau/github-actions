@@ -33,4 +33,7 @@ runs:
       uses: Azure/cli@1.0.4
       with:
         inlineScript: |
-          az deployment group create --resource-group ${{ inputs.resourceGroupName }} --template-file ${{ inputs.templateFilePath }} --parameters ${{ inputs.parametersFilePath }}
+          az deployment group create \
+            --resource-group ${{ inputs.resourceGroupName }} \
+            --template-file ${{ inputs.templateFilePath }} \
+            --parameters ${{ inputs.parametersFilePath }}
