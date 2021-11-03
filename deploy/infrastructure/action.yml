@@ -45,7 +45,7 @@ runs:
       uses: Azure/cli@1.0.4
       with:
         inlineScript: |
-          if [ az group exists --name ${{ inputs.resourceGroupName }} != 'true' ];
+          if [ $(az group exists --name ${{ inputs.resourceGroupName }}) != 'true' ];
           then
             az group create \
               --name ${{ inputs.resourceGroupName }} \
