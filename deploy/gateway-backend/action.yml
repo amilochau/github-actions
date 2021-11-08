@@ -34,4 +34,7 @@ runs:
       with:
         azcliversion: 2.29.2
         inlineScript: |
-          az deployment group create --resource-group ${{ inputs.resourceGroupName }} --template-file ${{ inputs.templateFilePath }} --parameters ${{ inputs.parametersFilePath }}
+          az deployment group create \
+            --resource-group ${{ inputs.resourceGroupName }} \
+            --template-file ${{ inputs.templateFilePath }} \
+            --parameters ${{ inputs.parametersFilePath }}

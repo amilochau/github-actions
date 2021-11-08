@@ -46,5 +46,15 @@ runs:
       with:
         azcliversion: 2.29.2
         inlineScript: |
-          az group create --name ${{ inputs.resourceGroupName }} --location ${{ inputs.resourceGroupLocation }}
-          az deployment group create --resource-group ${{ inputs.resourceGroupName }} --template-file ${{ inputs.templateFilePath }} --parameters ${{ inputs.parametersFilePath }} --parameters templateVersion=${{ steps.format-versions.outputs.templateVersion }}
+          if [ $(az group exists --name ${{ inputs.resourceGroupName }}) != 'true' ];
+          then
+            az group create \
+              --name ${{ inputs.resourceGroupName }} \
+              --location ${{ inputs.resourceGroupLocation }}
+          fi
+          
+          az deployment group create \
+            --resource-group ${{ inputs.resourceGroupName }} \
+            --template-file ${{ inputs.templateFilePath }} \
+            --parameters ${{ inputs.parametersFilePath }} \
+            --parameters templateVersion=${{ steps.format-versions.outputs.templateVersion }}
