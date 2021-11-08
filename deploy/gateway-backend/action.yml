@@ -30,8 +30,9 @@ runs:
       with:
         creds: ${{ inputs.azureCredentials }}
     - name: Deploy infrastructure to Azure
-      uses: Azure/cli@1.0.4
+      uses: Azure/cli@v1
       with:
+        azcliversion: 2.29.2
         inlineScript: |
           az deployment group create \
             --resource-group ${{ inputs.resourceGroupName }} \

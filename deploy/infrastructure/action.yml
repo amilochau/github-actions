@@ -42,8 +42,9 @@ runs:
         echo "::set-output name=templateVersion::$templateVersion"
       working-directory: templates
     - name: Deploy infrastructure to Azure
-      uses: Azure/cli@1.0.4
+      uses: Azure/cli@v1
       with:
+        azcliversion: 2.29.2
         inlineScript: |
           if [ $(az group exists --name ${{ inputs.resourceGroupName }}) != 'true' ];
           then
