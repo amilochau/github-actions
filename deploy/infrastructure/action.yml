@@ -42,8 +42,9 @@ runs:
         echo "::set-output name=templateVersion::$templateVersion"
       working-directory: templates
     - name: Deploy infrastructure to Azure
-      uses: Azure/cli@1.0.4
+      uses: Azure/cli@v1
       with:
+        azcliversion: 2.29.2
         inlineScript: |
           az group create --name ${{ inputs.resourceGroupName }} --location ${{ inputs.resourceGroupLocation }}
           az deployment group create --resource-group ${{ inputs.resourceGroupName }} --template-file ${{ inputs.templateFilePath }} --parameters ${{ inputs.parametersFilePath }} --parameters templateVersion=${{ steps.format-versions.outputs.templateVersion }}
