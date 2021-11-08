@@ -25,6 +25,15 @@ runs:
         repository: amilochau/azure-templates
         ref: ${{ inputs.azureTemplateVersion }}
         path: templates
+        fetch-depth: 0
+    - name: Determine template version
+      id: format-versions
+      shell: bash
+      run: |
+        templateVersion=$(git describe --tags --match v*.*.*)
+        echo Template version is $templateVersion
+        echo "::set-output name=templateVersion::$templateVersion"
+      working-directory: templates
     - name: Login on Azure
       uses: azure/login@v1
       with:
@@ -37,4 +46,5 @@ runs:
           az deployment group create \
             --resource-group ${{ inputs.resourceGroupName }} \
             --template-file ${{ inputs.templateFilePath }} \
-            --parameters ${{ inputs.parametersFilePath }}
+            --parameters ${{ inputs.parametersFilePath }} \
+            --parameters templateVersion=${{ steps.format-versions.outputs.templateVersion }}
