@@ -1,0 +1,30 @@
+name: Build Node.js projects
+description: Build and test Node.js projects
+author: Antoine Milochau
+inputs:
+  projectWorkspace:
+    description: The path to the project to build
+    required: true
+  nodeVersion:
+    description: The Node.js version to use
+    default: 16.x
+runs:
+  using: composite
+  steps:
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.nodeVersion }}
+        cache: 'npm'
+    - name: Restore dependencies
+      shell: bash
+      run: npm ci
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Build application
+      shell: bash
+      run: npm run build
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Test application
+      shell: bash
+      run: npm test --if-present
+      working-directory: ${{ inputs.projectWorkspace }}
