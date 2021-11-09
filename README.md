@@ -21,6 +21,7 @@ The following actions are proposed, and can be freely used:
 | Path | Usage | Readme |
 | ---- | ----- | ------ |
 | `amilochau/github-actions/build/netcore@main` | Build and Test .NET projects | [README.md](./build/netcore/README.md) |
+| `amilochau/github-actions/build/node@main` | Build and Test Node.js projects | [README.md](./build/node/README.md) |
 | `amilochau/github-actions/deploy/functions@main` | Deploy Azure Functions applications | [README.md](./deploy/functions/README.md) |
 | `amilochau/github-actions/deploy/gateway-backend@main` | Deploy an API Management backend | [README.md](./deploy/gateway-backend/README.md) |
 | `amilochau/github-actions/deploy/infrastructure@main` | Deploy Azure infrastructure | [README.md](./deploy/infrastructure/README.md) |

@@ -7,3 +7,4 @@
 # New features
 
 - Add a custom GitHub Actions to build Node.js applications
+- Add a custom GitHub Actions to deploy Azure Static Web Apps applications
