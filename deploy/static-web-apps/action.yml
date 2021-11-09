@@ -5,7 +5,7 @@ inputs:
   projectWorkspace:
     description: The path to the project to build
     required: true
-  outputWorkspace:
+  projectOutput:
     description: The path to the output of the build project
     required: true
   azureStaticWebAppsApiToken:

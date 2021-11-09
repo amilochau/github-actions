@@ -29,7 +29,7 @@ jobs:
         uses: amilochau/github-actions/deploy//static-web-apps@v1
         with:
           projectWorkspace: ${{ env.PROJECT_WORKSPACE }}
-          outputWorkspace: ${{ env.PROJECT_OUTPUT }}
+          projectOutput: ${{ env.PROJECT_OUTPUT }}
           azureStaticWebAppsApiToken: ${{ secrets.SWA_TOKEN }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -39,7 +39,7 @@ jobs:
 | Input | Description | Required | Default value |
 | ----- | ----------- | -------- | ------------- |
 | `projectWorkspace` | The path to the project to build | **true** |
-| `outputWorkspace` | The path to the output of the build project | **true** |
+| `projectOutput` | The path to the output of the build project | **true** |
 | `azureStaticWebAppsApiToken` | The token from the Azure Static Web Apps; could be found from the Azure Portal | **true** |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `nodeVersion` | The Node.js version to use | *false* | `16.x` |
