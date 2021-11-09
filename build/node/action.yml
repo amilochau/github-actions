@@ -16,7 +16,7 @@ runs:
       with:
         node-version: ${{ inputs.nodeVersion }}
         cache: 'npm'
-      cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
+        cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
     - name: Restore dependencies
       shell: bash
       run: npm ci
