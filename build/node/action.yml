@@ -8,9 +8,6 @@ inputs:
   nodeVersion:
     description: The Node.js version to use
     default: 16.x
-defaults:
-  run:
-    working-directory: ${{ inputs.PROJECT_WORKSPACE }}
 runs:
   using: composite
   steps:
@@ -19,12 +16,16 @@ runs:
       with:
         node-version: ${{ inputs.nodeVersion }}
         cache: 'npm'
+      cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
     - name: Restore dependencies
       shell: bash
       run: npm ci
+      working-directory: ${{ inputs.projectWorkspace }}
     - name: Build application
       shell: bash
       run: npm run build
+      working-directory: ${{ inputs.projectWorkspace }}
     - name: Test application
       shell: bash
       run: npm test --if-present
+      working-directory: ${{ inputs.projectWorkspace }}
