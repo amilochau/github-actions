@@ -25,5 +25,6 @@ The following actions are proposed, and can be freely used:
 | `amilochau/github-actions/deploy/functions@main` | Deploy Azure Functions applications | [README.md](./deploy/functions/README.md) |
 | `amilochau/github-actions/deploy/gateway-backend@main` | Deploy an API Management backend | [README.md](./deploy/gateway-backend/README.md) |
 | `amilochau/github-actions/deploy/infrastructure@main` | Deploy Azure infrastructure | [README.md](./deploy/infrastructure/README.md) |
+| `amilochau/github-actions/deploy/static-web-apps@main` | Deploy Static Web Apps applications | [README.md](./deploy/static-web-apps/README.md) |
 | `amilochau/github-actions/release/nuget@main` | Release .NET libraries as NuGet packages into nuget.org and GitHub Packages | [README.md](./release/nuget/README.md) |
 | `amilochau/github-actions/release/basic@main` | Create complete GitHub Releases with a simple process | [README.md](./release/basic/README.md) |
