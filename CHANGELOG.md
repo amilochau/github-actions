@@ -4,7 +4,7 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
-## Bug fixes
+# New features
 
-- Avoid creating existing resource group in the `deploy/infrastructure` template
-- Add a workaround for Azure CLI authentication issue (see [here](https://github.com/Azure/azure-cli/issues/20154))
+- Add a custom GitHub Actions to build Node.js applications
+- Add a custom GitHub Actions to deploy Azure Static Web Apps applications

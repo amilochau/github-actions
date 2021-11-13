@@ -1,4 +1,4 @@
-# Readme - build/netcore
+# Readme - deploy/functions
 
 ## Introduction
 
@@ -30,7 +30,7 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Deploy application
-        uses: amilochau/github-actions/deploy/application@v1
+        uses: amilochau/github-actions/deploy/functions@v1
         with:
           projectsToBuild: ${{ env.PROJECTS_BUILD }}
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
