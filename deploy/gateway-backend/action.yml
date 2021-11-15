@@ -41,7 +41,6 @@ runs:
     - name: Deploy infrastructure to Azure
       uses: Azure/cli@v1
       with:
-        azcliversion: 2.29.2
         inlineScript: |
           az deployment group create \
             --resource-group ${{ inputs.resourceGroupName }} \

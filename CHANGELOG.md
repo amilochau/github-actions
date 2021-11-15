@@ -4,7 +4,6 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
-# New features
+# Bug fixes
 
-- Add a custom GitHub Actions to build Node.js applications
-- Add a custom GitHub Actions to deploy Azure Static Web Apps applications
+- Revert temporary fix for Azure login
