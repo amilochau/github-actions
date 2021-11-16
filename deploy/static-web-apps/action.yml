@@ -29,7 +29,9 @@ runs:
       shell: bash
       run: |
         secrets=$(az rest --method post --url '${{ inputs.staticWebAppsId }}/listsecrets?api-version=2020-06-01')
+        echo Secrets are $secrets
         deploymentToken=$(fromJson(secrets).properties.apiKey)
+        echo Deployment token is $deploymentToken
         echo "::set-output name=deploymentToken::$deploymentToken"  
     - name: Build and deploy Azure Static Web Apps application 
       uses: Azure/static-web-apps-deploy@v1
