@@ -5,8 +5,8 @@ inputs:
   azureCredentials:
     description: Azure credentials, typically get from secrets.AZURE_CREDENTIALS
     required: true
-  staticWebAppsId:
-    description: The ID of the Azure Static Web Apps
+  applicationName:
+    description: The application name, as defined on Azure
     required: true 
   projectWorkspace:
     description: The path to the project to build
@@ -28,7 +28,7 @@ runs:
       id: get-token
       shell: bash
       run: |
-        secrets=$(az rest --method post --url '${{ inputs.staticWebAppsId }}/listsecrets?api-version=2020-06-01')
+        secrets=$(az staticwebapp secrets list --name '${{ inputs.applicationName }}')
         echo Secrets are $secrets
         deploymentToken=$(fromJson($secrets).properties.apiKey)
         echo Deployment token is $deploymentToken
