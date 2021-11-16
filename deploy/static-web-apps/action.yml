@@ -30,7 +30,8 @@ runs:
       run: |
         echo AXXXXXAA =====
         $token = (az staticwebapp secrets list --name 'mil-cv-dev-swa' | ConvertFrom-Json).properties.apiKey
-        Write-Host "::set-output name=$token::$token"
+        Write-Host "::set-output name=token::$token"
+        echo $token
         echo ===== AXXXXXAA
     - name: AAA
       shell: bash
