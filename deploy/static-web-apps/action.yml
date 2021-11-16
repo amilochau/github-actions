@@ -24,16 +24,18 @@ runs:
       uses: azure/login@v1
       with:
         creds: ${{ inputs.azureCredentials }}
-    - name: EEEEE
-      shell: bash
-      run: |
-        echo ${{ fromJson(steps.get-secrets.outputs.swaSecrets).properties.apiKey }}
     - name: Determine Static Web Apps deployment token
       id: get-secrets
       shell: bash
       run: |
         secrets=$(az staticwebapp secrets list --name '${{ inputs.applicationName }}')
         echo "::set-output name=swaSecrets::$secrets"
+    - name: EEEEE
+      shell: bash
+      run: |
+        echo EEEEE =====
+        echo ${{ fromJson(steps.get-secrets.outputs.swaSecrets).properties.apiKey }}
+        echo ===== EEEEE
     - name: Build and deploy Azure Static Web Apps application 
       uses: Azure/static-web-apps-deploy@v1
       with:
