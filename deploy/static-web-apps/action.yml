@@ -8,22 +8,26 @@ inputs:
   projectOutput:
     description: The path to the output of the build project
     required: true
-  azureStaticWebAppsApiToken:
-    description: The token from the Azure Static Web Apps; could be found from the Azure Portal
+  staticWebAppsId:
+    description: The ID of the Azure Static Web Apps
     required: true 
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
-  nodeVersion:
-    description: The Node.js version to use
-    default: 16.x
 runs:
   using: composite
   steps:
+    - name: Determine Static Web Apps deployment token
+      id: get-token
+      shell: bash
+      run: |
+        secrets=$(az rest --method post --url '${{ inputs.staticWebAppsId }}/listsecrets?api-version=2020-06-01')
+        deploymentToken=$(fromJson(secrets).properties.apiKey)
+        echo "::set-output name=deploymentToken::$deploymentToken"  
     - name: Build and deploy Azure Static Web Apps application 
       uses: Azure/static-web-apps-deploy@v1
       with:
-        azure_static_web_apps_api_token: ${{ inputs.azureStaticWebAppsApiToken }}
+        azure_static_web_apps_api_token: ${{ steps.get-token.outputs.deploymentToken }}
         repo_token: ${{ inputs.githubToken }}
         action: 'upload'
         app_location: ${{ inputs.projectWorkspace }}
