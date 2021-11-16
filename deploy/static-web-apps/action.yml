@@ -31,7 +31,6 @@ runs:
         secrets=$(az staticwebapp secrets list --name '${{ inputs.applicationName }}')
         echo "::set-output name=swaSecrets::$secrets"
     - name: EEEEE
-      id: get-secrets
       shell: bash
       run: |
         echo ${{ fromJson(steps.get-secrets.outputs.swaSecrets).properties.apiKey }}
