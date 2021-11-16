@@ -26,26 +26,22 @@ runs:
         creds: ${{ inputs.azureCredentials }}
     - name: Determine Static Web Apps deployment token
       id: get-secrets
-      shell: bash
+      shell: pwsh
       run: |
-        secrets=$(az staticwebapp secrets list --name '${{ inputs.applicationName }}')
-        echo "::set-output name=swaSecrets::$secrets"
+        echo AXXXXXAA =====
+        $token = (az staticwebapp secrets list --name 'mil-cv-dev-swa' | ConvertFrom-Json).properties.apiKey
+        Write-Host "::set-output name=$token::$token"
+        echo ===== AXXXXXAA
     - name: AAA
       shell: bash
       run: |
         echo AAA =====
-        echo "${{ steps.get-secrets.outputs.swaSecrets }}"
+        echo "${{ steps.get-secrets.outputs.token }}"
         echo ===== AAA
-    - name: EEEEE
-      shell: bash
-      run: |
-        echo EEEEE =====
-        echo "${{ fromJson(steps.get-secrets.outputs.swaSecrets).properties.apiKey }}"
-        echo ===== EEEEE
     - name: Build and deploy Azure Static Web Apps application 
       uses: Azure/static-web-apps-deploy@v1
       with:
-        azure_static_web_apps_api_token: ${{ fromJson(steps.get-secrets.outputs.swaSecrets).properties.apiKey }}
+        azure_static_web_apps_api_token: ${{ steps.get-secrets.outputs.token }}
         repo_token: ${{ inputs.githubToken }}
         action: 'upload'
         app_location: ${{ inputs.projectWorkspace }}
