@@ -41,7 +41,7 @@ runs:
         echo Template version is $templateVersion
         echo "::set-output name=templateVersion::$templateVersion"
       working-directory: templates
-    - name: Deploy infrastructure to Azure
+    - name: Create Azure Resource Group
       uses: Azure/cli@v1
       with:
         inlineScript: |
@@ -51,9 +51,10 @@ runs:
               --name ${{ inputs.resourceGroupName }} \
               --location ${{ inputs.resourceGroupLocation }}
           fi
-          
-          az deployment group create \
-            --resource-group ${{ inputs.resourceGroupName }} \
-            --template-file ${{ inputs.templateFilePath }} \
-            --parameters ${{ inputs.parametersFilePath }} \
-            --parameters templateVersion=${{ steps.format-versions.outputs.templateVersion }}
+    - name: Deploy infrastructure to Azure
+      uses: azure/arm-deploy@v1
+      with:
+        resourceGroupName: ${{ inputs.resourceGroupName }}
+        template: ${{ inputs.templateFilePath }}
+        parameters: ${{ inputs.parametersFilePath }} templateVersion=${{ steps.format-versions.outputs.templateVersion }}
+        deploymentName: 'Deployment-GitHub'
