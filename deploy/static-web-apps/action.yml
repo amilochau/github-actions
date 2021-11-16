@@ -28,17 +28,8 @@ runs:
       id: get-secrets
       shell: pwsh
       run: |
-        echo AXXXXXAA =====
-        $token = (az staticwebapp secrets list --name 'mil-cv-dev-swa' | ConvertFrom-Json).properties.apiKey
+        $token = (az staticwebapp secrets list --name '${{ inputs.applicationName }}' | ConvertFrom-Json).properties.apiKey
         Write-Host "::set-output name=token::$token"
-        echo $token
-        echo ===== AXXXXXAA
-    - name: AAA
-      shell: bash
-      run: |
-        echo AAA =====
-        echo "${{ steps.get-secrets.outputs.token }}"
-        echo ===== AAA
     - name: Build and deploy Azure Static Web Apps application 
       uses: Azure/static-web-apps-deploy@v1
       with:
