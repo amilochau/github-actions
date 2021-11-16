@@ -28,6 +28,8 @@ jobs:
       - name: Deploy application
         uses: amilochau/github-actions/deploy//static-web-apps@v1
         with:
+          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+          staticWebAppsName: ${{ env.INFRA_APP_NAME }}
           projectWorkspace: ${{ env.PROJECT_WORKSPACE }}
           projectOutput: ${{ env.PROJECT_OUTPUT }}
           azureStaticWebAppsApiToken: ${{ secrets.SWA_TOKEN }}
@@ -38,11 +40,11 @@ jobs:
 
 | Input | Description | Required | Default value |
 | ----- | ----------- | -------- | ------------- |
+| `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
+| `applicationName` | The application name, as defined on Azure | **true** |
 | `projectWorkspace` | The path to the project to build | **true** |
 | `projectOutput` | The path to the output of the build project | **true** |
-| `azureStaticWebAppsApiToken` | The token from the Azure Static Web Apps; could be found from the Azure Portal | **true** |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
-| `nodeVersion` | The Node.js version to use | *false* | `16.x` |
 
 ### Outputs
 

@@ -2,28 +2,39 @@ name: Deploy Azure Static Web Apps application
 description: Deploy Azure Static Web Apps application
 author: Antoine Milochau
 inputs:
+  azureCredentials:
+    description: Azure credentials, typically get from secrets.AZURE_CREDENTIALS
+    required: true
+  applicationName:
+    description: The application name, as defined on Azure
+    required: true 
   projectWorkspace:
     description: The path to the project to build
     required: true
   projectOutput:
     description: The path to the output of the build project
     required: true
-  azureStaticWebAppsApiToken:
-    description: The token from the Azure Static Web Apps; could be found from the Azure Portal
-    required: true 
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
-  nodeVersion:
-    description: The Node.js version to use
-    default: 16.x
 runs:
   using: composite
   steps:
+    - name: Login on Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ inputs.azureCredentials }}
+    - name: Determine Static Web Apps deployment token
+      id: get-secrets
+      shell: pwsh
+      run: |
+        az staticwebapp disconnect --name '${{ inputs.applicationName }}'
+        $token = (az staticwebapp secrets list --name '${{ inputs.applicationName }}' | ConvertFrom-Json).properties.apiKey
+        Write-Host "::set-output name=token::$token"
     - name: Build and deploy Azure Static Web Apps application 
       uses: Azure/static-web-apps-deploy@v1
       with:
-        azure_static_web_apps_api_token: ${{ inputs.azureStaticWebAppsApiToken }}
+        azure_static_web_apps_api_token: ${{ steps.get-secrets.outputs.token }}
         repo_token: ${{ inputs.githubToken }}
         action: 'upload'
         app_location: ${{ inputs.projectWorkspace }}
