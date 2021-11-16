@@ -2,21 +2,28 @@ name: Deploy Azure Static Web Apps application
 description: Deploy Azure Static Web Apps application
 author: Antoine Milochau
 inputs:
+  azureCredentials:
+    description: Azure credentials, typically get from secrets.AZURE_CREDENTIALS
+    required: true
+  staticWebAppsId:
+    description: The ID of the Azure Static Web Apps
+    required: true 
   projectWorkspace:
     description: The path to the project to build
     required: true
   projectOutput:
     description: The path to the output of the build project
     required: true
-  staticWebAppsId:
-    description: The ID of the Azure Static Web Apps
-    required: true 
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
 runs:
   using: composite
   steps:
+    - name: Login on Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ inputs.azureCredentials }}
     - name: Determine Static Web Apps deployment token
       id: get-token
       shell: bash
