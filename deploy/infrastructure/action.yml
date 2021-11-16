@@ -20,6 +20,13 @@ inputs:
   parametersFilePath:
     description: The path of the parameters files to use during deployment
     required: true
+outputs:
+  resourceId:
+    description: "ID of the main deployed resource"
+    value: ${{ steps.deploy_infra_step.outputs.resourceId }}
+  resourceName:
+    description: "Name of the main deployed resource"
+    value: ${{ steps.deploy_infra_step.outputs.resourceName }}
 runs:
   using: composite
   steps:
@@ -52,6 +59,7 @@ runs:
               --location ${{ inputs.resourceGroupLocation }}
           fi
     - name: Deploy infrastructure to Azure
+      id: deploy_infra_step
       uses: azure/arm-deploy@v1
       with:
         resourceGroupName: ${{ inputs.resourceGroupName }}
