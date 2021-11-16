@@ -30,6 +30,12 @@ runs:
       run: |
         secrets=$(az staticwebapp secrets list --name '${{ inputs.applicationName }}')
         echo "::set-output name=swaSecrets::$secrets"
+    - name: AAA
+      shell: bash
+      run: |
+        echo AAA =====
+        echo "${{ steps.get-secrets.outputs.swaSecrets }}"
+        echo ===== AAA
     - name: EEEEE
       shell: bash
       run: |
