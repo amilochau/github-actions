@@ -30,7 +30,7 @@ runs:
       run: |
         secrets=$(az staticwebapp secrets list --name '${{ inputs.applicationName }}')
         echo Secrets are $secrets
-        deploymentToken=$(fromJson($secrets).properties.apiKey)
+        deploymentToken=${{fromJson($secrets).properties.apiKey}}
         echo Deployment token is $deploymentToken
         echo "::set-output name=deploymentToken::$deploymentToken"  
     - name: Build and deploy Azure Static Web Apps application 
