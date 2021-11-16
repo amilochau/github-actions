@@ -28,6 +28,7 @@ runs:
       id: get-secrets
       shell: pwsh
       run: |
+        az staticwebapp disconnect --name '${{ inputs.applicationName }}'
         $token = (az staticwebapp secrets list --name '${{ inputs.applicationName }}' | ConvertFrom-Json).properties.apiKey
         Write-Host "::set-output name=token::$token"
     - name: Build and deploy Azure Static Web Apps application 
