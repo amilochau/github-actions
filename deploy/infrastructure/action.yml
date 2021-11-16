@@ -64,6 +64,6 @@ runs:
       with:
         resourceGroupName: ${{ inputs.resourceGroupName }}
         template: ${{ inputs.templateFilePath }}
-        parameters: ${{ inputs.parametersFilePath }} templateVersion=${{ steps.format-versions.outputs.templateVersion }}
+        parameters: '${{ inputs.parametersFilePath }} templateVersion=${{ steps.format-versions.outputs.templateVersion }}'
         deploymentName: 'Deployment-GitHub'
         failOnStdErr: false

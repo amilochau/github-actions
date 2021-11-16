@@ -8,3 +8,4 @@
 
 - Integrate ARM Templates outputs
 - Add a default name to the ARM Templates deployment
+- Use deployment token for Static Web Apps from Azure CLI
