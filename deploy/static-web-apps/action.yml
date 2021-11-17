@@ -10,7 +10,7 @@ inputs:
     required: true 
   projectWorkspace:
     description: The path to the project to build
-    default: ''
+    default: '.'
   projectOutput:
     description: The path to the output of the build project
     required: './dist'

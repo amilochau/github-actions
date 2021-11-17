@@ -42,8 +42,8 @@ jobs:
 | ----- | ----------- | -------- | ------------- |
 | `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
 | `applicationName` | The application name, as defined on Azure | **true** |
-| `projectWorkspace` | The path to the project to build | **true** |
-| `projectOutput` | The path to the output of the build project | **true** |
+| `projectWorkspace` | The path to the project to build | *false* | `.` |
+| `projectOutput` | The path to the output of the build project | *false* | `./dist` |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 
 ### Outputs

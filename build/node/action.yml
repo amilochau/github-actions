@@ -4,7 +4,7 @@ author: Antoine Milochau
 inputs:
   projectWorkspace:
     description: The path to the project to build
-    default: ''
+    default: '.'
   nodeVersion:
     description: The Node.js version to use
     default: 16.x

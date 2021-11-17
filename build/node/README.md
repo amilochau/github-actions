@@ -33,7 +33,7 @@ jobs:
 
 | Input | Description | Required | Default value |
 | ----- | ----------- | -------- | ------------- |
-| `projectWorkspace` | The path to the project to build | **true** |
+| `projectWorkspace` | The path to the project to build | *false* | `.` |
 | `nodeVersion` | The Node.js version to use | *false* | `16.x` |
 
 ### Outputs
