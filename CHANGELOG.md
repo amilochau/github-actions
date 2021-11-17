@@ -6,6 +6,4 @@
 
 # New features
 
-- Integrate ARM Templates outputs
-- Add a default name to the ARM Templates deployment
-- Use deployment token for Static Web Apps from Azure CLI
+- Path parameters for `build/node` and `deploy/static-web-apps` are now optional, with default values
