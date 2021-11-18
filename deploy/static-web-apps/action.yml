@@ -13,7 +13,7 @@ inputs:
     default: '.'
   projectOutput:
     description: The path to the output of the build project
-    required: './dist'
+    default: './dist'
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
