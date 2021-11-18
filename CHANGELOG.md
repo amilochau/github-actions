@@ -6,4 +6,4 @@
 
 # New features
 
-- Path parameters for `build/node` and `deploy/static-web-apps` are now optional, with default values
+- Build Static Web Apps before deployment
