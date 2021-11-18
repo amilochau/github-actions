@@ -17,6 +17,9 @@ inputs:
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
+  nodeVersion:
+    description: The Node.js version to use
+    default: 16.x
 runs:
   using: composite
   steps:

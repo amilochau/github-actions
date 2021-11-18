@@ -45,6 +45,7 @@ jobs:
 | `projectWorkspace` | The path to the project to build | *false* | `.` |
 | `projectOutput` | The path to the output of the build project | *false* | `./dist` |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
+| `nodeVersion` | The Node.js version to use | *false* | `16.x` |
 
 ### Outputs
 
