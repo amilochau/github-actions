@@ -24,6 +24,20 @@ runs:
       uses: azure/login@v1
       with:
         creds: ${{ inputs.azureCredentials }}
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.nodeVersion }}
+        cache: 'npm'
+        cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
+    - name: Restore dependencies
+      shell: bash
+      run: npm ci
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Build application
+      shell: bash
+      run: npm run build
+      working-directory: ${{ inputs.projectWorkspace }}
     - name: Determine Static Web Apps deployment token
       id: get-secrets
       shell: pwsh
@@ -37,5 +51,6 @@ runs:
         azure_static_web_apps_api_token: ${{ steps.get-secrets.outputs.token }}
         repo_token: ${{ inputs.githubToken }}
         action: 'upload'
-        app_location: ${{ inputs.projectWorkspace }}
-        output_location: ${{ inputs.outputWorkspace }}
+        app_location: ${{ inputs.projectOutput }}
+        output_location: ''
+        skip_app_build: true
