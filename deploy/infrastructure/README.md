@@ -44,8 +44,13 @@ jobs:
 | ----- | ----------- | -------- | ------------- |
 | `azureTemplateVersion` | The version of 'azure-templates' to use | **true** |
 | `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
-| `resourceGroupName` | The name of the resource group where to deploy the infrastructure | **true** |
-| `resourceGroupLocation` | The location of the resource group where to deploy the infrastructure | **true** |
+| `scope` | Deployment scope | **true** |
+| `resourceGroupName` | The name of the resource group where to deploy the infrastructure | *false* |
+| `resourceGroupLocation` | The location of the resource group where to deploy the infrastructure | *false* |
+| `subscriptionId` | The ID of the Azure subscription | *false* |
+| `subscriptionRegion` | The region of the Azure subscription | *false* |
+| `managementGroupId` | The ID of the Azure management group | *false* |
+| `managementGroupRegion` | The region of the Azure management group | *false* |
 | `templateFilePath` | The path of the infrastructure template to deploy | **true** |
 | `parametersFilePath` | The path of the parameters files to use during deployment | **true** |
 
