@@ -6,4 +6,4 @@
 
 # New features
 
-- Build Static Web Apps before deployment
+- Support infrastructure deployment on a subscription or management group scope
