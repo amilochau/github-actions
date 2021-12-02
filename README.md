@@ -20,11 +20,13 @@ The following actions are proposed, and can be freely used:
 
 | Path | Usage | Readme |
 | ---- | ----- | ------ |
-| `amilochau/github-actions/build/netcore@main` | Build and Test .NET projects | [README.md](./build/netcore/README.md) |
-| `amilochau/github-actions/build/node@main` | Build and Test Node.js projects | [README.md](./build/node/README.md) |
-| `amilochau/github-actions/deploy/functions@main` | Deploy Azure Functions applications | [README.md](./deploy/functions/README.md) |
-| `amilochau/github-actions/deploy/gateway-backend@main` | Deploy an API Management backend | [README.md](./deploy/gateway-backend/README.md) |
-| `amilochau/github-actions/deploy/infrastructure@main` | Deploy Azure infrastructure | [README.md](./deploy/infrastructure/README.md) |
-| `amilochau/github-actions/deploy/static-web-apps@main` | Deploy Static Web Apps applications | [README.md](./deploy/static-web-apps/README.md) |
-| `amilochau/github-actions/release/nuget@main` | Release .NET libraries as NuGet packages into nuget.org and GitHub Packages | [README.md](./release/nuget/README.md) |
-| `amilochau/github-actions/release/basic@main` | Create complete GitHub Releases with a simple process | [README.md](./release/basic/README.md) |
+| `build/netcore` | Build and Test .NET projects | [README.md](./build/netcore/README.md) |
+| `build/node` | Build and Test Node.js projects | [README.md](./build/node/README.md) |
+| `deploy/functions` | Deploy Azure Functions applications | [README.md](./deploy/functions/README.md) |
+| `deploy/gateway-backend` | Deploy an API Management backend | [README.md](./deploy/gateway-backend/README.md) |
+| `deploy/infrastructure` | Deploy Azure infrastructure | [README.md](./deploy/infrastructure/README.md) |
+| `deploy/static-web-apps` | Deploy Static Web Apps applications | [README.md](./deploy/static-web-apps/README.md) |
+| `release/nuget` | Release .NET libraries as NuGet packages into nuget.org and GitHub Packages | [README.md](./release/nuget/README.md) |
+| `release/basic` | Create complete GitHub Releases with a simple process | [README.md](./release/basic/README.md) |
+
+*Note that all actions must start with the prefix `amilochau/github-actions/`*

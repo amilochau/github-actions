@@ -8,12 +8,32 @@ inputs:
   azureCredentials:
     description: Azure credentials, typically get from secrets.AZURE_CREDENTIALS
     required: true
+  scope:
+    description: Deployment scope
+    type: choice
+    options:
+    - resourceGroup
+    - subscription
+    - managementGroup
+    default: resourcegroup
   resourceGroupName:
     description: The name of the resource group where to deploy the infrastructure
-    required: true
+    required: false
   resourceGroupLocation:
     description: The location of the resource group where to deploy the infrastructure
-    required: true
+    required: false
+  subscriptionId:
+    description: The ID of the Azure subscription
+    required: false
+  subscriptionRegion:
+    description: The region of the Azure subscription
+    required: false
+  managementGroupId:
+    description: The ID of the Azure management group
+    required: false
+  managementGroupRegion:
+    description: The region of the Azure management group
+    required: false
   templateFilePath:
     description: The path of the infrastructure template to deploy
     required: true
@@ -23,10 +43,10 @@ inputs:
 outputs:
   resourceId:
     description: "ID of the main deployed resource"
-    value: ${{ steps.deploy_infra_step.outputs.resourceId }}
+    value: ${{ steps.deploy_infra_step_rg.outputs.resourceId }}
   resourceName:
     description: "Name of the main deployed resource"
-    value: ${{ steps.deploy_infra_step.outputs.resourceName }}
+    value: ${{ steps.deploy_infra_step_rg.outputs.resourceName }}
 runs:
   using: composite
   steps:
@@ -41,6 +61,7 @@ runs:
       with:
         creds: ${{ inputs.azureCredentials }}
     - name: Determine template version
+      if: ${{ inputs.scope == 'resourceGroup' }}
       id: format-versions
       shell: bash
       run: |
@@ -49,6 +70,7 @@ runs:
         echo "::set-output name=templateVersion::$templateVersion"
       working-directory: templates
     - name: Create Azure Resource Group
+      if: ${{ inputs.scope == 'resourceGroup' }}
       uses: Azure/cli@v1
       with:
         inlineScript: |
@@ -59,11 +81,37 @@ runs:
               --location ${{ inputs.resourceGroupLocation }}
           fi
     - name: Deploy infrastructure to Azure
-      id: deploy_infra_step
+      if: ${{ inputs.scope == 'resourceGroup' }}
+      id: deploy_infra_step_rg
       uses: azure/arm-deploy@v1
       with:
+        scope: 'resourcegroup'
         resourceGroupName: ${{ inputs.resourceGroupName }}
         template: ${{ inputs.templateFilePath }}
         parameters: '${{ inputs.parametersFilePath }} templateVersion=${{ steps.format-versions.outputs.templateVersion }}'
+        deploymentName: 'Deployment-GitHub'
+        failOnStdErr: false
+    - name: Deploy infrastructure to Azure
+      if: ${{ inputs.scope == 'subscription' }}
+      id: deploy_infra_step_sub
+      uses: azure/arm-deploy@v1
+      with:
+        scope: 'subscription'
+        subscriptionId: ${{ inputs.subscriptionId }}
+        region: ${{ inputs.subscriptionRegion }}
+        template: ${{ inputs.templateFilePath }}
+        parameters: ${{ inputs.parametersFilePath }}
+        deploymentName: 'Deployment-GitHub'
+        failOnStdErr: false
+    - name: Deploy infrastructure to Azure
+      if: ${{ inputs.scope == 'managementGroup' }}
+      id: deploy_infra_step_mg
+      uses: azure/arm-deploy@v1
+      with:
+        scope: 'managementgroup'
+        managementGroupId: ${{ inputs.managementGroupId }}
+        region: ${{ inputs.managementGroupRegion }}
+        template: ${{ inputs.templateFilePath }}
+        parameters: ${{ inputs.parametersFilePath }}
         deploymentName: 'Deployment-GitHub'
         failOnStdErr: false
