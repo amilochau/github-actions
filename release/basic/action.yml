@@ -103,16 +103,16 @@ runs:
           $headers.Add("Accept", "application/vnd.github.v3+json")
           $headers.Add("Authorization", "token ${{ inputs.githubToken }}")
 
-          $response = Invoke-RestMethod 'https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest' -Method 'GET' -Headers $headers
+          $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers
           $lastRelease = $response.tag_name
           echo "Latest release is $($lastRelease)."
 
           $headers.Add("Content-Type", "application/json")
           $body = "{
-          `"tag_name`": `"v1.10.0`",
-          `"previous_tag_name`": `"v1.9.0`"
+          `"tag_name`": `"${{ steps.format-versions.outputs.versionLong }}`",
+          `"previous_tag_name`": `"$lastRelease`"
           }"
-          $response = Invoke-RestMethod 'https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes' -Method 'POST' -Headers $headers -Body $body
+          $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" -Method 'POST' -Headers $headers -Body $body
           $releaseNoteResponse = $response.body
           echo 'Release note has been generated.'
           echo $releaseNoteResponse
