@@ -19,8 +19,8 @@ inputs:
     description: Disable GitHub Release creation for unstable version
     required: false
     default: false
-  includeReleaseNotes:
-    description: Include automatic release notes
+  generateReleaseNotes:
+    description: Generate automatic release notes
     required: false
     default: false
   githubToken:
@@ -96,12 +96,13 @@ runs:
     - name: Create GitHub Release
       shell: pwsh
       run: |
+        $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+        $headers.Add("Accept", "application/vnd.github.v3+json")
+        $headers.Add("Authorization", "token ${{ inputs.githubToken }}")
+        
         echo 'Checking if release notes must be included...'
-        if ("${{ inputs.includeReleaseNotes }}" -eq $true) {
+        if ("${{ inputs.generateReleaseNotes }}" -eq $true) {
           echo 'Release note must be included.'
-          $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-          $headers.Add("Accept", "application/vnd.github.v3+json")
-          $headers.Add("Authorization", "token ${{ inputs.githubToken }}")
 
           $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers
           $lastRelease = $response.tag_name
@@ -112,17 +113,39 @@ runs:
           `"tag_name`": `"${{ steps.format-versions.outputs.versionLong }}`",
           `"previous_tag_name`": `"$lastRelease`"
           }"
+
           $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" -Method 'POST' -Headers $headers -Body $body
-          $releaseNoteResponse = $response.body
+          $releaseNote = $response.body
+          
           echo 'Release note has been generated.'
-          echo $releaseNoteResponse
+          echo $releaseNote
+        } else {
+          $releaseNote = Get-Content 'CHANGELOG.md'
         }
 
         echo 'Creating release...'
         if ("${{ steps.format-versions.outputs.versionPrerelease }}" -eq $false) {
-          gh release create ${{ steps.format-versions.outputs.versionLong }} --title "Version ${{ steps.format-versions.outputs.versionLong }}" --notes-file CHANGELOG.md --draft
+          $body = "{
+          `"tag_name`": `"${{ steps.format-versions.outputs.versionLong }}`",
+          `"name`": `"Version ${{ steps.format-versions.outputs.versionLong }}`",
+          `"body`": `"$releaseNote`",
+          `"draft`": true
+          }"
+
+          Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
+
           echo 'Prerelease has been created.'
         } elseif ("${{ inputs.avoidGitHubPrerelease }}" -eq $false) {
+          $body = "{
+          `"tag_name`": `"${{ steps.format-versions.outputs.versionLong }}`",
+          `"name`": `"Version ${{ steps.format-versions.outputs.versionLong }}`",
+          `"body`": `"$releaseNote`",
+          `"draft`": true,
+          `"prerelease`": true
+          }"
+
+          Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
+
           gh release create ${{ steps.format-versions.outputs.versionLong }} --title "Version ${{ steps.format-versions.outputs.versionLong }}" --notes-file CHANGELOG.md --draft --prerelease
           echo 'Release has been created.'
         }
