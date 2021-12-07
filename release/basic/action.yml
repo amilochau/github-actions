@@ -110,7 +110,7 @@ runs:
             -H "Accept: application/vnd.github.v3+json" `
             -H "Authorization: token ${{ inputs.githubToken }}" `
             "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" `
-            -d '{ "tag_name": "${{ steps.format-versions.outputs.versionLong }}", "previous_tag_name": "$lastRelease" }'
+            -d "{ \"tag_name\": \"${{ steps.format-versions.outputs.versionLong }}\", \"previous_tag_name\": \"$lastRelease\" }"
           echo 'Release note has been generated.'
           echo $releaseNoteResponse
         }
