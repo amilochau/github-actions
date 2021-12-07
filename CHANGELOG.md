@@ -6,4 +6,4 @@
 
 # New features
 
-- Support infrastructure deployment on a subscription or management group scope
+- Detach Static Web Apps before deployment

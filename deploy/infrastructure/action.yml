@@ -69,17 +69,28 @@ runs:
         echo Template version is $templateVersion
         echo "::set-output name=templateVersion::$templateVersion"
       working-directory: templates
+    - name: Detach Static Web Apps
+      if: ${{ inputs.scope == 'resourceGroup' }}
+      shell: pwsh
+      run: |
+        echo 'Checking if Static Web Apps must be disconnected...'
+        az staticwebapp list --resource-group ${{ inputs.resourceGroupName }} | ConvertFrom-Json | ForEach-Object {
+          echo "Disconnecting $($_.name)..."
+          az staticwebapp disconnect --name $_.name
+          echo "$($_.name) has been disconnected."
+        }
     - name: Create Azure Resource Group
       if: ${{ inputs.scope == 'resourceGroup' }}
-      uses: Azure/cli@v1
-      with:
-        inlineScript: |
-          if [ $(az group exists --name ${{ inputs.resourceGroupName }}) != 'true' ];
-          then
-            az group create \
-              --name ${{ inputs.resourceGroupName }} \
-              --location ${{ inputs.resourceGroupLocation }}
-          fi
+      shell: pwsh
+      run: |
+        echo 'Checking if the resource group must be created...'
+        if ((az group exists --name ${{ inputs.resourceGroupName }}) -eq 'false') {
+          echo 'Creating the resource group...'
+          az group create `
+            --name ${{ inputs.resourceGroupName }} `
+            --location ${{ inputs.resourceGroupLocation }}
+          echo 'Resource group has been be created.'
+        }
     - name: Deploy infrastructure to Azure
       if: ${{ inputs.scope == 'resourceGroup' }}
       id: deploy_infra_step_rg
