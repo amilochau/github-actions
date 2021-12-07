@@ -19,6 +19,10 @@ inputs:
     description: Disable GitHub Release creation for unstable version
     required: false
     default: false
+  includeReleaseNotes:
+    description: Include automatic release notes
+    required: false
+    default: false
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
@@ -90,14 +94,32 @@ runs:
         git tag -fa ${{ steps.format-versions.outputs.versionLong }} -m "Version ${{ steps.format-versions.outputs.versionLong }}"
         git push origin --tags
     - name: Create GitHub Release
-      shell: bash
+      shell: pwsh
       run: |
-        if [ ${{ steps.format-versions.outputs.versionPrerelease }} != 'true' ];
-        then
+        echo 'Checking if release notes must be included...'
+        if (${{ inputs.includeReleaseNotes }} -eq 'true') {
+          $lastRelease = (curl `
+            -H "Accept: application/vnd.github.v3+json" `
+            -H "Authorization: token ${{ inputs.githubToken }}" `
+            https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }}/releases/latest `
+            | ConvertFrom-Json).tag_name
+          $releaseNoteResponse = curl `
+            -X POST `
+            -H "Accept: application/vnd.github.v3+json" `
+            -H "Authorization: token ${{ inputs.githubToken }}" `
+            https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }}/releases/generate-notes `
+            -d '{ "tag_name": ${{ steps.format-versions.outputs.versionLong }}, "previous_tag_name": $lastRelease }'
+            echo 'Release note has been generated.'
+            echo $releaseNoteResponse
+        }
+
+        echo 'Creating release...'
+        if (${{ steps.format-versions.outputs.versionPrerelease }} -eq 'false') {
           gh release create ${{ steps.format-versions.outputs.versionLong }} --title "Version ${{ steps.format-versions.outputs.versionLong }}" --notes-file CHANGELOG.md --draft
-        elif [ ${{ inputs.avoidGitHubPrerelease }} != 'true' ];
-        then
+          echo 'Prerelease has been created.'
+        } elseif (${{ inputs.avoidGitHubPrerelease }} -eq 'false') {
           gh release create ${{ steps.format-versions.outputs.versionLong }} --title "Version ${{ steps.format-versions.outputs.versionLong }}" --notes-file CHANGELOG.md --draft --prerelease
-        fi
+          echo 'Release has been created.'
+        }
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}

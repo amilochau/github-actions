@@ -49,6 +49,8 @@ jobs:
           versionPatch: ${{ github.event.inputs.versionPatch }}
           versionUnstableSuffix: ${{ github.event.inputs.versionUnstableSuffix }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+          avoidGitHubPrerelease: true
+          includeReleaseNotes: true
 ```
 
 ### Inputs
@@ -61,6 +63,7 @@ jobs:
 | `versionUnstableSuffix` | The unstable suffix version - must be added when you want to create a pre-release | **true** |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
+| `includeReleaseNotes` | Include automatic release notes |  *false* | `false` |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
 
 ### Outputs
