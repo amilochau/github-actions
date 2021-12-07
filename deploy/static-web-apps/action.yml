@@ -48,6 +48,13 @@ runs:
         az staticwebapp disconnect --name '${{ inputs.applicationName }}'
         $token = (az staticwebapp secrets list --name '${{ inputs.applicationName }}' | ConvertFrom-Json).properties.apiKey
         Write-Host "::set-output name=token::$token"
+    - name: Detach Static Web Apps
+      shell: pwsh
+      run: |
+        if ((az staticwebapp list --resource-group ${{ env.INFRA_RG_NAME }} | ConvertFrom-Json).Count -gt 0)
+        {
+          az staticwebapp disconnect --name ${{ env.INFRA_APP_NAME }}
+        }
     - name: Build and deploy Azure Static Web Apps application 
       uses: Azure/static-web-apps-deploy@v1
       with:
