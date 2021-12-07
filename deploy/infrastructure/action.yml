@@ -72,21 +72,23 @@ runs:
     - name: Detach Static Web Apps
       shell: pwsh
       run: |
-        echo Checking if a Static Web Apps must be disconnected...
+        echo 'Checking if a Static Web Apps must be disconnected...'
         if ((az staticwebapp list --resource-group ${{ env.INFRA_RG_NAME }} | ConvertFrom-Json).Count -gt 0)
         {
           az staticwebapp disconnect --name ${{ env.INFRA_APP_NAME }}
-          echo Static Web Apps must be disconnected.
+          echo 'Static Web Apps has been be disconnected.'
         }
     - name: Create Azure Resource Group
       if: ${{ inputs.scope == 'resourceGroup' }}
       shell: pwsh
       run: |
+        echo 'Creating the resource group...'
         if ((az group exists --name ${{ inputs.resourceGroupName }}) -eq 'true')
         {
-          az group create \
-            --name ${{ inputs.resourceGroupName }} \
+          az group create `
+            --name ${{ inputs.resourceGroupName }} `
             --location ${{ inputs.resourceGroupLocation }}
+          echo 'Resource group has been be created.'
         }
     - name: Deploy infrastructure to Azure
       if: ${{ inputs.scope == 'resourceGroup' }}
