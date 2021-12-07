@@ -70,20 +70,22 @@ runs:
         echo "::set-output name=templateVersion::$templateVersion"
       working-directory: templates
     - name: Detach Static Web Apps
+      if: ${{ inputs.scope == 'resourceGroup' }}
       shell: pwsh
       run: |
-        echo 'Checking if a Static Web Apps must be disconnected...'
-        if ((az staticwebapp list --resource-group ${{ env.INFRA_RG_NAME }} | ConvertFrom-Json).Count -gt 0)
+        echo 'Checking if Static Web Apps must be disconnected...'
+        az staticwebapp list --resource-group ${{ inputs.resourceGroupName }} | ConvertFrom-Json | ForEach-Object
         {
-          az staticwebapp disconnect --name ${{ env.INFRA_APP_NAME }}
-          echo 'Static Web Apps has been be disconnected.'
+          echo 'Disconnecting ${$_.name}...''
+          az staticwebapp disconnect --name $_.name
+          echo '${$_.name} has been disconnected.'
         }
     - name: Create Azure Resource Group
       if: ${{ inputs.scope == 'resourceGroup' }}
       shell: pwsh
       run: |
         echo 'Creating the resource group...'
-        if ((az group exists --name ${{ inputs.resourceGroupName }}) -eq 'true')
+        if ((az group exists --name ${{ inputs.resourceGroupName }}) -eq 'false')
         {
           az group create `
             --name ${{ inputs.resourceGroupName }} `
