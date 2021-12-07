@@ -99,18 +99,21 @@ runs:
         echo 'Checking if release notes must be included...'
         if ("${{ inputs.includeReleaseNotes }}" -eq $true) {
           echo 'Release note must be included.'
-          $lastRelease = (curl -s `
-            -H "Accept: application/vnd.github.v3+json" `
-            -H "Authorization: token ${{ inputs.githubToken }}" `
-            "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" `
-            | ConvertFrom-Json).tag_name
+          $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+          $headers.Add("Accept", "application/vnd.github.v3+json")
+          $headers.Add("Authorization", "token ${{ inputs.githubToken }}")
+
+          $response = Invoke-RestMethod 'https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest' -Method 'GET' -Headers $headers
+          $lastRelease = $response.tag_name
           echo "Latest release is $($lastRelease)."
-          $releaseNoteResponse = curl -s `
-            -X POST `
-            -H "Accept: application/vnd.github.v3+json" `
-            -H "Authorization: token ${{ inputs.githubToken }}" `
-            "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" `
-            -d "{ \"tag_name\": \"${{ steps.format-versions.outputs.versionLong }}\", \"previous_tag_name\": \"$lastRelease\" }"
+
+          $headers.Add("Content-Type", "application/json")
+          $body = "{
+          `"tag_name`": `"v1.10.0`",
+          `"previous_tag_name`": `"v1.9.0`"
+          }"
+          $response = Invoke-RestMethod 'https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes' -Method 'POST' -Headers $headers -Body $body
+          $releaseNoteResponse = $response.body
           echo 'Release note has been generated.'
           echo $releaseNoteResponse
         }
