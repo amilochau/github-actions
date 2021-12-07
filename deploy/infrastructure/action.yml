@@ -16,13 +16,6 @@ inputs:
     - subscription
     - managementGroup
     default: resourcegroup
-  applicationType:
-    description: Application type
-    type: choice
-    options:
-    - default
-    - static-web-apps
-    default: default
   resourceGroupName:
     description: The name of the resource group where to deploy the infrastructure
     required: false
@@ -77,12 +70,13 @@ runs:
         echo "::set-output name=templateVersion::$templateVersion"
       working-directory: templates
     - name: Detach Static Web Apps
-      if: ${{ inputs.applicationType == 'static-web-apps' }}
       shell: pwsh
       run: |
+        echo Checking if a Static Web Apps must be disconnected...
         if ((az staticwebapp list --resource-group ${{ env.INFRA_RG_NAME }} | ConvertFrom-Json).Count -gt 0)
         {
           az staticwebapp disconnect --name ${{ env.INFRA_APP_NAME }}
+          echo Static Web Apps must be disconnected.
         }
     - name: Create Azure Resource Group
       if: ${{ inputs.scope == 'resourceGroup' }}
