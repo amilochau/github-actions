@@ -16,6 +16,13 @@ inputs:
     - subscription
     - managementGroup
     default: resourcegroup
+  applicationType:
+    description: Application type
+    type: choice
+    options:
+    - default
+    - static-web-apps
+    default: default
   resourceGroupName:
     description: The name of the resource group where to deploy the infrastructure
     required: false
@@ -69,17 +76,24 @@ runs:
         echo Template version is $templateVersion
         echo "::set-output name=templateVersion::$templateVersion"
       working-directory: templates
+    - name: Detach Static Web Apps
+      if: ${{ inputs.applicationType == 'static-web-apps' }}
+      shell: pwsh
+      run: |
+        if ((az staticwebapp list --resource-group ${{ env.INFRA_RG_NAME }} | ConvertFrom-Json).Count -gt 0)
+        {
+          az staticwebapp disconnect --name ${{ env.INFRA_APP_NAME }}
+        }
     - name: Create Azure Resource Group
       if: ${{ inputs.scope == 'resourceGroup' }}
-      uses: Azure/cli@v1
-      with:
-        inlineScript: |
-          if [ $(az group exists --name ${{ inputs.resourceGroupName }}) != 'true' ];
-          then
-            az group create \
-              --name ${{ inputs.resourceGroupName }} \
-              --location ${{ inputs.resourceGroupLocation }}
-          fi
+      shell: pwsh
+      run: |
+        if ((az group exists --name ${{ inputs.resourceGroupName }}) -eq 'true')
+        {
+          az group create \
+            --name ${{ inputs.resourceGroupName }} \
+            --location ${{ inputs.resourceGroupLocation }}
+        }
     - name: Deploy infrastructure to Azure
       if: ${{ inputs.scope == 'resourceGroup' }}
       id: deploy_infra_step_rg
