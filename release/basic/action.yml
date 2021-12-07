@@ -110,8 +110,8 @@ runs:
 
           $headers.Add("Content-Type", "application/json")
           $body = "{
-          `"tag_name`": `"${{ steps.format-versions.outputs.versionLong }}`",
-          `"previous_tag_name`": `"$lastRelease`"
+            `"tag_name`": `"${{ steps.format-versions.outputs.versionLong }}`",
+            `"previous_tag_name`": `"$lastRelease`"
           }"
 
           $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" -Method 'POST' -Headers $headers -Body $body
@@ -123,13 +123,15 @@ runs:
           $releaseNote = Get-Content 'CHANGELOG.md'
         }
 
+        $releaseNoteAsJson = $releaseNote | ConvertTo-Json
+
         echo 'Creating release...'
         if ("${{ steps.format-versions.outputs.versionPrerelease }}" -eq $false) {
           $body = "{
-          `"tag_name`": `"${{ steps.format-versions.outputs.versionLong }}`",
-          `"name`": `"Version ${{ steps.format-versions.outputs.versionLong }}`",
-          `"body`": `"$releaseNote`",
-          `"draft`": true
+            `"tag_name`": `"${{ steps.format-versions.outputs.versionLong }}`",
+            `"name`": `"Version ${{ steps.format-versions.outputs.versionLong }}`",
+            `"body`": `"$releaseNoteAsJson`",
+            `"draft`": true
           }"
 
           Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
@@ -137,16 +139,15 @@ runs:
           echo 'Prerelease has been created.'
         } elseif ("${{ inputs.avoidGitHubPrerelease }}" -eq $false) {
           $body = "{
-          `"tag_name`": `"${{ steps.format-versions.outputs.versionLong }}`",
-          `"name`": `"Version ${{ steps.format-versions.outputs.versionLong }}`",
-          `"body`": `"$releaseNote`",
-          `"draft`": true,
-          `"prerelease`": true
+            `"tag_name`": `"${{ steps.format-versions.outputs.versionLong }}`",
+            `"name`": `"Version ${{ steps.format-versions.outputs.versionLong }}`",
+            `"body`": `"$releaseNoteAsJson`",
+            `"draft`": true,
+            `"prerelease`": true
           }"
 
           Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
 
-          gh release create ${{ steps.format-versions.outputs.versionLong }} --title "Version ${{ steps.format-versions.outputs.versionLong }}" --notes-file CHANGELOG.md --draft --prerelease
           echo 'Release has been created.'
         }
       env:
