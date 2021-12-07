@@ -74,19 +74,17 @@ runs:
       shell: pwsh
       run: |
         echo 'Checking if Static Web Apps must be disconnected...'
-        az staticwebapp list --resource-group ${{ inputs.resourceGroupName }} | ConvertFrom-Json | ForEach-Object
-        {
-          echo "Disconnecting ${$_.name}..."
+        az staticwebapp list --resource-group ${{ inputs.resourceGroupName }} | ConvertFrom-Json | ForEach-Object {
+          echo "Disconnecting $($_.name)..."
           az staticwebapp disconnect --name $_.name
-          echo '${$_.name} has been disconnected.'
+          echo "$($_.name) has been disconnected."
         }
     - name: Create Azure Resource Group
       if: ${{ inputs.scope == 'resourceGroup' }}
       shell: pwsh
       run: |
         echo 'Checking if the resource group must be created...'
-        if ((az group exists --name ${{ inputs.resourceGroupName }}) -eq 'false')
-        {
+        if ((az group exists --name ${{ inputs.resourceGroupName }}) -eq 'false') {
           echo 'Creating the resource group...'
           az group create `
             --name ${{ inputs.resourceGroupName }} `
