@@ -96,6 +96,11 @@ runs:
     - name: Create GitHub Release
       shell: pwsh
       run: |
+        if (("${{ steps.format-versions.outputs.versionPrerelease }}" -eq $true) -Or ("${{ inputs.avoidGitHubPrerelease }}" -eq $true)) {
+          echo 'No release must be created.'
+          return
+        }
+
         $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
         $headers.Add("Accept", "application/vnd.github.v3+json")
         $headers.Add("Authorization", "token ${{ inputs.githubToken }}")
