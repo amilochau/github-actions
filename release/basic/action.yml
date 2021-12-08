@@ -118,37 +118,44 @@ runs:
           $releaseNote = $response.body
           
           echo 'Release note has been generated.'
-          echo $releaseNote
         } else {
+          echo 'Release note is read from CHANGELOG.md'
           $releaseNote = Get-Content 'CHANGELOG.md'
+          
+          echo 'Release note has been read.'
         }
 
+        echo $releaseNote
         $releaseNoteAsJson = $releaseNote | ConvertTo-Json
 
         echo 'Creating release...'
         if ("${{ steps.format-versions.outputs.versionPrerelease }}" -eq $false) {
+          echo 'A stable release must be created.'
+
           $body = [PSCustomObject]@{
             tag_name = "${{ steps.format-versions.outputs.versionLong }}";
             name = "Version ${{ steps.format-versions.outputs.versionLong }}";
-            body = $releaseNote;
+            body = $releaseNoteAsJson;
             draft = $true;
           } | ConvertTo-Json
 
           Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
 
-          echo 'Prerelease has been created.'
+          echo 'Stable release has been created.'
         } elseif ("${{ inputs.avoidGitHubPrerelease }}" -eq $false) {
+          echo 'A prerelease must be created.'
+
           $body = [PSCustomObject]@{
             tag_name = "${{ steps.format-versions.outputs.versionLong }}";
             name = "Version ${{ steps.format-versions.outputs.versionLong }}";
-            body = $releaseNote;
+            body = $releaseNoteAsJson;
             draft = $true;
             prerelease = $true;
           } | ConvertTo-Json
 
           Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
 
-          echo 'Release has been created.'
+          echo 'Prerelease has been created.'
         }
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}
