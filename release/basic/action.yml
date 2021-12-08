@@ -120,13 +120,13 @@ runs:
           echo 'Release note has been generated.'
         } else {
           echo 'Release note is read from CHANGELOG.md'
-          $releaseNote = Get-Content 'CHANGELOG.md'
+          
+          $releaseNote = Get-Content 'CHANGELOG.md' | Out-String
           
           echo 'Release note has been read.'
         }
 
         echo $releaseNote
-        $releaseNoteAsJson = $releaseNote | ConvertTo-Json
 
         echo 'Creating release...'
         if ("${{ steps.format-versions.outputs.versionPrerelease }}" -eq $false) {
@@ -135,7 +135,7 @@ runs:
           $body = [PSCustomObject]@{
             tag_name = "${{ steps.format-versions.outputs.versionLong }}";
             name = "Version ${{ steps.format-versions.outputs.versionLong }}";
-            body = $releaseNoteAsJson;
+            body = $releaseNote;
             draft = $true;
           } | ConvertTo-Json
 
@@ -148,7 +148,7 @@ runs:
           $body = [PSCustomObject]@{
             tag_name = "${{ steps.format-versions.outputs.versionLong }}";
             name = "Version ${{ steps.format-versions.outputs.versionLong }}";
-            body = $releaseNoteAsJson;
+            body = $releaseNote;
             draft = $true;
             prerelease = $true;
           } | ConvertTo-Json
