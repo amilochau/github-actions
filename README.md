@@ -4,13 +4,9 @@
 
 `github-actions` is a set of GitHub Actions developed to help defining workflows for `amilochau` projects.
 
-## Getting Started
+## What's new
 
-1. Installation process
-From your local computer, clone the repository.
-
-2. Integration process
-Please follow the development good practices, then follow the integration process.
+You can find the new releases on the [GitHub releases page](https://github.com/amilochau/github-actions/releases).
 
 ---
 

@@ -15,6 +15,10 @@ inputs:
     description: Disable GitHub Release creation for unstable version
     required: false
     default: true
+  generateReleaseNotes:
+    description: Generate automatic release notes
+    required: false
+    default: false
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
@@ -35,7 +39,7 @@ outputs:
     value: ${{ steps.format-versions.outputs.versionNumber }}
   versionPrerelease:
     description: If the version is recognized as a prerelease
-    value: ${{ steps.format-versions.outputs.versionPrerelease }}
+    value: ${{ env.VERSION_PRERELEASE }}
 runs:
   using: composite
   steps:
@@ -85,16 +89,75 @@ runs:
         fi
 
         echo Publish projects to GitHub Packages
-        dotnet nuget push ./build/*.nupkg 
+        dotnet nuget push ./build/*.nupkg
     - name: Create GitHub Release
-      shell: bash
+      shell: pwsh
       run: |
-        if [ ${{ env.VERSION_PRERELEASE }} != 'true' ];
-        then
-          gh release create ${{ env.VERSION_NUMBER }} --title "Version ${{ env.VERSION_NUMBER }}" --notes-file CHANGELOG.md --draft
-        elif [ ${{ inputs.avoidGitHubPrerelease }} != 'true' ];
-        then
-          gh release create ${{ env.VERSION_NUMBER }} --title "Version ${{ env.VERSION_NUMBER }}" --notes-file CHANGELOG.md --draft --prerelease
-        fi
+        if (("${{ env.VERSION_PRERELEASE }}" -eq $true) -Or ("${{ inputs.avoidGitHubPrerelease }}" -eq $true)) {
+          echo 'No release must be created.'
+          return
+        }
+
+        $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+        $headers.Add("Accept", "application/vnd.github.v3+json")
+        $headers.Add("Authorization", "token ${{ inputs.githubToken }}")
+        
+        echo 'Checking if release notes must be included...'
+        if ("${{ inputs.generateReleaseNotes }}" -eq $true) {
+          echo 'Release note must be included.'
+
+          $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers
+          $lastRelease = $response.tag_name
+          echo "Latest release is $($lastRelease)."
+
+          $headers.Add("Content-Type", "application/json")
+          $body = [PSCustomObject]@{
+            tag_name = "${{ env.VERSION_NUMBER }}";
+            previous_tag_name = $lastRelease;
+          } | ConvertTo-Json
+
+          $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" -Method 'POST' -Headers $headers -Body $body
+          $releaseNote = $response.body
+          
+          echo 'Release note has been generated.'
+        } else {
+          echo 'Release note is read from CHANGELOG.md'
+          
+          $releaseNote = Get-Content 'CHANGELOG.md' | Out-String
+          
+          echo 'Release note has been read.'
+        }
+
+        echo $releaseNote
+
+        echo 'Creating release...'
+        if ("${{ env.VERSION_PRERELEASE }}" -eq $false) {
+          echo 'A stable release must be created.'
+
+          $body = [PSCustomObject]@{
+            tag_name = "${{ env.VERSION_NUMBER }}";
+            name = "Version ${{ env.VERSION_NUMBER }}";
+            body = $releaseNote;
+            draft = $true;
+          } | ConvertTo-Json
+
+          Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
+
+          echo 'Stable release has been created.'
+        } elseif ("${{ inputs.avoidGitHubPrerelease }}" -eq $false) {
+          echo 'A prerelease must be created.'
+
+          $body = [PSCustomObject]@{
+            tag_name = "${{ env.VERSION_NUMBER }}";
+            name = "Version ${{ env.VERSION_NUMBER }}";
+            body = $releaseNote;
+            draft = $true;
+            prerelease = $true;
+          } | ConvertTo-Json
+
+          Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
+
+          echo 'Prerelease has been created.'
+        }
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}

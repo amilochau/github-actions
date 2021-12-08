@@ -35,10 +35,6 @@ on:
         description: Disable GitHub Release creation for unstable version
         type: boolean
         default: true
-      generateReleaseNotes:
-        description: Generate automatic release notes
-        type: boolean
-        default: true
 
 jobs:
   release:
@@ -54,7 +50,7 @@ jobs:
           versionUnstableSuffix: ${{ github.event.inputs.versionUnstableSuffix }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           avoidGitHubPrerelease: ${{ github.event.inputs.avoidGitHubPrerelease }}
-          generateReleaseNotes: ${{ github.event.inputs.generateReleaseNotes }}
+          generateReleaseNotes: true
 ```
 
 ### Inputs
