@@ -96,7 +96,7 @@ runs:
     - name: Create GitHub Release
       shell: pwsh
       run: |
-        if (("${{ steps.format-versions.outputs.versionPrerelease }}" -eq $true) -Or ("${{ inputs.avoidGitHubPrerelease }}" -eq $true)) {
+        if (("${{ steps.format-versions.outputs.versionPrerelease }}" -eq $true) -And ("${{ inputs.avoidGitHubPrerelease }}" -eq $true)) {
           echo 'No release must be created.'
           return
         }
