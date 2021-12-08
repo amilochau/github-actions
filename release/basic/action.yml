@@ -134,7 +134,7 @@ runs:
         echo $releaseNote
 
         echo 'Creating release...'
-        if ("${{ steps.format-versions.outputs.versionPrerelease }}" -eq $false) {
+        if (${{ steps.format-versions.outputs.versionPrerelease }} -eq $false) {
           echo 'A stable release must be created.'
 
           $body = [PSCustomObject]@{
@@ -161,6 +161,8 @@ runs:
           Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
 
           echo 'Prerelease has been created.'
+        } else {
+          echo 'No release has been created!'
         }
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}
