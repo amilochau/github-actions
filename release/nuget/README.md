@@ -36,6 +36,8 @@ jobs:
           projectsToPublish: ${{ env.PROJECTS_SDK }}
           versionFile: ${{ env.VERSION_FILE }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+          avoidGitHubPrerelease: true
+          generateReleaseNotes: true
 ```
 
 ### Inputs
@@ -47,6 +49,7 @@ jobs:
 | `projectsToPublish` | The path to the projects to publish - can be a .csproj or a .sln file | **true** |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
+| `generateReleaseNotes` | Generate automatic release notes |  *false* | `false` |
 | `nugetOrgToken` | The nuget.org token, typically get from a secret; used to publish projects to nuget.org | *false* | `''` |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
 

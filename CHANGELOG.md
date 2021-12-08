@@ -7,3 +7,4 @@
 # New features
 
 - Detach Static Web Apps before deployment
+- Support automatic release notes generation in `release/*` Actions

@@ -16,6 +16,10 @@ on:
         description: Unstable suffix version - must be added when you want to create a pre-release
         required: false
         default: ''
+      avoidGitHubPrerelease:
+        description: Disable GitHub Release creation for unstable version
+        type: boolean
+        default: true
 
 concurrency: release
 
@@ -34,4 +38,5 @@ jobs:
           versionPatch: ${{ github.event.inputs.versionPatch }}
           versionUnstableSuffix: ${{ github.event.inputs.versionUnstableSuffix }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          avoidGitHubPrerelease: true
+          avoidGitHubPrerelease: ${{ github.event.inputs.avoidGitHubPrerelease }}
+          generateReleaseNotes: true
