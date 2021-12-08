@@ -39,7 +39,7 @@ outputs:
     value: ${{ steps.format-versions.outputs.versionNumber }}
   versionPrerelease:
     description: If the version is recognized as a prerelease
-    value: ${{ env.VERSION_PRERELEASE }}
+    value: ${{ steps.format-versions.outputs.versionPrerelease }}
 runs:
   using: composite
   steps:
