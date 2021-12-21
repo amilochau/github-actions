@@ -1,0 +1,164 @@
+name: Release npm packages
+description: Package, publish and release Node.js libraries as npm packages into npmjs.com
+author: Antoine Milochau
+inputs:
+  projectWorkspace:
+    description: The path to the project to build
+    default: '.'
+  nodeVersion:
+    description: The Node.js version to use
+    default: 16.x
+  avoidGitHubPrerelease:
+    description: Disable GitHub Release creation for unstable version
+    required: false
+    default: true
+  generateReleaseNotes:
+    description: Generate automatic release notes
+    required: false
+    default: false
+  githubToken:
+    description: The GitHub token, typically get from secrets.GITHUB_TOKEN
+    required: true
+  mainBranch:
+    description: The name of the main branch
+    default: 'refs/heads/main'
+    required: false
+  npmjsComToken:
+    description: The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com
+    default: ''
+    required: false
+outputs:
+  versionNumber:
+    description: The version as defined in the Git tag
+    value: ${{ steps.format-versions.outputs.versionNumber }}
+  versionPrerelease:
+    description: If the version is recognized as a prerelease
+    value: ${{ steps.format-versions.outputs.versionPrerelease }}
+runs:
+  using: composite
+  steps:
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.nodeVersion }}
+        cache: 'npm'
+        cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
+    - name: Get current version
+      shell: pwsh
+      run: |
+        $versionFileContent = Get-Content -Path ${{ inputs.projectWorkspace }}/package.json | ConvertFrom-Json
+        $version = "v" + $packageJson.version
+        echo "VERSION_NUMBER=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf-8 -Append
+        
+        $exp = '^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
+        $match = ($version -match $exp).ToString().ToLower()
+        echo "VERSION_PRERELEASE=$match" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf-8 -Append
+    - name: Format versions
+      id: format-versions
+      run: |
+        echo "::set-output name=versionNumber::${{ env.VERSION_NUMBER }}"
+        echo "::set-output name=versionPrerelease::${{ env.VERSION_PRERELEASE }}"
+      shell: bash
+    - name: Check prerelease if not main branch
+      shell: bash
+      run: |
+        if [ ${{ github.ref }} != ${{ inputs.mainBranch }} ] && [ ${{ env.VERSION_PRERELEASE }} != 'true' ];
+        then
+          echo You can not publish a pre-release package if you are not in the main branch
+          echo Version: ${{ env.VERSION_NUMBER }}
+          echo Pre-release: ${{ env.VERSION_PRERELEASE }}
+          echo Branch: ${{ github.ref }}
+          exit 1
+        fi
+    - name: Restore dependencies
+      shell: bash
+      run: npm ci
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Build application
+      shell: bash
+      run: npm run build
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Publish projects to GitHub Packages or npmjs.com
+      shell: bash
+      run: |
+        if [ ${{ inputs.npmjsComToken }} != '' ];
+        then
+          echo Publish projects to npmjs.com
+          npm publish ${{ inputs.projectWorkspace }} --registry https://registry.npmjs.org
+        fi
+
+        echo Publish projects to GitHub Packages
+          npm publish ${{ inputs.projectWorkspace }} --registry https://npm.pkg.github.com
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create GitHub Release
+      shell: pwsh
+      run: |
+        if (("${{ env.VERSION_PRERELEASE }}" -eq $true) -And ("${{ inputs.avoidGitHubPrerelease }}" -eq $true)) {
+          echo 'No release must be created.'
+          return
+        }
+
+        $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+        $headers.Add("Accept", "application/vnd.github.v3+json")
+        $headers.Add("Authorization", "token ${{ inputs.githubToken }}")
+        
+        echo 'Checking if release notes must be included...'
+        if ("${{ inputs.generateReleaseNotes }}" -eq $true) {
+          echo 'Release note must be included.'
+
+          $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers
+          $lastRelease = $response.tag_name
+          echo "Latest release is $($lastRelease)."
+
+          $headers.Add("Content-Type", "application/json")
+          $body = [PSCustomObject]@{
+            tag_name = "${{ env.VERSION_NUMBER }}";
+            previous_tag_name = $lastRelease;
+          } | ConvertTo-Json
+
+          $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" -Method 'POST' -Headers $headers -Body $body
+          $releaseNote = $response.body
+          
+          echo 'Release note has been generated.'
+        } else {
+          echo 'Release note is read from CHANGELOG.md'
+          
+          $releaseNote = Get-Content 'CHANGELOG.md' | Out-String
+          
+          echo 'Release note has been read.'
+        }
+
+        echo $releaseNote
+
+        echo 'Creating release...'
+        if ("${{ env.VERSION_PRERELEASE }}" -eq $false) {
+          echo 'A stable release must be created.'
+
+          $body = [PSCustomObject]@{
+            tag_name = "${{ env.VERSION_NUMBER }}";
+            name = "Version ${{ env.VERSION_NUMBER }}";
+            body = $releaseNote;
+            draft = $true;
+          } | ConvertTo-Json
+
+          Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
+
+          echo 'Stable release has been created.'
+        } elseif ("${{ inputs.avoidGitHubPrerelease }}" -eq $false) {
+          echo 'A prerelease must be created.'
+
+          $body = [PSCustomObject]@{
+            tag_name = "${{ env.VERSION_NUMBER }}";
+            name = "Version ${{ env.VERSION_NUMBER }}";
+            body = $releaseNote;
+            draft = $true;
+            prerelease = $true;
+          } | ConvertTo-Json
+
+          Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
+
+          echo 'Prerelease has been created.'
+        }
+      env:
+        GITHUB_TOKEN: ${{ inputs.githubToken }}
