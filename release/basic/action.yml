@@ -66,7 +66,7 @@ runs:
       run: |
         if [ ${{ github.ref }} != ${{ inputs.mainBranch }} ] && [ ${{ steps.format-versions.outputs.versionPrerelease }} != 'true' ];
         then
-          echo You can not publish a pre-release package if you are not in the main branch
+          echo You can not publish a stable release package if you are not in the main branch
           echo Pre-release: ${{ steps.format-versions.outputs.versionPrerelease }}
           echo Branch: ${{ github.ref }}
           exit 1
