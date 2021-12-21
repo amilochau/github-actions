@@ -84,17 +84,13 @@ runs:
         if [ ${{ inputs.npmjsComToken }} != '' ];
         then
           echo Publish projects to npmjs.com
-          npm publish ${{ inputs.projectWorkspace }} --registry https://registry.npmjs.org
+          npm publish ${{ inputs.projectWorkspace }} --registry https://registry.npmjs.org --//registry.npmjs.org/:_authToken ${{ inputs.npmjsComToken }}
         fi
-      env:
-        NODE_AUTH_TOKEN: ${{ inputs.npmjsComToken }}
     - name: Publish projects to GitHub Packages
       shell: bash
       run: |
         echo Publish projects to GitHub Packages
-          npm publish ${{ inputs.projectWorkspace }} --registry https://npm.pkg.github.com
-      env:
-        NODE_AUTH_TOKEN: ${{ inputs.githubToken }}
+          npm publish ${{ inputs.projectWorkspace }} --registry https://npm.pkg.github.com --//npm.pkg.github.com/:_authToken ${{ inputs.githubToken }}
     - name: Create GitHub Release
       shell: pwsh
       run: |
