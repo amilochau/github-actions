@@ -3,7 +3,7 @@ description: Package, publish and release Node.js libraries as npm packages into
 author: Antoine Milochau
 inputs:
   projectWorkspace:
-    description: The path to the project to build
+    description: The path to the project workspace
     default: '.'
   nodeVersion:
     description: The Node.js version to use
@@ -78,7 +78,7 @@ runs:
       shell: bash
       run: npm run build
       working-directory: ${{ inputs.projectWorkspace }}
-    - name: Publish projects to GitHub Packages or npmjs.com
+    - name: Publish projects to npmjs.com
       shell: bash
       run: |
         if [ ${{ inputs.npmjsComToken }} != '' ];
@@ -86,11 +86,15 @@ runs:
           echo Publish projects to npmjs.com
           npm publish ${{ inputs.projectWorkspace }} --registry https://registry.npmjs.org
         fi
-
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.npmjsComToken }}
+    - name: Publish projects to GitHub Packages
+      shell: bash
+      run: |
         echo Publish projects to GitHub Packages
           npm publish ${{ inputs.projectWorkspace }} --registry https://npm.pkg.github.com
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ inputs.githubToken }}
     - name: Create GitHub Release
       shell: pwsh
       run: |
