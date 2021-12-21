@@ -1,16 +1,13 @@
-name: Release NuGet packages
-description: Package, publish and release .NET libraries as NuGet packages into GitHub Packages and nuget.org
+name: Release npm packages
+description: Package, publish and release Node.js libraries as npm packages into npmjs.com
 author: Antoine Milochau
 inputs:
-  versionFile:
-    description: The path to the file where the version can be found - must be an XML file
-    required: true
-  projectsToBuild:
-    description: The path to the projects to build - can be a .csproj or a .sln file
-    required: true
-  projectsToPublish:
-    description: The path to the projects to publish - can be a .csproj or a .sln file
-    required: true
+  projectWorkspace:
+    description: The path to the project workspace
+    default: '.'
+  nodeVersion:
+    description: The Node.js version to use
+    default: 16.x
   avoidGitHubPrerelease:
     description: Disable GitHub Release creation for unstable version
     required: false
@@ -26,13 +23,10 @@ inputs:
     description: The name of the main branch
     default: 'refs/heads/main'
     required: false
-  nugetOrgToken:
-    description: The nuget.org token, typically get from a secret; used to publish projects to nuget.org
+  npmjsComToken:
+    description: The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com
     default: ''
     required: false
-  verbosity:
-    description: The verbosity of the dotnet CLI
-    default: minimal
 outputs:
   versionNumber:
     description: The version as defined in the Git tag
@@ -43,11 +37,17 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.nodeVersion }}
+        cache: 'npm'
+        cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
     - name: Get current version
       shell: pwsh
       run: |
-        [xml]$xmlDocument = Get-Content -Path ${{ inputs.versionFile }}
-        $version = "v" + $xmlDocument.Project.PropertyGroup.Version
+        $versionFileContent = Get-Content -Path ${{ inputs.projectWorkspace }}/package.json | ConvertFrom-Json
+        $version = "v" + $versionFileContent.version
         echo "VERSION_NUMBER=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf-8 -Append
         
         $exp = '^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
@@ -72,24 +72,29 @@ runs:
         fi
     - name: Restore dependencies
       shell: bash
-      run: dotnet restore ${{ inputs.projectsToBuild }} --verbosity ${{ inputs.verbosity }}
-    - name: Build projects
+      run: npm ci
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Build application
       shell: bash
-      run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --no-restore --verbosity ${{ inputs.verbosity }}
-    - name: Pack projects
-      shell: bash
-      run: dotnet pack ${{ inputs.projectsToPublish }} --configuration Release --no-restore --no-build --output ./build --verbosity ${{ inputs.verbosity }}
-    - name: Publish projects to GitHub Packages or nuget.org
+      run: npm run build
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Publish projects to npmjs.com
       shell: bash
       run: |
-        if [ ${{ inputs.nugetOrgToken }} != '' ];
+        if [ ${{ inputs.npmjsComToken }} != '' ];
         then
-          echo Publish projects to nuget.org
-          dotnet nuget push ./build/*.nupkg -k ${{ inputs.nugetOrgToken }} -s https://api.nuget.org/v3/index.json
+          echo Publish projects to npmjs.com
+          npm set registry "https://registry.npmjs.org"
+          npm set //registry.npmjs.org/:_authToken ${{ inputs.npmjsComToken }}
+          npm publish ${{ inputs.projectWorkspace }}
         fi
-
+    - name: Publish projects to GitHub Packages
+      shell: bash
+      run: |
         echo Publish projects to GitHub Packages
-        dotnet nuget push ./build/*.nupkg
+        npm set registry "https://npm.pkg.github.com"
+        npm set //npm.pkg.github.com/:_authToken ${{ inputs.githubToken }}
+        npm publish ${{ inputs.projectWorkspace }}
     - name: Create GitHub Release
       shell: pwsh
       run: |
