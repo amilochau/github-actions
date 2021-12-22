@@ -106,6 +106,7 @@ runs:
         $headers.Add("Authorization", "token ${{ inputs.githubToken }}")
         
         echo 'Checking if release notes must be included...'
+        $releaseNote = '...'
         if ("${{ inputs.generateReleaseNotes }}" -eq $true) {
           echo 'Release note must be included.'
 

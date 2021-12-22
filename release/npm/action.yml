@@ -108,6 +108,7 @@ runs:
         $headers.Add("Authorization", "token ${{ inputs.githubToken }}")
         
         echo 'Checking if release notes must be included...'
+        $releaseNote = '...'
         if ("${{ inputs.generateReleaseNotes }}" -eq $true) {
           echo 'Release note must be included.'
 
@@ -167,6 +168,8 @@ runs:
           Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
 
           echo 'Prerelease has been created.'
+        } else {
+          echo 'No release has been created!'
         }
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}
