@@ -9,7 +9,7 @@
   The npmjs.com token
   .PARAMETER githubToken
   The GitHub token
-  .PARAMETER avoidGitHubPrerelease
+  .PARAMETER avoidGithubPrerelease
   Avoid creating GitHub release for prerelease versions
   .PARAMETER generateReleaseNotes
   Generate release notes
@@ -36,7 +36,7 @@ param(
 )
 param(
   [parameter(Mandatory = $true)]
-  [bool]$avoidGitHubPrerelease
+  [bool]$avoidGithubPrerelease
 )
 param(
   [parameter(Mandatory = $true)]
@@ -47,7 +47,7 @@ Write-Output "Main branch is: $mainBranch"
 Write-Output "Current branch is: $currentBranch"
 Write-Output "npmjs.com token is: $npmjsComToken"
 Write-Output "GitHub token is: $githubToken"
-Write-Output "Avoid GitHub prerelease is: $avoidGitHubPrerelease"
+Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
 Write-Output "Generate release notes is: $generateReleaseNotes"
 
 
@@ -96,7 +96,7 @@ npm publish
 
 Write-Output '=========='
 Write-Output 'Create GitHub Release...'
-if ($match -And $avoidGitHubPrerelease) {
+if ($match -And $avoidGithubPrerelease) {
   Write-Output 'No release must be created.'
   return
 }
@@ -152,7 +152,7 @@ if ($match -eq $false) {
   Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
 
   Write-Output 'Stable release has been created.'
-} elseif ($avoidGitHubPrerelease -eq $false) {
+} elseif ($avoidGithubPrerelease -eq $false) {
   Write-Output 'A prerelease must be created.'
 
   $body = [PSCustomObject]@{
