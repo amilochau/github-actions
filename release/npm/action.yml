@@ -108,23 +108,28 @@ runs:
         $headers.Add("Authorization", "token ${{ inputs.githubToken }}")
         
         echo 'Checking if release notes must be included...'
+        $releaseNote = '...'
         if ("${{ inputs.generateReleaseNotes }}" -eq $true) {
           echo 'Release note must be included.'
 
-          $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers
-          $lastRelease = $response.tag_name
-          echo "Latest release is $($lastRelease)."
+          $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
+          if ($response.tag_name) {
+            $lastRelease = $response.tag_name
+            echo "Latest release is $($lastRelease)."
 
-          $headers.Add("Content-Type", "application/json")
-          $body = [PSCustomObject]@{
-            tag_name = "${{ env.VERSION_NUMBER }}";
-            previous_tag_name = $lastRelease;
-          } | ConvertTo-Json
+            $headers.Add("Content-Type", "application/json")
+            $body = [PSCustomObject]@{
+              tag_name = "${{ env.VERSION_NUMBER }}";
+              previous_tag_name = $lastRelease;
+            } | ConvertTo-Json
 
-          $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" -Method 'POST' -Headers $headers -Body $body
-          $releaseNote = $response.body
-          
-          echo 'Release note has been generated.'
+            $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" -Method 'POST' -Headers $headers -Body $body
+            $releaseNote = $response.body
+            
+            echo 'Release note has been generated.'
+          } else {
+            echo 'No release has been found, release note can\'t be generated.'
+          }
         } else {
           echo 'Release note is read from CHANGELOG.md'
           
@@ -163,6 +168,8 @@ runs:
           Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
 
           echo 'Prerelease has been created.'
+        } else {
+          echo 'No release has been created!'
         }
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}
