@@ -5,7 +5,7 @@
   The main branch
   .PARAMETER currentBranch
   The current branch
-  .PARAMETER npmjsComToken
+  .PARAMETER npmjsToken
   The npmjs.com token
   .PARAMETER githubToken
   The GitHub token
@@ -15,37 +15,30 @@
   Generate release notes
 #>
 
-Write-Output '=========='
-Write-Output 'Get parameters...'
+[CmdletBinding()]
+Param(
+  [parameter(Mandatory = $true)]
+  [string]$mainBranch,
 
-param(
   [parameter(Mandatory = $true)]
-  [string]$mainBranch
-)
-param(
+  [string]$currentBranch,
+  
   [parameter(Mandatory = $true)]
-  [string]$currentBranch
-)
-param(
+  [string]$npmjsToken,
+  
   [parameter(Mandatory = $true)]
-  [string]$npmjsComToken
-)
-param(
+  [string]$githubToken,
+  
   [parameter(Mandatory = $true)]
-  [string]$githubToken
-)
-param(
-  [parameter(Mandatory = $true)]
-  [bool]$avoidGithubPrerelease
-)
-param(
+  [bool]$avoidGithubPrerelease,
+  
   [parameter(Mandatory = $true)]
   [bool]$generateReleaseNotes
 )
 
 Write-Output "Main branch is: $mainBranch"
 Write-Output "Current branch is: $currentBranch"
-Write-Output "npmjs.com token is: $npmjsComToken"
+Write-Output "npmjs.com token is: $npmjsToken"
 Write-Output "GitHub token is: $githubToken"
 Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
 Write-Output "Generate release notes is: $generateReleaseNotes"
@@ -81,10 +74,10 @@ npm run build
 
 Write-Output '=========='
 Write-Output 'Publish projects to npmjs.com...'
-if ($npmjsComToken.length -gt 0) {
+if ($npmjsToken.length -gt 0) {
   Write-Output 'Token for npmjs.com is found.'
   npm set registry "https://registry.npmjs.org"
-  npm set //registry.npmjs.org/:_authToken $npmjsComToken
+  npm set //registry.npmjs.org/:_authToken $npmjsToken
   npm publish
 }
 
