@@ -30,17 +30,19 @@ Param(
   [string]$githubToken,
   
   [parameter(Mandatory = $true)]
-  [bool]$avoidGithubPrerelease,
+  [string]$avoidGithubPrerelease,
   
   [parameter(Mandatory = $true)]
-  [bool]$generateReleaseNotes
+  [string]$generateReleaseNotes
 )
 
 Write-Output "Main branch is: $mainBranch"
 Write-Output "Current branch is: $currentBranch"
-Write-Output "npmjs.com token is: $npmjsToken"
-Write-Output "GitHub token is: $githubToken"
+
+[System.Convert]::ToBoolean($avoidGithubPrerelease)
 Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
+
+[System.Convert]::ToBoolean($generateReleaseNotes)
 Write-Output "Generate release notes is: $generateReleaseNotes"
 
 
