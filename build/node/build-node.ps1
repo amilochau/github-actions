@@ -1,3 +1,8 @@
+<#
+  .SYNOPSIS
+  This script build and tests a Node.js application
+#>
+
 Write-Output '=========='
 Write-Output 'Install packages...'
 npm ci
