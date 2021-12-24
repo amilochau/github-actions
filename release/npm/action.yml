@@ -45,7 +45,13 @@ runs:
         cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
     - name: Release npm with script
       shell: pwsh
-      run: ${{ github.action_path }}/release-npm.ps1 -mainBranch ${{ inputs.mainBranch }} -currentBranch ${{ github.ref }} -npmjsToken ${{ inputs.npmjsComToken }} -githubToken ${{ inputs.githubToken }} -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} -generateReleaseNotes ${{ inputs.generateReleaseNotes }}
+      run: ${{ github.action_path }}/release-npm.ps1 `
+        -mainBranch ${{ inputs.mainBranch }} `
+        -currentBranch ${{ github.ref }} `
+        -npmjsToken ${{ inputs.npmjsComToken }} `
+        -githubToken ${{ inputs.githubToken }} `
+        -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
+        -generateReleaseNotes ${{ inputs.generateReleaseNotes }}
       working-directory: ${{ inputs.projectWorkspace }}
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}
