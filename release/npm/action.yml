@@ -27,13 +27,6 @@ inputs:
     description: The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com
     default: ''
     required: false
-outputs:
-  versionNumber:
-    description: The version as defined in the Git tag
-    value: ${{ steps.format-versions.outputs.versionNumber }}
-  versionPrerelease:
-    description: If the version is recognized as a prerelease
-    value: ${{ steps.format-versions.outputs.versionPrerelease }}
 runs:
   using: composite
   steps:
