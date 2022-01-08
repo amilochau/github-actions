@@ -63,7 +63,7 @@ Write-Output 'Check prerelease if not main branch...'
 
 if ( ($currentBranch -ne $mainBranch) -And ($match -ne $true)) {
   Write-Output 'You can not publish a stable release package if you are not in the main branch'
-  exit 1
+  throw 'You can not publish a stable release package if you are not in the main branch'
 }
 
 Write-Output '=========='
