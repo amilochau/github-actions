@@ -76,7 +76,7 @@ if (($null -ne $versionUnstableSuffix) -and ($versionUnstableSuffix.Length -gt 0
 Write-Output "Set long version to $versionLong"
 Write-Output "::set-output name=versionLong::$versionLong"
 
-$versionShort=v$versionMajor
+$versionShort="v$versionMajor"
 Write-Output "Set short version to $versionShort"
 Write-Output "::set-output name=versionShort::$versionShort"
 
