@@ -23,14 +23,14 @@ Param(
 
 Write-Output '=========='
 Write-Output 'Install packages...'
-run: dotnet restore $projectsToBuild --verbosity $verbosity
+dotnet restore $projectsToBuild --verbosity $verbosity
  
 Write-Output '=========='
 Write-Output 'Build application...'
-run: dotnet build $projectsToBuild --configuration Release --no-restore --verbosity $verbosity
+dotnet build $projectsToBuild --configuration Release --no-restore --verbosity $verbosity
 
 Write-Output '=========='
 Write-Output 'Run tests...'
-run: dotnet test $projectsToTest --configuration Release --no-restore --no-build --verbosity $verbosity
+dotnet test $projectsToTest --configuration Release --no-restore --no-build --verbosity $verbosity
 
 Write-Output '=========='
