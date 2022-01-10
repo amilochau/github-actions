@@ -27,6 +27,13 @@ inputs:
     description: The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com
     default: ''
     required: false
+outputs:
+  versionNumber:
+    description: The version as defined in the Git tag
+    value: ${{ steps.release.outputs.versionNumber }}
+  versionPrerelease:
+    description: If the version is recognized as a prerelease
+    value: ${{ steps.release.outputs.versionPrerelease }}
 runs:
   using: composite
   steps:
@@ -37,6 +44,7 @@ runs:
         cache: 'npm'
         cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
     - name: Release npm with script
+      id: release
       shell: pwsh
       run: ${{ github.action_path }}/release-npm.ps1 `
         -mainBranch ${{ inputs.mainBranch }} `

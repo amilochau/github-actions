@@ -1,12 +1,20 @@
 <#
   .SYNOPSIS
   This script releases a workspace as a npm package
+  .PARAMETER versionFile
+  The file where to get version (XML file)
   .PARAMETER mainBranch
   The main branch
   .PARAMETER currentBranch
   The current branch
-  .PARAMETER npmjsToken
-  The npmjs.com token
+  .PARAMETER projectsToBuild
+  The projects to build
+  .PARAMETER projectsToPublish
+  The projects to publish
+  .PARAMETER verbosity
+  The .NET CLI verbosity level
+  .PARAMETER nugetOrgToken
+  The nuget.org token
   .PARAMETER githubToken
   The GitHub token
   .PARAMETER avoidGithubPrerelease
@@ -18,14 +26,26 @@
 [CmdletBinding()]
 Param(
   [parameter(Mandatory = $true)]
+  [string]$versionFile,
+
+  [parameter(Mandatory = $true)]
   [string]$mainBranch,
 
   [parameter(Mandatory = $true)]
   [string]$currentBranch,
   
   [parameter(Mandatory = $true)]
-  [string]$npmjsToken,
-  
+  [string]$projectsToBuild,
+
+  [parameter(Mandatory = $true)]
+  [string]$projectsToPublish,
+
+  [parameter(Mandatory = $true)]
+  [string]$verbosity,
+
+  [parameter(Mandatory = $true)]
+  [string]$nugetOrgToken,
+
   [parameter(Mandatory = $true)]
   [string]$githubToken,
   
@@ -49,8 +69,8 @@ Write-Output "Generate release notes is: $generateReleaseNotes"
 Write-Output '=========='
 Write-Output 'Get current version...'
 
-$versionFileContent = Get-Content -Path package.json | ConvertFrom-Json
-$version = "v" + $versionFileContent.version
+[xml]$versionFileContent = Get-Content -Path $versionFile
+$version = "v" + $versionFileContent.Project.PropertyGroup.Version
 Write-Output "Version is: $version"
 Write-Host "::set-output name=versionNumber::$version"
 
@@ -58,7 +78,6 @@ $exp = '^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-((?:0|[1-9]\d*|\d*[a-zA-Z-][0
 $match = $version -match $exp
 Write-Output "Prerelease match is: $match"
 Write-Host "::set-output name=versionPrerelease::$match"
-
 
 Write-Output '=========='
 Write-Output 'Check prerelease if not main branch...'
@@ -70,26 +89,26 @@ if ( ($currentBranch -ne $mainBranch) -And ($match -ne $true)) {
 
 Write-Output '=========='
 Write-Output 'Install packages...'
-npm ci
+dotnet restore $projectsToBuild --verbosity $verbosity
 
 Write-Output '=========='
 Write-Output 'Build application...'
-npm run build
+dotnet build $projectsToBuild --configuration Release --no-restore --verbosity $verbosity
 
 Write-Output '=========='
-Write-Output 'Publish projects to npmjs.com...'
-if ($npmjsToken.length -gt 0) {
-  Write-Output 'Token for npmjs.com is found.'
-  npm set registry "https://registry.npmjs.org"
-  npm set //registry.npmjs.org/:_authToken $npmjsToken
-  npm publish
+Write-Output 'Pack projects...'
+dotnet pack $projectsToPublish --configuration Release --no-restore --no-build --output ./build --verbosity $verbosity
+
+Write-Output '=========='
+Write-Output 'Publish projects to nuget.org...'
+if ($nugetOrgToken.length -gt 0) {
+  Write-Output 'Token for nuget.org is found.'
+  dotnet nuget push ./build/*.nupkg -k $nugetOrgToken -s https://api.nuget.org/v3/index.json
 }
 
 Write-Output '=========='
 Write-Output 'Publish projects to GitHub Packages...'
-npm set registry "https://npm.pkg.github.com"
-npm set //npm.pkg.github.com/:_authToken $githubToken
-npm publish
+dotnet nuget push ./build/*.nupkg
 
 Write-Output '=========='
 Write-Output 'Create GitHub Release...'

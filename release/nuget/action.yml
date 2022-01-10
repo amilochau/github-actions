@@ -36,135 +36,27 @@ inputs:
 outputs:
   versionNumber:
     description: The version as defined in the Git tag
-    value: ${{ steps.format-versions.outputs.versionNumber }}
+    value: ${{ steps.release.outputs.versionNumber }}
   versionPrerelease:
     description: If the version is recognized as a prerelease
-    value: ${{ steps.format-versions.outputs.versionPrerelease }}
+    value: ${{ steps.release.outputs.versionPrerelease }}
 runs:
   using: composite
   steps:
-    - name: Get current version
+    - name: Release npm with script
+      id: release
       shell: pwsh
-      run: |
-        [xml]$xmlDocument = Get-Content -Path ${{ inputs.versionFile }}
-        $version = "v" + $xmlDocument.Project.PropertyGroup.Version
-        echo "VERSION_NUMBER=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf-8 -Append
-        
-        $exp = '^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
-        $match = ($version -match $exp).ToString().ToLower()
-        echo "VERSION_PRERELEASE=$match" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf-8 -Append
-    - name: Format versions
-      id: format-versions
-      run: |
-        echo "::set-output name=versionNumber::${{ env.VERSION_NUMBER }}"
-        echo "::set-output name=versionPrerelease::${{ env.VERSION_PRERELEASE }}"
-      shell: bash
-    - name: Check prerelease if not main branch
-      shell: bash
-      run: |
-        if [ ${{ github.ref }} != ${{ inputs.mainBranch }} ] && [ ${{ env.VERSION_PRERELEASE }} != 'true' ];
-        then
-          echo You can not publish a stable release package if you are not in the main branch
-          echo Version: ${{ env.VERSION_NUMBER }}
-          echo Pre-release: ${{ env.VERSION_PRERELEASE }}
-          echo Branch: ${{ github.ref }}
-          exit 1
-        fi
-    - name: Restore dependencies
-      shell: bash
-      run: dotnet restore ${{ inputs.projectsToBuild }} --verbosity ${{ inputs.verbosity }}
-    - name: Build projects
-      shell: bash
-      run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --no-restore --verbosity ${{ inputs.verbosity }}
-    - name: Pack projects
-      shell: bash
-      run: dotnet pack ${{ inputs.projectsToPublish }} --configuration Release --no-restore --no-build --output ./build --verbosity ${{ inputs.verbosity }}
-    - name: Publish projects to GitHub Packages or nuget.org
-      shell: bash
-      run: |
-        if [ ${{ inputs.nugetOrgToken }} != '' ];
-        then
-          echo Publish projects to nuget.org
-          dotnet nuget push ./build/*.nupkg -k ${{ inputs.nugetOrgToken }} -s https://api.nuget.org/v3/index.json
-        fi
-
-        echo Publish projects to GitHub Packages
-        dotnet nuget push ./build/*.nupkg
-    - name: Create GitHub Release
-      shell: pwsh
-      run: |
-        if (("${{ env.VERSION_PRERELEASE }}" -eq $true) -And ("${{ inputs.avoidGitHubPrerelease }}" -eq $true)) {
-          echo 'No release must be created.'
-          return
-        }
-
-        $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-        $headers.Add("Accept", "application/vnd.github.v3+json")
-        $headers.Add("Authorization", "token ${{ inputs.githubToken }}")
-        
-        echo 'Checking if release notes must be included...'
-        $releaseNote = '...'
-        if ("${{ inputs.generateReleaseNotes }}" -eq $true) {
-          echo 'Release note must be included.'
-
-          $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
-          if ($response.tag_name) {
-            $lastRelease = $response.tag_name
-            echo "Latest release is $($lastRelease)."
-
-            $headers.Add("Content-Type", "application/json")
-            $body = [PSCustomObject]@{
-              tag_name = "${{ env.VERSION_NUMBER }}";
-              previous_tag_name = $lastRelease;
-            } | ConvertTo-Json
-
-            $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" -Method 'POST' -Headers $headers -Body $body
-            $releaseNote = $response.body
-            
-            echo 'Release note has been generated.'
-          } else {
-            echo 'No release has been found, release note can\'t be generated.'
-          }
-        } else {
-          echo 'Release note is read from CHANGELOG.md'
-          
-          $releaseNote = Get-Content 'CHANGELOG.md' | Out-String
-          
-          echo 'Release note has been read.'
-        }
-
-        echo $releaseNote
-
-        echo 'Creating release...'
-        if ("${{ env.VERSION_PRERELEASE }}" -eq $false) {
-          echo 'A stable release must be created.'
-
-          $body = [PSCustomObject]@{
-            tag_name = "${{ env.VERSION_NUMBER }}";
-            name = "Version ${{ env.VERSION_NUMBER }}";
-            body = $releaseNote;
-            draft = $true;
-          } | ConvertTo-Json
-
-          Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
-
-          echo 'Stable release has been created.'
-        } elseif ("${{ inputs.avoidGitHubPrerelease }}" -eq $false) {
-          echo 'A prerelease must be created.'
-
-          $body = [PSCustomObject]@{
-            tag_name = "${{ env.VERSION_NUMBER }}";
-            name = "Version ${{ env.VERSION_NUMBER }}";
-            body = $releaseNote;
-            draft = $true;
-            prerelease = $true;
-          } | ConvertTo-Json
-
-          Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
-
-          echo 'Prerelease has been created.'
-        } else {
-          echo 'No release has been created!'
-        }
+      run: ${{ github.action_path }}/release-nuget.ps1 `
+        -versionFile ${{ inputs.versionFile }} `
+        -mainBranch ${{ inputs.mainBranch }} `
+        -currentBranch ${{ github.ref }} `
+        -projectsToBuild ${{ inputs.projectsToBuild }} `
+        -projectsToPublish ${{ inputs.projectsToPublish }} `
+        -verbosity ${{ inputs.verbosity }} `
+        -nugetOrgToken ${{ inputs.nugetOrgToken }} `
+        -githubToken ${{ inputs.githubToken }} `
+        -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
+        -generateReleaseNotes ${{ inputs.generateReleaseNotes }}
+      working-directory: ${{ inputs.projectWorkspace }}
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}
