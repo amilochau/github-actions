@@ -33,141 +33,28 @@ inputs:
 outputs:
   versionLong:
     description: The long version as defined in the long Git tag
-    value: ${{ steps.format-versions.outputs.versionLong }}
+    value: ${{ steps.release.outputs.versionLong }}
   versionShort:
     description: The short version as defined in the short Git tag
-    value: ${{ steps.format-versions.outputs.versionShort }}
+    value: ${{ steps.release.outputs.versionShort }}
   versionPrerelease:
     description: If the version is recognized as a prerelease
-    value: ${{ steps.format-versions.outputs.versionPrerelease }}
+    value: ${{ steps.release.outputs.versionPrerelease }}
 runs:
   using: composite
   steps:
-    - name: Format versions
-      id: format-versions
-      shell: bash
-      run: |
-        if [ ${{ inputs.versionUnstableSuffix }} != '' ];
-        then
-          versionLong=v${{ inputs.versionMajor }}.${{ inputs.versionMinor }}.${{ inputs.versionPatch }}-${{ inputs.versionUnstableSuffix }}
-          echo "::set-output name=versionPrerelease::'true'"
-        else
-          versionLong=v${{ inputs.versionMajor }}.${{ inputs.versionMinor }}.${{ inputs.versionPatch }}
-          echo "::set-output name=versionPrerelease::'false'"
-        fi
-        echo Set long version to $versionLong
-        echo "::set-output name=versionLong::$versionLong"
-
-        versionShort=v${{ inputs.versionMajor }}
-        echo Set short version to $versionShort
-        echo "::set-output name=versionShort::$versionShort"
-    - name: Check prerelease if not main branch
-      shell: bash
-      run: |
-        if [ ${{ github.ref }} != ${{ inputs.mainBranch }} ] && [ ${{ steps.format-versions.outputs.versionPrerelease }} != 'true' ];
-        then
-          echo You can not publish a stable release package if you are not in the main branch
-          echo Pre-release: ${{ steps.format-versions.outputs.versionPrerelease }}
-          echo Branch: ${{ github.ref }}
-          exit 1
-        fi
-    - name: Remove precedent tags for short and long versions
-      shell: bash
-      run: |
-        if [ ${{ steps.format-versions.outputs.versionPrerelease }} != 'true' ];
-        then
-          git push origin :refs/tags/${{ steps.format-versions.outputs.versionShort }}
-        fi
-
-        git push origin :refs/tags/${{ steps.format-versions.outputs.versionLong }}
-    - name: Set short and long versions tags
-      shell: bash
-      run: |
-        git config --global user.email "actions@github.com"
-        git config --global user.name "Github Actions"
-
-        if [ ${{ steps.format-versions.outputs.versionPrerelease }} != 'true' ];
-        then
-          git tag -fa ${{ steps.format-versions.outputs.versionShort }} -m "Version ${{ steps.format-versions.outputs.versionLong }}"
-        fi
-
-        git tag -fa ${{ steps.format-versions.outputs.versionLong }} -m "Version ${{ steps.format-versions.outputs.versionLong }}"
-        git push origin --tags
-    - name: Create GitHub Release
+    - name: Release with script
+      id: release
       shell: pwsh
-      run: |
-        if (("${{ steps.format-versions.outputs.versionPrerelease }}" -eq $true) -And ("${{ inputs.avoidGitHubPrerelease }}" -eq $true)) {
-          echo 'No release must be created.'
-          return
-        }
-
-        $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-        $headers.Add("Accept", "application/vnd.github.v3+json")
-        $headers.Add("Authorization", "token ${{ inputs.githubToken }}")
-        
-        echo 'Checking if release notes must be included...'
-        $releaseNote = '...'
-        if ("${{ inputs.generateReleaseNotes }}" -eq $true) {
-          echo 'Release note must be included.'
-
-          $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
-          if ($response.tag_name) {
-            $lastRelease = $response.tag_name
-            echo "Latest release is $($lastRelease)."
-
-            $headers.Add("Content-Type", "application/json")
-            $body = [PSCustomObject]@{
-              tag_name = "${{ steps.format-versions.outputs.versionLong }}";
-              previous_tag_name = $lastRelease;
-            } | ConvertTo-Json
-
-            $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" -Method 'POST' -Headers $headers -Body $body
-            $releaseNote = $response.body
-            
-            echo 'Release note has been generated.'
-          } else {
-            echo 'No release has been found, release note can\'t be generated.'
-          }
-        } else {
-          echo 'Release note is read from CHANGELOG.md'
-          
-          $releaseNote = Get-Content 'CHANGELOG.md' | Out-String
-          
-          echo 'Release note has been read.'
-        }
-
-        echo $releaseNote
-
-        echo 'Creating release...'
-        if (${{ steps.format-versions.outputs.versionPrerelease }} -eq $false) {
-          echo 'A stable release must be created.'
-
-          $body = [PSCustomObject]@{
-            tag_name = "${{ steps.format-versions.outputs.versionLong }}";
-            name = "Version ${{ steps.format-versions.outputs.versionLong }}";
-            body = $releaseNote;
-            draft = $true;
-          } | ConvertTo-Json
-
-          Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
-
-          echo 'Stable release has been created.'
-        } elseif ("${{ inputs.avoidGitHubPrerelease }}" -eq $false) {
-          echo 'A prerelease must be created.'
-
-          $body = [PSCustomObject]@{
-            tag_name = "${{ steps.format-versions.outputs.versionLong }}";
-            name = "Version ${{ steps.format-versions.outputs.versionLong }}";
-            body = $releaseNote;
-            draft = $true;
-            prerelease = $true;
-          } | ConvertTo-Json
-
-          Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
-
-          echo 'Prerelease has been created.'
-        } else {
-          echo 'No release has been created!'
-        }
+      run: ${{ github.action_path }}/release-basic.ps1 `
+        -versionMajor ${{ inputs.versionMajor }} `
+        -versionMinor ${{ inputs.versionMinor }} `
+        -versionPatch ${{ inputs.versionPatch }} `
+        -versionUnstableSuffix ${{ inputs.versionUnstableSuffix }} `
+        -mainBranch ${{ inputs.mainBranch }} `
+        -currentBranch ${{ github.ref }} `
+        -githubToken ${{ inputs.githubToken }} `
+        -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
+        -generateReleaseNotes ${{ inputs.generateReleaseNotes }}
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}

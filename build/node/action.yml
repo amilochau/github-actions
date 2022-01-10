@@ -17,7 +17,7 @@ runs:
         node-version: ${{ inputs.nodeVersion }}
         cache: 'npm'
         cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
-    - name: Restore dependencies
+    - name: Build Node.js application with script
       shell: pwsh
       run: ${{ github.action_path }}/build-node.ps1
       working-directory: ${{ inputs.projectWorkspace }}

@@ -1,12 +1,18 @@
 <#
   .SYNOPSIS
   This script releases a workspace as a npm package
+  .PARAMETER versionMajor
+  The major version
+  .PARAMETER versionMinor
+  The minor version
+  .PARAMETER versionPatch
+  The patch version
+  .PARAMETER versionUnstableSuffix
+  The unstable suffix version
   .PARAMETER mainBranch
   The main branch
   .PARAMETER currentBranch
   The current branch
-  .PARAMETER npmjsToken
-  The npmjs.com token
   .PARAMETER githubToken
   The GitHub token
   .PARAMETER avoidGithubPrerelease
@@ -18,13 +24,22 @@
 [CmdletBinding()]
 Param(
   [parameter(Mandatory = $true)]
+  [string]$versionMajor,
+
+  [parameter(Mandatory = $true)]
+  [string]$versionMinor,
+
+  [parameter(Mandatory = $true)]
+  [string]$versionPatch,
+
+  [parameter(Mandatory = $false)]
+  [string]$versionUnstableSuffix,
+
+  [parameter(Mandatory = $true)]
   [string]$mainBranch,
 
   [parameter(Mandatory = $true)]
   [string]$currentBranch,
-  
-  [parameter(Mandatory = $true)]
-  [string]$npmjsToken,
   
   [parameter(Mandatory = $true)]
   [string]$githubToken,
@@ -49,16 +64,21 @@ Write-Output "Generate release notes is: $generateReleaseNotes"
 Write-Output '=========='
 Write-Output 'Get current version...'
 
-$versionFileContent = Get-Content -Path package.json | ConvertFrom-Json
-$version = "v" + $versionFileContent.version
-Write-Output "Version is: $version"
-Write-Host "::set-output name=versionNumber::$version"
+if (($null -ne $versionUnstableSuffix) -and ($versionUnstableSuffix.Length -gt 0)) {
+  $versionLong=v$versionMajor.$versionMinor.$versionPatch-$versionUnstableSuffix
+  $match = $true
+  Write-Host "::set-output name=versionPrerelease::$true"
+} else {
+  $versionLong=v$versionMajor.$versionMinor.$versionPatch
+  $match = $false
+  Write-Host "::set-output name=versionPrerelease::$false"
+}
+Write-Output "Set long version to $versionLong"
+Write-Output "::set-output name=versionLong::$versionLong"
 
-$exp = '^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
-$match = $version -match $exp
-Write-Output "Prerelease match is: $match"
-Write-Host "::set-output name=versionPrerelease::$match"
-
+$versionShort=v$versionMajor
+Write-Output "Set short version to $versionShort"
+Write-Output "::set-output name=versionShort::$versionShort"
 
 Write-Output '=========='
 Write-Output 'Check prerelease if not main branch...'
@@ -69,27 +89,27 @@ if ( ($currentBranch -ne $mainBranch) -And ($match -ne $true)) {
 }
 
 Write-Output '=========='
-Write-Output 'Install packages...'
-npm ci
+Write-Output 'Remove precedent tags for short and long versions...'
+if ($match -ne $true) {
+  git push origin :refs/tags/$versionShort
+  Write-Output "Precedent tag for short version has been removed ($versionShort)."
+}
+git push origin :refs/tags/$versionLong
+Write-Output "Precedent tag for long version has been removed ($versionLong)."
 
 Write-Output '=========='
-Write-Output 'Build application...'
-npm run build
+Write-Output 'Set short and long versions tags...'
+git config --global user.email "actions@github.com"
+git config --global user.name "Github Actions"
 
-Write-Output '=========='
-Write-Output 'Publish projects to npmjs.com...'
-if ($npmjsToken.length -gt 0) {
-  Write-Output 'Token for npmjs.com is found.'
-  npm set registry "https://registry.npmjs.org"
-  npm set //registry.npmjs.org/:_authToken $npmjsToken
-  npm publish
+if ($match -ne $true) {
+  git tag -fa $versionShort -m "Version $versionLong"
+  Write-Output "Short version tag has been set ($versionShort)."
 }
 
-Write-Output '=========='
-Write-Output 'Publish projects to GitHub Packages...'
-npm set registry "https://npm.pkg.github.com"
-npm set //npm.pkg.github.com/:_authToken $githubToken
-npm publish
+git tag -fa $versionLong -m "Version $versionLong"
+Write-Output "Long version tag has been set ($versionLong)."
+git push origin --tags
 
 Write-Output '=========='
 Write-Output 'Create GitHub Release...'

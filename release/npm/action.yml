@@ -30,10 +30,10 @@ inputs:
 outputs:
   versionNumber:
     description: The version as defined in the Git tag
-    value: ${{ steps.format-versions.outputs.versionNumber }}
+    value: ${{ steps.release.outputs.versionNumber }}
   versionPrerelease:
     description: If the version is recognized as a prerelease
-    value: ${{ steps.format-versions.outputs.versionPrerelease }}
+    value: ${{ steps.release.outputs.versionPrerelease }}
 runs:
   using: composite
   steps:
@@ -44,6 +44,7 @@ runs:
         cache: 'npm'
         cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
     - name: Release npm with script
+      id: release
       shell: pwsh
       run: ${{ github.action_path }}/release-npm.ps1 `
         -mainBranch ${{ inputs.mainBranch }} `
