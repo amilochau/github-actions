@@ -65,11 +65,11 @@ Write-Output '=========='
 Write-Output 'Get current version...'
 
 if (($null -ne $versionUnstableSuffix) -and ($versionUnstableSuffix.Length -gt 0)) {
-  $versionLong=v$versionMajor.$versionMinor.$versionPatch-$versionUnstableSuffix
+  $versionLong="v$versionMajor.$versionMinor.$versionPatch-$versionUnstableSuffix"
   $match = $true
   Write-Host "::set-output name=versionPrerelease::$true"
 } else {
-  $versionLong=v$versionMajor.$versionMinor.$versionPatch
+  $versionLong="v$versionMajor.$versionMinor.$versionPatch"
   $match = $false
   Write-Host "::set-output name=versionPrerelease::$false"
 }
