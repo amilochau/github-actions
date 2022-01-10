@@ -50,7 +50,7 @@ runs:
         -versionMajor ${{ inputs.versionMajor }} `
         -versionMinor ${{ inputs.versionMinor }} `
         -versionPatch ${{ inputs.versionPatch }} `
-        -versionUnstableSuffix ${{ inputs.versionUnstableSuffix }} `
+        -versionUnstableSuffix "${{ inputs.versionUnstableSuffix }}" `
         -mainBranch ${{ inputs.mainBranch }} `
         -currentBranch ${{ github.ref }} `
         -githubToken ${{ inputs.githubToken }} `
