@@ -56,8 +56,12 @@ Param(
   [string]$generateReleaseNotes
 )
 
+Write-Output "Version file is: $versionFile"
 Write-Output "Main branch is: $mainBranch"
 Write-Output "Current branch is: $currentBranch"
+Write-Output "Projects to build are: $projectsToBuild"
+Write-Output "Projects to publish are: $projectsToPublish"
+Write-Output "Verbosity is: $verbosity"
 
 [System.Convert]::ToBoolean($avoidGithubPrerelease)
 Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
