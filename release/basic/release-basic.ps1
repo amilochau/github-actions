@@ -65,16 +65,16 @@ Write-Output '=========='
 Write-Output 'Get current version...'
 
 if (($null -ne $versionUnstableSuffix) -and ($versionUnstableSuffix.Length -gt 0)) {
-  $versionLong="v$versionMajor.$versionMinor.$versionPatch-$versionUnstableSuffix"
+  $version="v$versionMajor.$versionMinor.$versionPatch-$versionUnstableSuffix"
   $match = $true
   Write-Host "::set-output name=versionPrerelease::$true"
 } else {
-  $versionLong="v$versionMajor.$versionMinor.$versionPatch"
+  $version="v$versionMajor.$versionMinor.$versionPatch"
   $match = $false
   Write-Host "::set-output name=versionPrerelease::$false"
 }
-Write-Output "Set long version to $versionLong"
-Write-Output "::set-output name=versionLong::$versionLong"
+Write-Output "Set long version to $version"
+Write-Output "::set-output name=versionLong::$version"
 
 $versionShort="v$versionMajor"
 Write-Output "Set short version to $versionShort"
@@ -94,8 +94,8 @@ if ($match -ne $true) {
   git push origin :refs/tags/$versionShort
   Write-Output "Precedent tag for short version has been removed ($versionShort)."
 }
-git push origin :refs/tags/$versionLong
-Write-Output "Precedent tag for long version has been removed ($versionLong)."
+git push origin :refs/tags/$version
+Write-Output "Precedent tag for long version has been removed ($version)."
 
 Write-Output '=========='
 Write-Output 'Set short and long versions tags...'
@@ -103,12 +103,12 @@ git config --global user.email "actions@github.com"
 git config --global user.name "Github Actions"
 
 if ($match -ne $true) {
-  git tag -fa $versionShort -m "Version $versionLong"
+  git tag -fa $versionShort -m "Version $versionShort"
   Write-Output "Short version tag has been set ($versionShort)."
 }
 
-git tag -fa $versionLong -m "Version $versionLong"
-Write-Output "Long version tag has been set ($versionLong)."
+git tag -fa $version -m "Version $version"
+Write-Output "Long version tag has been set ($version)."
 git push origin --tags
 
 Write-Output '=========='
