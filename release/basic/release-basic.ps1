@@ -1,20 +1,18 @@
 <#
   .SYNOPSIS
   This script releases a workspace as a npm package
-  .PARAMETER versionFile
-  The file where to get version (XML file)
+  .PARAMETER versionMajor
+  The major version
+  .PARAMETER versionMinor
+  The minor version
+  .PARAMETER versionPatch
+  The patch version
+  .PARAMETER versionUnstableSuffix
+  The unstable suffix version
   .PARAMETER mainBranch
   The main branch
   .PARAMETER currentBranch
   The current branch
-  .PARAMETER projectsToBuild
-  The projects to build
-  .PARAMETER projectsToPublish
-  The projects to publish
-  .PARAMETER verbosity
-  The .NET CLI verbosity level
-  .PARAMETER nugetOrgToken
-  The nuget.org token
   .PARAMETER githubToken
   The GitHub token
   .PARAMETER avoidGithubPrerelease
@@ -26,7 +24,16 @@
 [CmdletBinding()]
 Param(
   [parameter(Mandatory = $true)]
-  [string]$versionFile,
+  [string]$versionMajor,
+
+  [parameter(Mandatory = $true)]
+  [string]$versionMinor,
+
+  [parameter(Mandatory = $true)]
+  [string]$versionPatch,
+
+  [parameter(Mandatory = $false)]
+  [string]$versionUnstableSuffix,
 
   [parameter(Mandatory = $true)]
   [string]$mainBranch,
@@ -34,18 +41,6 @@ Param(
   [parameter(Mandatory = $true)]
   [string]$currentBranch,
   
-  [parameter(Mandatory = $true)]
-  [string]$projectsToBuild,
-
-  [parameter(Mandatory = $true)]
-  [string]$projectsToPublish,
-
-  [parameter(Mandatory = $true)]
-  [string]$verbosity,
-
-  [parameter(Mandatory = $true)]
-  [string]$nugetOrgToken,
-
   [parameter(Mandatory = $true)]
   [string]$githubToken,
   
@@ -56,12 +51,8 @@ Param(
   [string]$generateReleaseNotes
 )
 
-Write-Output "Version file is: $versionFile"
 Write-Output "Main branch is: $mainBranch"
 Write-Output "Current branch is: $currentBranch"
-Write-Output "Projects to build are: $projectsToBuild"
-Write-Output "Projects to publish are: $projectsToPublish"
-Write-Output "Verbosity is: $verbosity"
 
 [System.Convert]::ToBoolean($avoidGithubPrerelease)
 Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
@@ -73,15 +64,21 @@ Write-Output "Generate release notes is: $generateReleaseNotes"
 Write-Output '=========='
 Write-Output 'Get current version...'
 
-[xml]$versionFileContent = Get-Content -Path $versionFile
-$version = "v" + $versionFileContent.Project.PropertyGroup.Version
-Write-Output "Version is: $version"
-Write-Host "::set-output name=versionNumber::$version"
+if (($null -ne $versionUnstableSuffix) -and ($versionUnstableSuffix.Length -gt 0)) {
+  $versionLong=v$versionMajor.$versionMinor.$versionPatch-$versionUnstableSuffix
+  $match = $true
+  Write-Host "::set-output name=versionPrerelease::$true"
+} else {
+  $versionLong=v$versionMajor.$versionMinor.$versionPatch
+  $match = $false
+  Write-Host "::set-output name=versionPrerelease::$false"
+}
+Write-Output "Set long version to $versionLong"
+Write-Output "::set-output name=versionLong::$versionLong"
 
-$exp = '^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
-$match = $version -match $exp
-Write-Output "Prerelease match is: $match"
-Write-Host "::set-output name=versionPrerelease::$match"
+$versionShort=v$versionMajor
+Write-Output "Set short version to $versionShort"
+Write-Output "::set-output name=versionShort::$versionShort"
 
 Write-Output '=========='
 Write-Output 'Check prerelease if not main branch...'
@@ -92,27 +89,27 @@ if ( ($currentBranch -ne $mainBranch) -And ($match -ne $true)) {
 }
 
 Write-Output '=========='
-Write-Output 'Install packages...'
-dotnet restore $projectsToBuild --verbosity $verbosity
+Write-Output 'Remove precedent tags for short and long versions...'
+if ($match -ne $true) {
+  git push origin :refs/tags/$versionShort
+  Write-Output "Precedent tag for short version has been removed ($versionShort)."
+}
+git push origin :refs/tags/$versionLong
+Write-Output "Precedent tag for long version has been removed ($versionLong)."
 
 Write-Output '=========='
-Write-Output 'Build application...'
-dotnet build $projectsToBuild --configuration Release --no-restore --verbosity $verbosity
+Write-Output 'Set short and long versions tags...'
+git config --global user.email "actions@github.com"
+git config --global user.name "Github Actions"
 
-Write-Output '=========='
-Write-Output 'Pack projects...'
-dotnet pack $projectsToPublish --configuration Release --no-restore --no-build --output ./build --verbosity $verbosity
-
-Write-Output '=========='
-Write-Output 'Publish projects to nuget.org...'
-if ($nugetOrgToken.length -gt 0) {
-  Write-Output 'Token for nuget.org is found.'
-  dotnet nuget push ./build/*.nupkg -k $nugetOrgToken -s https://api.nuget.org/v3/index.json
+if ($match -ne $true) {
+  git tag -fa $versionShort -m "Version $versionLong"
+  Write-Output "Short version tag has been set ($versionShort)."
 }
 
-Write-Output '=========='
-Write-Output 'Publish projects to GitHub Packages...'
-dotnet nuget push ./build/*.nupkg
+git tag -fa $versionLong -m "Version $versionLong"
+Write-Output "Long version tag has been set ($versionLong)."
+git push origin --tags
 
 Write-Output '=========='
 Write-Output 'Create GitHub Release...'

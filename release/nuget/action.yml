@@ -43,7 +43,7 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Release npm with script
+    - name: Release NuGet with script
       id: release
       shell: pwsh
       run: ${{ github.action_path }}/release-nuget.ps1 `

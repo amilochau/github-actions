@@ -127,9 +127,7 @@ if ($generateReleaseNotes) {
   }
 } else {
   Write-Output 'Release note is read from CHANGELOG.md'
-  
   $releaseNote = Get-Content 'CHANGELOG.md' | Out-String
-  
   Write-Output 'Release note has been read.'
 }
 
