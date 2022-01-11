@@ -25,23 +25,16 @@ runs:
   steps:
     - name: Build projects
       shell: bash
-      run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --verbosity ${{ inputs.verbosity }}
+      run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --output ./output --verbosity ${{ inputs.verbosity }}
     - name: Login on Azure
       uses: azure/login@v1
       with:
         creds: ${{ inputs.azureCredentials }}
-    - name: Download and install Azure Functions Core Tools v3
-      shell: bash
-      run: |
-        wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
-        sudo dpkg -i packages-microsoft-prod.deb
-        sudo apt-get update
-        sudo apt-get install azure-functions-core-tools-3
     - name: Deploy Azure Functions application
-      shell: bash
-      run: func azure functionapp publish ${{ inputs.applicationName }}
-      working-directory: ${{ inputs.projectsToPublishPath }}
-
+      uses: Azure/functions-action@v1
+      with:
+        app-name: ${{ inputs.applicationName }}
+        package: ./output
     - name: Check health
       shell: pwsh
       run: Invoke-WebRequest ${{ inputs.healthUrl }} -TimeoutSec 120 -MaximumRetryCount 12 -RetryIntervalSec 10
