@@ -23,18 +23,15 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Build projects
-      shell: bash
-      run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --output ./output --verbosity ${{ inputs.verbosity }}
     - name: Login on Azure
       uses: azure/login@v1
       with:
         creds: ${{ inputs.azureCredentials }}
-    - name: Deploy Azure Functions application
-      uses: Azure/functions-action@v1
-      with:
-        app-name: ${{ inputs.applicationName }}
-        package: ./output
-    - name: Check health
+    - name: Deploy Functions application
       shell: pwsh
-      run: Invoke-WebRequest ${{ inputs.healthUrl }} -TimeoutSec 120 -MaximumRetryCount 12 -RetryIntervalSec 10
+      run: ${{ github.action_path }}/deploy-functions.ps1 `
+        -projectsToPublishPath ${{ inputs.projectsToPublishPath }} `
+        -verbosity ${{ inputs.verbosity }} `
+        -applicationName ${{ inputs.applicationName }}
+        -healthUrl ${{ inputs.healthUrl }}
+      working-directory: ${{ inputs.projectsToPublishPath }}
