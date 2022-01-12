@@ -26,7 +26,7 @@ Param(
   [string]$healthUrl
 )
 
-Write-Output "projects to publish path is: $projectsToPublishPath"
+Write-Output "Projects to publish path is: $projectsToPublishPath"
 Write-Output "Verbosity is: $verbosity"
 Write-Output "Application name is: $applicationName"
 Write-Output "Health URL is: $healthUrl"
