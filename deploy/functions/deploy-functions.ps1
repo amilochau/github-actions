@@ -26,8 +26,8 @@ Write-Output "Application name is: $applicationName"
 Write-Output "Health URL is: $healthUrl"
 
 Write-Output '=========='
-Write-Output 'Build application...'
-dotnet build --configuration Release --output ./output --verbosity $verbosity
+Write-Output 'Publish application...'
+dotnet publish --configuration Release --output ./output --verbosity $verbosity
 
 Write-Output '=========='
 Write-Output 'Create deployment package...'
