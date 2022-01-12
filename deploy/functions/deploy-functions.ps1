@@ -1,8 +1,8 @@
 <#
   .SYNOPSIS
   This script build and tests a .NET Core application
-  .PARAMETER projectsToBuild
-  The projects to build
+  .PARAMETER projectsToPublishPath
+  The path to projects to publish
   .PARAMETER verbosity
   The verbosity level
   .PARAMETER applicationName
@@ -35,7 +35,7 @@ Write-Output '=========='
 Write-Output 'Build application...'
 dotnet build $projectsToPublishPath --configuration Release --output ./output --verbosity $verbosity
 
-ls ./output
+Get-ChildItem -Path ./output -Attributes D,H
 
 Write-Output '=========='
 Write-Output 'Create deployment package...'
@@ -68,14 +68,14 @@ Write-Output "Deployment package has been updated to $blobUri."
 
 Write-Output '=========='
 Write-Output 'Update Functions appsettings with package reference...'
-az functionapp config appsettings set --name $applicationName --resource-group $resourceGroupName --settings "WEBSITE_RUN_FROM_PACKAGE=$blobUri" | Out-Null
+#az functionapp config appsettings set --name $applicationName --resource-group $resourceGroupName --settings "WEBSITE_RUN_FROM_PACKAGE=$blobUri" | Out-Null
 
 Write-Output '=========='
 Write-Output 'Synchronize triggers...'
-az functionapp restart --name $applicationName --resource-group $resourceGroupName | Out-Null
+#az functionapp restart --name $applicationName --resource-group $resourceGroupName | Out-Null
 
 Write-Output '=========='
 Write-Output 'Check application health...'
-Invoke-WebRequest $healthUrl -TimeoutSec 120 -MaximumRetryCount 12 -RetryIntervalSec 10
+#Invoke-WebRequest $healthUrl -TimeoutSec 120 -MaximumRetryCount 12 -RetryIntervalSec 10
 
 Write-Output 'Deployment is done.'
