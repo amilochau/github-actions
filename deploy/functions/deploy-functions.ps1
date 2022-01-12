@@ -35,6 +35,8 @@ Write-Output '=========='
 Write-Output 'Build application...'
 dotnet build $projectsToPublishPath --configuration Release --output ./output --verbosity $verbosity
 
+ls ./output
+
 Write-Output '=========='
 Write-Output 'Create deployment package...'
 $currentDate = Get-Date -Format yyyyMMdd_HHmmss
