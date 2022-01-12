@@ -30,7 +30,7 @@ runs:
     - name: Deploy Functions application
       shell: pwsh
       run: ${{ github.action_path }}/deploy-functions.ps1 `
-        -projectsToPublishPath ${{ inputs.projectsToPublishPath }} `
         -verbosity ${{ inputs.verbosity }} `
         -applicationName ${{ inputs.applicationName }}
         -healthUrl ${{ inputs.healthUrl }}
+      working-directory: ${{ inputs.projectsToPublishPath }}

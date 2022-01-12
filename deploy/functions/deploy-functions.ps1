@@ -1,7 +1,5 @@
 <#
   .SYNOPSIS
-  This script build and tests a .NET Core application
-  .PARAMETER projectsToPublishPath
   The path to projects to publish
   .PARAMETER verbosity
   The verbosity level
@@ -14,9 +12,6 @@
 [CmdletBinding()]
 Param(
   [parameter(Mandatory = $true)]
-  [string]$projectsToPublishPath,
-
-  [parameter(Mandatory = $true)]
   [string]$verbosity,
 
   [parameter(Mandatory = $true)]
@@ -26,16 +21,13 @@ Param(
   [string]$healthUrl
 )
 
-Write-Output "Projects to publish path is: $projectsToPublishPath"
 Write-Output "Verbosity is: $verbosity"
 Write-Output "Application name is: $applicationName"
 Write-Output "Health URL is: $healthUrl"
 
 Write-Output '=========='
 Write-Output 'Build application...'
-dotnet build $projectsToPublishPath --configuration Release --output ./output --verbosity $verbosity
-
-Get-ChildItem -Path ./output -Attributes D,H
+dotnet build --configuration Release --output ./output --verbosity $verbosity
 
 Write-Output '=========='
 Write-Output 'Create deployment package...'
@@ -68,14 +60,14 @@ Write-Output "Deployment package has been updated to $blobUri."
 
 Write-Output '=========='
 Write-Output 'Update Functions appsettings with package reference...'
-#az functionapp config appsettings set --name $applicationName --resource-group $resourceGroupName --settings "WEBSITE_RUN_FROM_PACKAGE=$blobUri" | Out-Null
+az functionapp config appsettings set --name $applicationName --resource-group $resourceGroupName --settings "WEBSITE_RUN_FROM_PACKAGE=$blobUri" | Out-Null
 
 Write-Output '=========='
 Write-Output 'Synchronize triggers...'
-#az functionapp restart --name $applicationName --resource-group $resourceGroupName | Out-Null
+az functionapp restart --name $applicationName --resource-group $resourceGroupName | Out-Null
 
 Write-Output '=========='
 Write-Output 'Check application health...'
-#Invoke-WebRequest $healthUrl -TimeoutSec 120 -MaximumRetryCount 12 -RetryIntervalSec 10
+Invoke-WebRequest $healthUrl -TimeoutSec 120 -MaximumRetryCount 12 -RetryIntervalSec 10
 
 Write-Output 'Deployment is done.'
