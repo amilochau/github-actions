@@ -34,4 +34,3 @@ runs:
         -verbosity ${{ inputs.verbosity }} `
         -applicationName ${{ inputs.applicationName }}
         -healthUrl ${{ inputs.healthUrl }}
-      working-directory: ${{ inputs.projectsToPublishPath }}
