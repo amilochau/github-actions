@@ -32,7 +32,7 @@ dotnet publish --configuration Release --output ./output --verbosity $verbosity
 Write-Output '=========='
 Write-Output 'Create deployment package...'
 $currentDate = Get-Date -Format yyyyMMdd_HHmmss
-$fileName = "FunctionApp_$currentDate.zip"
+$fileName = "FunctionsApp_$currentDate.zip"
 [System.IO.Compression.ZipFile]::CreateFromDirectory('./output', $fileName)
 Write-Output "Deployment package has been created ($fileName)."
 
