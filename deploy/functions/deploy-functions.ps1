@@ -77,10 +77,10 @@ Write-Output '=========='
 Write-Output 'Check application health...'
 
 if (($null -ne $healthUrl) -and ($healthUrl.Length -gt 0)) {
+  Write-Host "Using configured health URL: $healthUrl"
+} else {
   $healthUrl="https://$defaultHostName/api/health"
   Write-Host "Using default health URL: $healthUrl"
-} else {
-  Write-Host "Using configured health URL: $healthUrl"
 }
 
 Invoke-WebRequest $healthUrl -TimeoutSec 120 -MaximumRetryCount 12 -RetryIntervalSec 10

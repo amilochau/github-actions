@@ -3,8 +3,8 @@ description: Deploy Azure Functions application
 author: Antoine Milochau
 inputs:
   projectsToBuild:
-    description: The path to the projects to build - can be a .csproj or a .sln file
-    required: true
+    description: OBSOLETE PARAMETER - The path to the projects to build - can be a .csproj or a .sln file
+    required: false
   verbosity:
     description: The verbosity of the dotnet CLI
     default: minimal
