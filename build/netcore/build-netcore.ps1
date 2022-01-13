@@ -1,6 +1,6 @@
 <#
   .SYNOPSIS
-  This script build and tests a .NET Core application
+  This script builds and tests a .NET Core application
   .PARAMETER projectsToBuild
   The projects to build
   .PARAMETER projectsToTest

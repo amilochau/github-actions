@@ -1,6 +1,6 @@
 <#
   .SYNOPSIS
-  This script releases a workspace as a npm package
+  This script creates a new release on GitHub and publishes a workspace as NuGet packages
   .PARAMETER versionFile
   The file where to get version (XML file)
   .PARAMETER mainBranch

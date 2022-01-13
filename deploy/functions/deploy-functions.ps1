@@ -1,6 +1,6 @@
 <#
   .SYNOPSIS
-  The path to projects to publish
+  This script deploys a Functions application
   .PARAMETER verbosity
   The verbosity level
   .PARAMETER applicationName
