@@ -33,8 +33,6 @@ Write-Output '=========='
 Write-Output 'Create deployment package...'
 $currentDate = Get-Date -Format yyyyMMdd_HHmmss
 $fileName = "FunctionApp_$currentDate.zip"
-#Compress-Archive -Path ./output/* -DestinationPath $fileName
-#(Set-Location ./output && zip -r ../$fileName ./output)
 [System.IO.Compression.ZipFile]::CreateFromDirectory('./output', $fileName)
 Write-Output "Deployment package has been created ($fileName)."
 
