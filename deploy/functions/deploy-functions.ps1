@@ -38,7 +38,7 @@ Write-Output "Deployment package has been created ($fileName)."
 
 Write-Output '=========='
 Write-Output 'Get storage account name from application settings...'
-$resourceGroupName = az functionapp list --query "[?name == '$applicationName'] | [].resourceGroup" | ConvertFrom-Json
+$resourceGroupName, $applicationType = az functionapp list --query "[?name == '$applicationName'] | [[].resourceGroup, [].type]" | ConvertFrom-Json
 $appSettings = az functionapp config appsettings list --name $applicationName --resource-group $resourceGroupName | ConvertFrom-Json
 $storageAccountName = $appSettings | Where-Object { $_.name -eq "AzureWebJobsStorage__accountName" } | ForEach-Object { $_.value }
 Write-Output "Resource group name: $resourceGroupName"
@@ -64,7 +64,10 @@ az functionapp config appsettings set --name $applicationName --resource-group $
 
 Write-Output '=========='
 Write-Output 'Synchronize triggers...'
-az functionapp restart --name $applicationName --resource-group $resourceGroupName | Out-Null
+az resource invoke-action --resource-group $resourceGroupName --action syncfunctiontriggers --name $applicationName --resource-type $applicationType
+#$apiVersion = '2021-02-01'
+#Invoke-WebRequest "https://management.azure.com/$applicationId/syncfunctiontriggers?api-version=$apiVersion" -Method 'POST' | Out-Null
+#az functionapp restart --name $applicationName --resource-group $resourceGroupName | Out-Null
 
 Write-Output '=========='
 Write-Output 'Check application health...'
