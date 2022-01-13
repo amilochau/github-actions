@@ -39,8 +39,6 @@ Write-Output "Deployment package has been created ($fileName)."
 Write-Output '=========='
 Write-Output 'Get application information from application settings...'
 $app = az functionapp list --query "[?name == '$applicationName']" | ConvertFrom-Json
-$appSettings = az functionapp config appsettings list --name $applicationName --resource-group $resourceGroupName | ConvertFrom-Json
-
 $resourceGroupName = $app.resourceGroup
 $applicationType = $app.type
 $defaultHostName = $app.defaultHostName
@@ -48,6 +46,7 @@ Write-Output "Resource group name: $resourceGroupName"
 Write-Output "Application type: $applicationType"
 Write-Output "Default host name: $defaultHostName"
 
+$appSettings = az functionapp config appsettings list --name $applicationName --resource-group $resourceGroupName | ConvertFrom-Json
 $storageAccountName = $appSettings | Where-Object { $_.name -eq "AzureWebJobsStorage__accountName" } | ForEach-Object { $_.value }
 Write-Output "Storage account name: $storageAccountName"
 
