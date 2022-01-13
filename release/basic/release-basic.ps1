@@ -1,6 +1,6 @@
 <#
   .SYNOPSIS
-  This script releases a workspace as a npm package
+  This script creates a new release on GitHub
   .PARAMETER versionMajor
   The major version
   .PARAMETER versionMinor
