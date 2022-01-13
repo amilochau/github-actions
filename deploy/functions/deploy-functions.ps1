@@ -17,7 +17,7 @@ Param(
   [parameter(Mandatory = $true)]
   [string]$applicationName,
 
-  [parameter(Mandatory = $true)]
+  [parameter(Mandatory = $false)]
   [string]$healthUrl
 )
 
@@ -37,11 +37,17 @@ $fileName = "FunctionsApp_$currentDate.zip"
 Write-Output "Deployment package has been created ($fileName)."
 
 Write-Output '=========='
-Write-Output 'Get storage account name from application settings...'
-$resourceGroupName, $applicationType = az functionapp list --query "[?name == '$applicationName'] | [[].resourceGroup, [].type]" | ConvertFrom-Json
+Write-Output 'Get application information from application settings...'
+$app = az functionapp list --query "[?name == '$applicationName']" | ConvertFrom-Json
+$resourceGroupName = $app.resourceGroup
+$applicationType = $app.type
+$defaultHostName = $app.defaultHostName
+Write-Output "Resource group name: $resourceGroupName"
+Write-Output "Application type: $applicationType"
+Write-Output "Default host name: $defaultHostName"
+
 $appSettings = az functionapp config appsettings list --name $applicationName --resource-group $resourceGroupName | ConvertFrom-Json
 $storageAccountName = $appSettings | Where-Object { $_.name -eq "AzureWebJobsStorage__accountName" } | ForEach-Object { $_.value }
-Write-Output "Resource group name: $resourceGroupName"
 Write-Output "Storage account name: $storageAccountName"
 
 Write-Output '=========='
@@ -65,12 +71,17 @@ az functionapp config appsettings set --name $applicationName --resource-group $
 Write-Output '=========='
 Write-Output 'Synchronize triggers...'
 az resource invoke-action --resource-group $resourceGroupName --action syncfunctiontriggers --name $applicationName --resource-type $applicationType
-#$apiVersion = '2021-02-01'
-#Invoke-WebRequest "https://management.azure.com/$applicationId/syncfunctiontriggers?api-version=$apiVersion" -Method 'POST' | Out-Null
-#az functionapp restart --name $applicationName --resource-group $resourceGroupName | Out-Null
 
 Write-Output '=========='
 Write-Output 'Check application health...'
+
+if (($null -ne $healthUrl) -and ($healthUrl.Length -gt 0)) {
+  Write-Host "Using configured health URL: $healthUrl"
+} else {
+  $healthUrl="https://$defaultHostName/api/health"
+  Write-Host "Using default health URL: $healthUrl"
+}
+
 Invoke-WebRequest $healthUrl -TimeoutSec 120 -MaximumRetryCount 12 -RetryIntervalSec 10
 
 Write-Output 'Deployment is done.'

@@ -118,9 +118,11 @@ if ($match -And $avoidGithubPrerelease) {
   return
 }
 
-$headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-$headers.Add("Accept", "application/vnd.github.v3+json")
-$headers.Add("Authorization", "token $githubToken")
+$headers = @{
+  Accept = 'application/vnd.github.v3+json'
+  Authorization = "token $githubToken"
+  'Content-Type' = 'application/json'
+}
 
 Write-Output 'Checking if release notes must be included...'
 $releaseNote = '...'
@@ -132,7 +134,6 @@ if ($generateReleaseNotes) {
     $lastRelease = $response.tag_name
     Write-Output "Latest release is $($lastRelease)."
 
-    $headers.Add("Content-Type", "application/json")
     $body = @{
       tag_name = "$version";
       previous_tag_name = $lastRelease;
@@ -154,35 +155,26 @@ if ($generateReleaseNotes) {
 Write-Debug $releaseNote
 
 Write-Output 'Creating release...'
+$rawBody = @{
+  tag_name = "$version";
+  name = "Version $version";
+  body = $releaseNote;
+  draft = $true;
+  prerelease = $false;
+}
+
 if ($match -eq $false) {
   Write-Output 'A stable release must be created.'
-
-  $body = @{
-    tag_name = "$version";
-    name = "Version $version";
-    body = $releaseNote;
-    draft = $true;
-  } | ConvertTo-Json
-
-  Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
-
-  Write-Output 'Stable release has been created.'
 } elseif ($avoidGithubPrerelease -eq $false) {
   Write-Output 'A prerelease must be created.'
-
-  $body = @{
-    tag_name = "$version";
-    name = "Version $version";
-    body = $releaseNote;
-    draft = $true;
-    prerelease = $true;
-  } | ConvertTo-Json
-
-  Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
-
-  Write-Output 'Prerelease has been created.'
+  $rawBody.prerelease = $true;
 } else {
   Write-Output 'No release has been created!'
+  return
 }
+
+$body = $rawBody | ConvertTo-Json
+Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
+Write-Output 'Release has been created.'
 
 Write-Output "=========="
