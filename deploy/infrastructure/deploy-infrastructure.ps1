@@ -21,6 +21,8 @@
   The path of the parameters file
   .PARAMETER templatesDirectory
   The directory of the ARM templates
+  .PARAMETER deploymentName
+  The name of the deployment
 #>
 
 [CmdletBinding()]
@@ -53,7 +55,10 @@ Param(
   [string]$parametersFilePath,
 
   [parameter(Mandatory = $true)]
-  [string]$templatesDirectory
+  [string]$templatesDirectory,
+
+  [parameter(Mandatory = $true)]
+  [string]$deploymentName
 )
 
 Write-Output "Scope is: $scope"
@@ -66,8 +71,6 @@ Write-Output "Management group location is: $managementGroupLocation"
 Write-Output "Template file path is: $templateFilePath"
 Write-Output "Parameters file path is: $parametersFilePath"
 Write-Output "Templates directory path is: $templatesDirectory"
-
-$deploymentName = 'Deployment-GitHub'
 Write-Output "Deployment name is: $deploymentName"
 
 Write-Output '=========='

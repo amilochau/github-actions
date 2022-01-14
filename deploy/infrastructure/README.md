@@ -1,4 +1,4 @@
-# Readme - build/netcore
+# Readme - deploy/infrastructure
 
 ## Introduction
 

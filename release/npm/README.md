@@ -1,4 +1,4 @@
-# Readme - release/nuget
+# Readme - release/npm
 
 ## Introduction
 

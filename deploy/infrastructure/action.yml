@@ -40,6 +40,10 @@ inputs:
   parametersFilePath:
     description: The path of the parameters files to use during deployment
     required: true
+  deploymentName:
+    description: The name of the deployment
+    required: false
+    default: ''Deployment-GitHub'
 outputs:
   resourceId:
     description: "ID of the main deployed resource"
@@ -73,4 +77,5 @@ runs:
         -managementGroupLocation "${{ inputs.managementGroupRegion }}" `
         -templateFilePath ${{ inputs.templateFilePath }} `
         -parametersFilePath ${{ inputs.parametersFilePath }} `
+        -deploymentName ${{ inputs.deploymentName }}
         -templatesDirectory ./templates
