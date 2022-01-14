@@ -4,7 +4,7 @@
 
 `amilochau/github-actions/deploy/gateway-backend` is a GitHub Action developed to deploy an API Management backend.
 
-> NOTE: This GitHub Actions is now OBSOLETE, and will be removed on `amilochau/github-actions@v2`. You are invited to use the `deploy/infrastructure` generic template.
+> NOTE: This GitHub Actions is now **OBSOLETE**, and will be removed on `amilochau/github-actions@v2`. You are invited to use the `deploy/infrastructure` generic template.
 
 ---
 
