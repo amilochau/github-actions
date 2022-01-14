@@ -36,8 +36,8 @@ jobs:
 
 ### Inputs
 
-| Input | Description | Required | Default value |
-| ----- | ----------- | -------- | ------------- |
+| Input | Description | Required | Default value | Comment |
+| ----- | ----------- | -------- | ------------- | ------- |
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
 | `projectsToTest` | The path to the projects to test - can be a .csproj or a .sln file | **true** |
 | `verbosity` | The verbosity of the dotnet CLI | *false* | `minimal` |

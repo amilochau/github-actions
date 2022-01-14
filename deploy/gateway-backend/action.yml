@@ -1,4 +1,4 @@
-name: Deploy an API Management backend
+name: OBSOLETE ACTIONS - Deploy an API Management backend
 description: Deploy an API Management backend
 author: Antoine Milochau
 inputs:
@@ -26,6 +26,10 @@ runs:
         ref: ${{ inputs.azureTemplateVersion }}
         path: templates
         fetch-depth: 0
+    - name: Login on Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ inputs.azureCredentials }}
     - name: Determine template version
       id: format-versions
       shell: bash
@@ -34,10 +38,6 @@ runs:
         echo Template version is $templateVersion
         echo "::set-output name=templateVersion::$templateVersion"
       working-directory: templates
-    - name: Login on Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ inputs.azureCredentials }}
     - name: Deploy infrastructure to Azure
       uses: Azure/cli@v1
       with:

@@ -1,4 +1,4 @@
-# Readme - build/netcore
+# Readme - deploy/infrastructure
 
 ## Introduction
 
@@ -40,23 +40,24 @@ jobs:
 
 ### Inputs
 
-| Input | Description | Required | Default value |
-| ----- | ----------- | -------- | ------------- |
+| Input | Description | Required | Default value | Comment |
+| ----- | ----------- | -------- | ------------- | ------- |
 | `azureTemplateVersion` | The version of 'azure-templates' to use | **true** |
-| `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
-| `scope` | Deployment scope | **true** |
-| `resourceGroupName` | The name of the resource group where to deploy the infrastructure | *false* |
-| `resourceGroupLocation` | The location of the resource group where to deploy the infrastructure | *false* |
-| `subscriptionId` | The ID of the Azure subscription | *false* |
-| `subscriptionRegion` | The region of the Azure subscription | *false* |
-| `managementGroupId` | The ID of the Azure management group | *false* |
-| `managementGroupRegion` | The region of the Azure management group | *false* |
+| `azureCredentials` | Azure credentials, typically get from `secrets.AZURE_CREDENTIALS` | **true** |
+| `scope` | Deployment scope | *false* | `resourceGroup` |
+| `resourceGroupName` | The name of the resource group where to deploy the infrastructure | *true if scope is `resourceGroup`* |
+| `resourceGroupLocation` | The location of the resource group where to deploy the infrastructure | *true if scope is `resourceGroup`* |
+| `subscriptionId` | The ID of the Azure subscription | *true if scope is `subscription`* |
+| `subscriptionRegion` | The region of the Azure subscription | *true if scope is `subscription`* |
+| `managementGroupId` | The ID of the Azure management group | *true if scope is `managementGroup`* |
+| `managementGroupRegion` | The region of the Azure management group | *true if scope is `managementGroup`* |
 | `templateFilePath` | The path of the infrastructure template to deploy | **true** |
 | `parametersFilePath` | The path of the parameters files to use during deployment | **true** |
+| `deploymentName` | The path of the deployment into Azure | *false* | `Deployment-GitHub` |
 
 ### Outputs
 
 | Output | Description |
 | ------ | ----------- |
-
-*No output is defined in the current GitHub Action...*
+| `resourceId` | The ID of the main deployed resource |
+| `resourceName` | The name of the main deployed resource |

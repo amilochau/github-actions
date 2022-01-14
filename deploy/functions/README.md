@@ -32,23 +32,21 @@ jobs:
       - name: Deploy application
         uses: amilochau/github-actions/deploy/functions@v1
         with:
-          projectsToBuild: ${{ env.PROJECTS_BUILD }}
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
           applicationName: ${{ env.INFRA_APP_NAME }}
           projectsToPublishPath: ${{ env.PROJECTS_PUBLISH }}
-          healthUrl: ${{ env.INFRA_HEALTH }}
 ```
 
 ### Inputs
 
-| Input | Description | Required | Default value |
-| ----- | ----------- | -------- | ------------- |
-| `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
+| Input | Description | Required | Default value | Comment |
+| ----- | ----------- | -------- | ------------- | ------- |
+| `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | *false* | | **OBSOLETE** parameter |
 | `verbosity` | The verbosity of the dotnet CLI | *false* | `minimal` |
 | `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
 | `applicationName` | The application name, as defined on Azure | **true** |
 | `projectsToPublishPath` | The path of the projects to publish, relative to the checkout path | **true** |
-| `healthUrl` | The absolute URL of the health endpoint, from the Functions application | **true** |
+| `healthUrl` | The absolute URL of the health endpoint, from the Functions application | *false* |
 
 ### Outputs
 

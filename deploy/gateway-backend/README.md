@@ -1,8 +1,10 @@
-# Readme - build/netcore
+# Readme - deploy/gateway-backend
 
 ## Introduction
 
-`amilochau/github-actions/deploy/infrastructure` is a GitHub Action developed to deploy an API Management backend.
+`amilochau/github-actions/deploy/gateway-backend` is a GitHub Action developed to deploy an API Management backend.
+
+> NOTE: This GitHub Actions is now **OBSOLETE**, and will be removed on `amilochau/github-actions@v2`. You are invited to use the `deploy/infrastructure` generic template.
 
 ---
 
@@ -39,8 +41,8 @@ jobs:
 
 ### Inputs
 
-| Input | Description | Required | Default value |
-| ----- | ----------- | -------- | ------------- |
+| Input | Description | Required | Default value | Comment |
+| ----- | ----------- | -------- | ------------- | ------- |
 | `azureTemplateVersion` | The version of 'azure-templates' to use | **true** |
 | `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
 | `resourceGroupLocation` | The location of the resource group where to deploy the infrastructure | **true** |
