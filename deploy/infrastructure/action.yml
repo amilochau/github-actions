@@ -43,7 +43,7 @@ inputs:
   deploymentName:
     description: The name of the deployment
     required: false
-    default: ''Deployment-GitHub'
+    default: 'Deployment-GitHub'
 outputs:
   resourceId:
     description: "ID of the main deployed resource"
