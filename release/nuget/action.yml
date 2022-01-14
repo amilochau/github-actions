@@ -53,7 +53,7 @@ runs:
         -projectsToBuild ${{ inputs.projectsToBuild }} `
         -projectsToPublish ${{ inputs.projectsToPublish }} `
         -verbosity ${{ inputs.verbosity }} `
-        -nugetOrgToken ${{ inputs.nugetOrgToken }} `
+        -nugetOrgToken "${{ inputs.nugetOrgToken }}" `
         -githubToken ${{ inputs.githubToken }} `
         -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
         -generateReleaseNotes ${{ inputs.generateReleaseNotes }}

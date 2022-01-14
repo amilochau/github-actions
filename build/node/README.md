@@ -31,8 +31,8 @@ jobs:
 
 ### Inputs
 
-| Input | Description | Required | Default value |
-| ----- | ----------- | -------- | ------------- |
+| Input | Description | Required | Default value | Comment |
+| ----- | ----------- | -------- | ------------- | ------- |
 | `projectWorkspace` | The path to the project to build | *false* | `.` |
 | `nodeVersion` | The Node.js version to use | *false* | `16.x` |
 

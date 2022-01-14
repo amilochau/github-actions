@@ -42,16 +42,17 @@ jobs:
 
 ### Inputs
 
-| Input | Description | Required | Default value |
-| ----- | ----------- | -------- | ------------- |
+| Input | Description | Required | Default value | Comment |
+| ----- | ----------- | -------- | ------------- | ------- |
 | `versionFile` | The path to the file where the version can be found - must be an XML file | **true** |
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
 | `projectsToPublish` | The path to the projects to publish - can be a .csproj or a .sln file | **true** |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
 | `generateReleaseNotes` | Generate automatic release notes |  *false* | `false` |
-| `nugetOrgToken` | The nuget.org token, typically get from a secret; used to publish projects to nuget.org | *false* | `''` |
+| `nugetOrgToken` | The nuget.org token, typically get from a secret; used to publish projects to nuget.org | *false* | `` |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
+| `verbosity` | The verbosity of the dotnet CLI | *false* | `minimal` |
 
 ### Outputs
 
@@ -59,30 +60,3 @@ jobs:
 | ------ | ----------- |
 | `versionNumber` | The version as defined in the Git tag |
 | `versionPrerelease` | If the version is recognized as a prerelease |
-
-## Examples
-
-```yaml
-steps:
-- uses: actions/checkout@main
-- name: Setup .NET Core
-  uses: actions/setup-dotnet@v1
-  with:
-    dotnet-version: ${{ inputs.dotnetVersion }}
-    source-url: ${{ inputs.nugetUrl }}
-  env:
-    NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-- name: Deploy libraries
-  id: actions_release
-    uses: amilochau/github-actions/release/nuget@v1
-  with:
-    projectsToBuild: ${{ env.PROJECTS_BUILD }}
-    projectsToPublish: ${{ env.PROJECTS_SDK }}
-    versionFile: ${{ env.VERSION_FILE }}
-    githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-# Use outputs here 
-- name: Check outputs
-    run: |
-    echo "Version number: ${{ steps.actions_release.outputs.versionNumber }}"
-```

@@ -33,14 +33,14 @@ jobs:
 
 ### Inputs
 
-| Input | Description | Required | Default value |
-| ----- | ----------- | -------- | ------------- |
+| Input | Description | Required | Default value | Comment |
+| ----- | ----------- | -------- | ------------- | ------- |
 | `projectWorkspace` | The path to the project workspace | *false* | `.` |
-| `nodeVersion` | The Node.js version to use | ** | `16.x` |
+| `nodeVersion` | The Node.js version to use | *false* | `16.x` |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
 | `generateReleaseNotes` | Generate automatic release notes |  *false* | `false` |
-| `npmjsComToken` |  The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com | *false* | `''` |
+| `npmjsComToken` |  The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com | *false* | `` |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
 
 ### Outputs
@@ -49,30 +49,3 @@ jobs:
 | ------ | ----------- |
 | `versionNumber` | The version as defined in the Git tag |
 | `versionPrerelease` | If the version is recognized as a prerelease |
-
-## Examples
-
-```yaml
-steps:
-- uses: actions/checkout@main
-- name: Setup .NET Core
-  uses: actions/setup-dotnet@v1
-  with:
-    dotnet-version: ${{ inputs.dotnetVersion }}
-    source-url: ${{ inputs.nugetUrl }}
-  env:
-    NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-- name: Deploy libraries
-  id: actions_release
-    uses: amilochau/github-actions/release/nuget@v1
-  with:
-    projectsToBuild: ${{ env.PROJECTS_BUILD }}
-    projectsToPublish: ${{ env.PROJECTS_SDK }}
-    versionFile: ${{ env.VERSION_FILE }}
-    githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-# Use outputs here 
-- name: Check outputs
-    run: |
-    echo "Version number: ${{ steps.actions_release.outputs.versionNumber }}"
-```

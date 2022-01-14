@@ -41,8 +41,8 @@ jobs:
 
 ### Inputs
 
-| Input | Description | Required | Default value |
-| ----- | ----------- | -------- | ------------- |
+| Input | Description | Required | Default value | Comment |
+| ----- | ----------- | -------- | ------------- | ------- |
 | `azureTemplateVersion` | The version of 'azure-templates' to use | **true** |
 | `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
 | `resourceGroupLocation` | The location of the resource group where to deploy the infrastructure | **true** |

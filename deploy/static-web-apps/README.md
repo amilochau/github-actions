@@ -38,8 +38,8 @@ jobs:
 
 ### Inputs
 
-| Input | Description | Required | Default value |
-| ----- | ----------- | -------- | ------------- |
+| Input | Description | Required | Default value | Comment |
+| ----- | ----------- | -------- | ------------- | ------- |
 | `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
 | `applicationName` | The application name, as defined on Azure | **true** |
 | `projectWorkspace` | The path to the project to build | *false* | `.` |

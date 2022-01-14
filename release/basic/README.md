@@ -55,12 +55,12 @@ jobs:
 
 ### Inputs
 
-| Input | Description | Required | Default value |
-| ----- | ----------- | -------- | ------------- |
+| Input | Description | Required | Default value | Comment |
+| ----- | ----------- | -------- | ------------- | ------- |
 | `versionMajor` | The major version - must be changed when you make incompatible API changes | **true** |
 | `versionMinor` | The minor version - must be changed when you add functionality in a backward compatible manner | **true** |
 | `versionPatch` | The patch version - must be changed when you make backwards compatible bug fixes | **true** |
-| `versionUnstableSuffix` | The unstable suffix version - must be added when you want to create a pre-release | **true** |
+| `versionUnstableSuffix` | The unstable suffix version - must be added when you want to create a pre-release | *false* | `` |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
 | `generateReleaseNotes` | Generate automatic release notes |  *false* | `false` |
@@ -73,24 +73,3 @@ jobs:
 | `versionLong` | The long version as defined in the long Git tag |
 | `versionShort` | The short version as defined in the short Git tag |
 | `versionPrerelease` | If the version is recognized as a prerelease |
-
-## Examples
-
-```yaml
-steps:
-- uses: actions/checkout@main
-- name: Set up a GitHub Release
-  id: actions_release
-  uses: amilochau/github-actions/release/basic@v1
-  with:
-    versionMajor: ${{ github.event.inputs.versionMajor }}
-    versionMinor: ${{ github.event.inputs.versionMinor }}
-    versionPatch: ${{ github.event.inputs.versionPatch }}
-    versionUnstableSuffix: ${{ github.event.inputs.versionUnstableSuffix }}
-    githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-# Use outputs here 
-- name: Check outputs
-    run: |
-    echo "Version (long): ${{ steps.actions_release.outputs.versionLong }}"
-```

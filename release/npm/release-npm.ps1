@@ -23,7 +23,7 @@ Param(
   [parameter(Mandatory = $true)]
   [string]$currentBranch,
   
-  [parameter(Mandatory = $true)]
+  [parameter(Mandatory = $false)]
   [string]$npmjsToken,
   
   [parameter(Mandatory = $true)]
@@ -78,7 +78,7 @@ npm run build
 
 Write-Output '=========='
 Write-Output 'Publish projects to npmjs.com...'
-if ($npmjsToken.length -gt 0) {
+if (($null -ne $npmjsToken) -and ($npmjsToken.length -gt 0)) {
   Write-Output 'Token for npmjs.com is found.'
   npm set registry "https://registry.npmjs.org"
   npm set //registry.npmjs.org/:_authToken $npmjsToken
