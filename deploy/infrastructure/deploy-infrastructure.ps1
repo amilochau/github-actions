@@ -19,6 +19,8 @@
   The path of the template file
   .PARAMETER parametersFilePath
   The path of the parameters file
+  .PARAMETER templatesDirectory
+  The directory of the ARM templates
 #>
 
 [CmdletBinding()]
@@ -48,7 +50,10 @@ Param(
   [string]$templateFilePath,
 
   [parameter(Mandatory = $true)]
-  [string]$parametersFilePath
+  [string]$parametersFilePath,
+
+  [parameter(Mandatory = $true)]
+  [string]$templatesDirectory
 )
 
 Write-Output "Scope is: $scope"
@@ -60,6 +65,10 @@ Write-Output "Management group ID is: $managementGroupId"
 Write-Output "Management group location is: $managementGroupLocation"
 Write-Output "Template file path is: $templateFilePath"
 Write-Output "Parameters file path is: $parametersFilePath"
+Write-Output "Templates directory path is: $templatesDirectory"
+
+$deploymentName = 'Deployment-GitHub'
+Write-Output "Deployment name is: $deploymentName"
 
 Write-Output '=========='
 Write-Host 'Define default subscription...'
@@ -95,20 +104,21 @@ if ($scope -eq 'resourceGroup') {
 
   Write-Output '=========='
   Write-Output 'Determine template version...'
-  Set-Location './templates'
+  $scriptLocation = Get-Location
+  Set-Location $templatesDirectory
   $templateVersion=$(git describe --tags --match v*.*.*)
   Write-Output "Template version is $templateVersion"
-  Set-Location '..'
+  Set-Location $scriptLocation
 
   Write-Output '=========='
   Write-Output 'Deploy ARM template file...'
   $result = az deployment group create `
-  --name 'Deployment-GitHub' `
-  --resource-group $resourceGroupName `
-  --template-file $templateFilePath `
-  --parameters $parametersFilePath `
-  --parameters templateVersion=$templateVersion `
-  --no-prompt
+    --name $deploymentName `
+    --resource-group $resourceGroupName `
+    --template-file $templateFilePath `
+    --parameters $parametersFilePath `
+    --parameters templateVersion=$templateVersion `
+    --no-prompt
 
   Write-Output 'Deployment is now completed on resource group.'
 
@@ -118,7 +128,7 @@ if ($scope -eq 'resourceGroup') {
   Write-Output '=========='
   Write-Output 'Deploy ARM template file...'
   $result = az deployment sub create `
-    --name 'Deployment-GitHub' `
+    --name $deploymentName `
     --location $subscriptionLocation `
     --template-file $templateFilePath `
     --parameters $parametersFilePath `
@@ -131,7 +141,7 @@ if ($scope -eq 'resourceGroup') {
   Write-Output '=========='
   Write-Output 'Deploy ARM template file...'
   $result = az deployment mg create `
-    --name 'Deployment-GitHub' `
+    --name $deploymentName `
     --management-group-id $managementGroupId `
     --location $managementGroupLocation `
     --template-file $templateFilePath `

@@ -62,7 +62,7 @@ az storage blob upload `
   --no-progress | Out-Null
 
 $blobUri = "https://$storageAccountName.blob.core.windows.net/$containerName/$fileName"
-Write-Output "Deployment package has been updated to $blobUri."
+Write-Output "Deployment package has been uploaded to $blobUri."
 
 Write-Output '=========='
 Write-Output 'Update Functions appsettings with package reference...'

@@ -43,10 +43,10 @@ inputs:
 outputs:
   resourceId:
     description: "ID of the main deployed resource"
-    value: ${{ steps.deploy_infra_step_rg.outputs.resourceId }}
+    value: ${{ steps.deploy.outputs.resourceId }}
   resourceName:
     description: "Name of the main deployed resource"
-    value: ${{ steps.deploy_infra_step_rg.outputs.resourceName }}
+    value: ${{ steps.deploy.outputs.resourceName }}
 runs:
   using: composite
   steps:
@@ -72,4 +72,5 @@ runs:
         -managementGroupId "${{ inputs.managementGroupId }}" `
         -managementGroupLocation "${{ inputs.managementGroupRegion }}" `
         -templateFilePath ${{ inputs.templateFilePath }} `
-        -parametersFilePath ${{ inputs.parametersFilePath }}
+        -parametersFilePath ${{ inputs.parametersFilePath }} `
+        -templatesDirectory ./templates
