@@ -60,69 +60,16 @@ runs:
       uses: azure/login@v1
       with:
         creds: ${{ inputs.azureCredentials }}
-    - name: Determine template version
-      if: ${{ inputs.scope == 'resourceGroup' }}
-      id: format-versions
-      shell: bash
-      run: |
-        templateVersion=$(git describe --tags --match v*.*.*)
-        echo Template version is $templateVersion
-        echo "::set-output name=templateVersion::$templateVersion"
-      working-directory: templates
-    - name: Create Azure Resource Group
-      if: ${{ inputs.scope == 'resourceGroup' }}
+    - name: Deploy infrastructure on Azure with script
+      id: deploy
       shell: pwsh
-      run: |
-        echo 'Checking if the resource group must be created...'
-        if ((az group exists --name ${{ inputs.resourceGroupName }}) -eq 'false') {
-          echo 'Creating the resource group...'
-          az group create `
-            --name ${{ inputs.resourceGroupName }} `
-            --location ${{ inputs.resourceGroupLocation }}
-          echo 'Resource group has been be created.'
-        }
-    - name: Detach Static Web Apps
-      if: ${{ inputs.scope == 'resourceGroup' }}
-      shell: pwsh
-      run: |
-        echo 'Checking if Static Web Apps must be disconnected...'
-        az staticwebapp list --resource-group ${{ inputs.resourceGroupName }} | ConvertFrom-Json | ForEach-Object {
-          echo "Disconnecting $($_.name)..."
-          az staticwebapp disconnect --name $_.name
-          echo "$($_.name) has been disconnected."
-        }
-    - name: Deploy infrastructure to Azure
-      if: ${{ inputs.scope == 'resourceGroup' }}
-      id: deploy_infra_step_rg
-      uses: azure/arm-deploy@v1
-      with:
-        scope: 'resourcegroup'
-        resourceGroupName: ${{ inputs.resourceGroupName }}
-        template: ${{ inputs.templateFilePath }}
-        parameters: '${{ inputs.parametersFilePath }} templateVersion=${{ steps.format-versions.outputs.templateVersion }}'
-        deploymentName: 'Deployment-GitHub'
-        failOnStdErr: false
-    - name: Deploy infrastructure to Azure
-      if: ${{ inputs.scope == 'subscription' }}
-      id: deploy_infra_step_sub
-      uses: azure/arm-deploy@v1
-      with:
-        scope: 'subscription'
-        subscriptionId: ${{ inputs.subscriptionId }}
-        region: ${{ inputs.subscriptionRegion }}
-        template: ${{ inputs.templateFilePath }}
-        parameters: ${{ inputs.parametersFilePath }}
-        deploymentName: 'Deployment-GitHub'
-        failOnStdErr: false
-    - name: Deploy infrastructure to Azure
-      if: ${{ inputs.scope == 'managementGroup' }}
-      id: deploy_infra_step_mg
-      uses: azure/arm-deploy@v1
-      with:
-        scope: 'managementgroup'
-        managementGroupId: ${{ inputs.managementGroupId }}
-        region: ${{ inputs.managementGroupRegion }}
-        template: ${{ inputs.templateFilePath }}
-        parameters: ${{ inputs.parametersFilePath }}
-        deploymentName: 'Deployment-GitHub'
-        failOnStdErr: false
+      run: ${{ github.action_path }}/deploy-infrastructure.ps1 `
+        -scope ${{ inputs.scope }} `
+        -resourceGroupName "${{ inputs.resourceGroupName }}" `
+        -resourceGroupLocation "${{ inputs.resourceGroupLocation }}" `
+        -subscriptionId "${{ inputs.subscriptionId }}" `
+        -subscriptionLocation "${{ inputs.subscriptionRegion }}" `
+        -managementGroupId "${{ inputs.managementGroupId }}" `
+        -managementGroupLocation "${{ inputs.managementGroupRegion }}" `
+        -templateFilePath ${{ inputs.templateFilePath }} `
+        -parametersFilePath ${{ inputs.parametersFilePath }}
