@@ -40,7 +40,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v2
       - name: Set up a GitHub Release
         uses: amilochau/github-actions/release/basic@v1
         with:
@@ -60,7 +60,7 @@ jobs:
 | `versionMajor` | The major version - must be changed when you make incompatible API changes | **true** |
 | `versionMinor` | The minor version - must be changed when you add functionality in a backward compatible manner | **true** |
 | `versionPatch` | The patch version - must be changed when you make backwards compatible bug fixes | **true** |
-| `versionUnstableSuffix` | The unstable suffix version - must be added when you want to create a pre-release | *false* | `` |
+| `versionUnstableSuffix` | The unstable suffix version - must be added when you want to create a pre-release | *false* | `''` |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
 | `generateReleaseNotes` | Generate automatic release notes |  *false* | `false` |

@@ -24,7 +24,7 @@ jobs:
     name: Deploy application
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v2
       - name: Deploy application
         uses: amilochau/github-actions/deploy//static-web-apps@v1
         with:

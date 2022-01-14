@@ -26,7 +26,7 @@ jobs:
     name: Register application
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v2
         with:
           path: app
       - name: Deploy application

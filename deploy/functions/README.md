@@ -24,17 +24,14 @@ jobs:
     name: Deploy application
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - uses: actions/checkout@v2
       - name: Deploy application
         uses: amilochau/github-actions/deploy/functions@v1
         with:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
           applicationName: ${{ env.INFRA_APP_NAME }}
           projectsToPublishPath: ${{ env.PROJECTS_PUBLISH }}
+          dotnetVersion: ${{ env.DOTNET_VERSION }}
 ```
 
 ### Inputs
@@ -42,6 +39,7 @@ jobs:
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | *false* | | **OBSOLETE** parameter |
+| `dotnetVersion` | The .NET version to use | *false* | `''` | If you don't specify this, you should use your own `actions/setup-dotnet` task before |
 | `verbosity` | The verbosity of the dotnet CLI | *false* | `minimal` |
 | `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
 | `applicationName` | The application name, as defined on Azure | **true** |

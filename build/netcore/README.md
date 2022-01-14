@@ -22,16 +22,13 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - uses: actions/checkout@v2
       - name: Build and test projects
         uses: amilochau/github-actions/build/netcore@v1
         with:
           projectsToBuild: ${{ env.PROJECTS_BUILD }}
           projectsToTest: ${{ env.PROJECTS_TESTS }}
+          dotnetVersion: ${{ env.DOTNET_VERSION }}
 ```
 
 ### Inputs
@@ -40,6 +37,7 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
 | `projectsToTest` | The path to the projects to test - can be a .csproj or a .sln file | **true** |
+| `dotnetVersion` | The .NET version to use | *false* | `''` | If you don't specify this, you should use your own `actions/setup-dotnet` task before |
 | `verbosity` | The verbosity of the dotnet CLI | *false* | `minimal` |
 
 ### Outputs

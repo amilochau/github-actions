@@ -24,7 +24,7 @@ jobs:
     name: Deploy infrastructure
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v2
         with:
           path: app
       - name: Deploy application
