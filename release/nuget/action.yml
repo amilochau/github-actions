@@ -11,6 +11,12 @@ inputs:
   projectsToPublish:
     description: The path to the projects to publish - can be a .csproj or a .sln file
     required: true
+  dotnetVersion:
+    description: The .NET version to use
+    default: ''
+  githubPackagesUrl:
+    description: The GitHub Packages URL where to push packages
+    default: ''
   avoidGitHubPrerelease:
     description: Disable GitHub Release creation for unstable version
     required: false
@@ -43,6 +49,14 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: Setup .NET Core
+      if: ${{ inputs.dotnetVersion != '' }}
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ inputs.dotnetVersion }}
+        source-url: ${{ inputs.githubPackagesUrl }}
+      env:
+        NUGET_AUTH_TOKEN: ${{ inputs.githubToken }}
     - name: Release NuGet with script
       id: release
       shell: pwsh

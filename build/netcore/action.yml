@@ -8,12 +8,20 @@ inputs:
   projectsToTest:
     description: The path to the projects to test - can be a .csproj or a .sln file
     required: true
+  dotnetVersion:
+    description: The .NET version to use
+    default: ''
   verbosity:
     description: The verbosity of the dotnet CLI
     default: minimal
 runs:
   using: composite
   steps:
+    - name: Setup .NET Core
+      if: ${{ inputs.dotnetVersion != '' }}
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ inputs.dotnetVersion }}
     - name: Build .NET Core application with script
       shell: pwsh
       run: ${{ github.action_path }}/build-netcore.ps1 `

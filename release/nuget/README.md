@@ -21,19 +21,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-          source-url: ${{ env.NUGET_URL }}
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
       - name: Deploy libraries
         uses: amilochau/github-actions/release/nuget@v1
         with:
           projectsToBuild: ${{ env.PROJECTS_BUILD }}
           projectsToPublish: ${{ env.PROJECTS_SDK }}
+          dotnetVersion: ${{ env.DOTNET_VERSION }}
+          githubPackagesUrl: ${{ env.NUGET_URL }}
           versionFile: ${{ env.VERSION_FILE }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           avoidGitHubPrerelease: true
@@ -47,10 +42,12 @@ jobs:
 | `versionFile` | The path to the file where the version can be found - must be an XML file | **true** |
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
 | `projectsToPublish` | The path to the projects to publish - can be a .csproj or a .sln file | **true** |
+| `dotnetVersion` | The .NET version to use | *false* | `''` | If you don't specify this, you should use your own `actions/setup-dotnet` task before |
+| `githubPackagesUrl` | The GitHub Packages URL where to push packages | *false* | `''` | If you don't specify this, you should use your own `actions/setup-dotnet` task before |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
 | `generateReleaseNotes` | Generate automatic release notes |  *false* | `false` |
-| `nugetOrgToken` | The nuget.org token, typically get from a secret; used to publish projects to nuget.org | *false* | `` |
+| `nugetOrgToken` | The nuget.org token, typically get from a secret; used to publish projects to nuget.org | *false* | `''` |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
 | `verbosity` | The verbosity of the dotnet CLI | *false* | `minimal` |
 
