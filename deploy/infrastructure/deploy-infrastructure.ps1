@@ -55,7 +55,7 @@ Param(
   [string]$templateFilePath,
 
   [parameter(Mandatory = $false)]
-  [ValidateSet('configuration', 'functions', 'functions/api-registration', 'functions/local-dependencies', 'gateway', 'management-group', 'monitoring', 'static-web-apps')]
+  [ValidateSet('', 'configuration', 'functions', 'functions/api-registration', 'functions/local-dependencies', 'gateway', 'management-group', 'monitoring', 'static-web-apps')]
   [string]$templateType,
 
   [parameter(Mandatory = $true)]
