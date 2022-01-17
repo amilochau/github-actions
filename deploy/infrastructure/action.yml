@@ -80,17 +80,18 @@ runs:
     - name: Deploy infrastructure on Azure with script
       id: deploy
       uses: azure/powershell@v1
-      inlineScript: ${{ github.action_path }}/deploy-infrastructure.ps1 `
-        -scope ${{ inputs.scope }} `
-        -resourceGroupName "${{ inputs.resourceGroupName }}" `
-        -resourceGroupLocation "${{ inputs.resourceGroupLocation }}" `
-        -subscriptionId "${{ inputs.subscriptionId }}" `
-        -subscriptionLocation "${{ inputs.subscriptionRegion }}" `
-        -managementGroupId "${{ inputs.managementGroupId }}" `
-        -managementGroupLocation "${{ inputs.managementGroupRegion }}" `
-        -templateFilePath "${{ inputs.templateFilePath }}" `
-        -templateType "${{ inputs.templateType }}"
-        -parametersFilePath ${{ inputs.parametersFilePath }} `
-        -deploymentName ${{ inputs.deploymentName }}
-        -templatesDirectory ./templates
-      azPSVersion: latest
+      with:
+        inlineScript: ${{ github.action_path }}/deploy-infrastructure.ps1 `
+          -scope ${{ inputs.scope }} `
+          -resourceGroupName "${{ inputs.resourceGroupName }}" `
+          -resourceGroupLocation "${{ inputs.resourceGroupLocation }}" `
+          -subscriptionId "${{ inputs.subscriptionId }}" `
+          -subscriptionLocation "${{ inputs.subscriptionRegion }}" `
+          -managementGroupId "${{ inputs.managementGroupId }}" `
+          -managementGroupLocation "${{ inputs.managementGroupRegion }}" `
+          -templateFilePath "${{ inputs.templateFilePath }}" `
+          -templateType "${{ inputs.templateType }}"
+          -parametersFilePath ${{ inputs.parametersFilePath }} `
+          -deploymentName ${{ inputs.deploymentName }}
+          -templatesDirectory ./templates
+        azPSVersion: latest
