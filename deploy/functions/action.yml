@@ -36,9 +36,11 @@ runs:
       with:
         creds: ${{ inputs.azureCredentials }}
     - name: Deploy Functions application
-      shell: pwsh
-      run: ${{ github.action_path }}/deploy-functions.ps1 `
-        -verbosity ${{ inputs.verbosity }} `
-        -applicationName ${{ inputs.applicationName }}
-        -healthUrl "${{ inputs.healthUrl }}"
+      uses: azure/powershell@v1
+      with:
+        inlineScript: ${{ github.action_path }}/deploy-functions.ps1 `
+          -verbosity ${{ inputs.verbosity }} `
+          -applicationName ${{ inputs.applicationName }}
+          -healthUrl "${{ inputs.healthUrl }}"
+        azPSVersion: 7.1.0
       working-directory: ${{ inputs.projectsToPublishPath }}
