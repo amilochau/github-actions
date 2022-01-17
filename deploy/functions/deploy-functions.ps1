@@ -58,7 +58,7 @@ Write-Output "Application type: $applicationType"
 Write-Output "Default host name: $defaultHostName"
 
 $appSettings = Get-AzFunctionAppSetting -Name $applicationName -ResourceGroupName $resourceGroupName
-$storageAccountName = $appSettings | Where-Object { $_.Name -eq "AzureWebJobsStorage__accountName" } | ForEach-Object { $_.Value }
+$storageAccountName = $appSettings['AzureWebJobsStorage__accountName']
 Write-Output "Storage account name: $storageAccountName"
 
 Write-Output '=========='
@@ -79,7 +79,7 @@ Update-AzFunctionAppSetting -Name $applicationName -ResourceGroupName $resourceG
 
 Write-Output '=========='
 Write-Output 'Synchronize triggers...'
-Invoke-AzResourceAction -ResourceGroupName $resourceGroupName -ResourceType $applicationType -ResourceName $applicationName -Action syncfunctiontriggers | Out-Null
+Invoke-AzResourceAction -ResourceGroupName $resourceGroupName -ResourceType $applicationType -ResourceName $applicationName -Action syncfunctiontriggers -Force | Out-Null
 
 Write-Output '=========='
 Write-Output 'Check application health...'
