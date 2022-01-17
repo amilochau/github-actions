@@ -44,8 +44,9 @@ Write-Output 'Create deployment package...'
 $currentDate = Get-Date -Format yyyyMMdd_HHmmss
 $currentLocation = Get-Location
 $fileName = "$currentLocation/FunctionsApp_$currentDate.zip"
-[System.IO.Compression.ZipFile]::CreateFromDirectory("$currentLocation/output", $fileName)
-Write-Output "Deployment package has been created ($fileName)."
+$filePath = "$currentLocation/$fileName"
+[System.IO.Compression.ZipFile]::CreateFromDirectory("$currentLocation/output", $filePath)
+Write-Output "Deployment package has been created ($filePath)."
 
 Write-Output '=========='
 Write-Output 'Get application information from application settings...'
@@ -68,7 +69,7 @@ $containerName = 'deployment-packages'
 New-AzStorageContext -StorageAccountName $storageAccountName | Set-AzStorageBlobContent `
   -Container $containerName `
   -Blob $fileName `
-  -File $fileName ` | Out-Null
+  -File $filePath ` | Out-Null
 
 $blobUri = "https://$storageAccountName.blob.core.windows.net/$containerName/$fileName"
 Write-Output "Deployment package has been uploaded to $blobUri."
