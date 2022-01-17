@@ -68,7 +68,7 @@ Param(
   [string]$deploymentName
 )
 
-Install-Module Az -RequiredVersion 7.1.0 -Force -Scope AllUsers
+Install-Module Az -Force -Scope CurrentUser
 
 Write-Output "Scope is: $scope"
 Write-Output "Resource group name is: $resourceGroupName"
