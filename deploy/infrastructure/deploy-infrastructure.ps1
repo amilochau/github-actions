@@ -68,8 +68,6 @@ Param(
   [string]$deploymentName
 )
 
-Install-Module Az -Force -Scope CurrentUser
-
 Write-Output "Scope is: $scope"
 Write-Output "Resource group name is: $resourceGroupName"
 Write-Output "Resource group location is: $resourceGroupLocation"
