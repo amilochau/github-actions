@@ -39,8 +39,8 @@ runs:
       uses: azure/powershell@v1
       with:
         inlineScript: ${{ github.action_path }}/deploy-functions.ps1 `
+          -projectsToPublishPath ${{ inputs.projectsToPublishPath }}
           -verbosity ${{ inputs.verbosity }} `
           -applicationName ${{ inputs.applicationName }}
           -healthUrl "${{ inputs.healthUrl }}"
         azPSVersion: 7.1.0
-      working-directory: ${{ inputs.projectsToPublishPath }}

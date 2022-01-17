@@ -1,6 +1,8 @@
 <#
   .SYNOPSIS
   This script deploys a Functions application
+  .PARAMETER projectsToPublishPath
+  The path of the projects to publish
   .PARAMETER verbosity
   The verbosity level
   .PARAMETER applicationName
@@ -12,6 +14,9 @@
 [CmdletBinding()]
 Param(
   [parameter(Mandatory = $true)]
+  [string]$projectsToPublishPath,
+
+  [parameter(Mandatory = $true)]
   [string]$verbosity,
 
   [parameter(Mandatory = $true)]
@@ -21,9 +26,14 @@ Param(
   [string]$healthUrl
 )
 
+Write-Output "Projects to publish path is: $projectsToPublishPath"
 Write-Output "Verbosity is: $verbosity"
 Write-Output "Application name is: $applicationName"
 Write-Output "Health URL is: $healthUrl"
+
+Write-Output '=========='
+Write-Output 'Moving into projects to publish path...'
+Set-Location $projectsToPublishPath
 
 Write-Output '=========='
 Write-Output 'Publish application...'
