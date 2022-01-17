@@ -94,4 +94,4 @@ runs:
           -parametersFilePath ${{ inputs.parametersFilePath }} `
           -deploymentName ${{ inputs.deploymentName }}
           -templatesDirectory ./templates
-        azPSVersion: latest
+        azPSVersion: 7.1.0
