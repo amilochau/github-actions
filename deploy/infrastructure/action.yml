@@ -79,8 +79,8 @@ runs:
         enable-AzPSSession: true
     - name: Deploy infrastructure on Azure with script
       id: deploy
-      shell: pwsh
-      run: ${{ github.action_path }}/deploy-infrastructure.ps1 `
+      uses: azure/powershell@v1
+      inlineScript: ${{ github.action_path }}/deploy-infrastructure.ps1 `
         -scope ${{ inputs.scope }} `
         -resourceGroupName "${{ inputs.resourceGroupName }}" `
         -resourceGroupLocation "${{ inputs.resourceGroupLocation }}" `
@@ -93,3 +93,4 @@ runs:
         -parametersFilePath ${{ inputs.parametersFilePath }} `
         -deploymentName ${{ inputs.deploymentName }}
         -templatesDirectory ./templates
+      azPSVersion: latest
