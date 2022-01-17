@@ -68,6 +68,8 @@ Param(
   [string]$deploymentName
 )
 
+Get-Module -Name Az -ListAvailable -All
+
 Write-Output "Scope is: $scope"
 Write-Output "Resource group name is: $resourceGroupName"
 Write-Output "Resource group location is: $resourceGroupLocation"

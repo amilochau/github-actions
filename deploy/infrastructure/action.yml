@@ -76,7 +76,7 @@ runs:
       uses: azure/login@v1
       with:
         creds: ${{ inputs.azureCredentials }}
-        enable-AzPSSession: true 
+        enable-AzPSSession: true
     - name: Deploy infrastructure on Azure with script
       id: deploy
       shell: pwsh
