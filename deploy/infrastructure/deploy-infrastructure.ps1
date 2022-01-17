@@ -150,8 +150,12 @@ if ($scope -eq 'resourceGroup') {
       $appSettings = Get-AzFunctionAppSetting -Name $applicationName -ResourceGroupName $resourceGroupName
   
       $applicationPackageUri = $appSettings['WEBSITE_RUN_FROM_PACKAGE']
-      $templateExtraParameters.Add('applicationPackageUri', $applicationPackageUri)
-      Write-Output "Application package URI found ($($applicationPackageUri.Length) characters)."
+      if (($null -ne $applicationPackageUri) -and ($applicationPackageUri.Length -gt 0)) {
+        $templateExtraParameters.Add('applicationPackageUri', $applicationPackageUri)
+        Write-Output "Application package URI found ($($applicationPackageUri.Length) characters)."
+      } else {
+        Write-Output "Application package URI not found."
+      }
     }
   }
 
