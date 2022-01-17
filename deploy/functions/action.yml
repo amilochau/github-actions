@@ -35,6 +35,7 @@ runs:
       uses: azure/login@v1
       with:
         creds: ${{ inputs.azureCredentials }}
+        enable-AzPSSession: true
     - name: Deploy Functions application
       uses: azure/powershell@v1
       with:
