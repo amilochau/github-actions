@@ -141,6 +141,21 @@ if ($scope -eq 'resourceGroup') {
   }
 
   Write-Output '=========='
+  Write-Output 'Get Functions application settings...'
+  if ($templateType -eq 'functions') {
+    $app = Get-AzFunctionApp -ResourceGroupName $resourceGroupName
+    if (!!$app) {
+      $applicationName = $app.Name
+      Write-Output "Application name: $applicationName"
+      $appSettings = Get-AzFunctionAppSetting -Name $applicationName -ResourceGroupName $resourceGroupName
+  
+      $applicationPackageUri = $appSettings['WEBSITE_RUN_FROM_PACKAGE']
+      $templateExtraParameters.Add('applicationPackageUri', $applicationPackageUri)
+      Write-Output "Application package URI found ($($applicationPackageUri.Length) characters)."
+    }
+  }
+
+  Write-Output '=========='
   Write-Output 'Determine template version...'
   $scriptLocation = Get-Location
   Set-Location $templatesDirectory
