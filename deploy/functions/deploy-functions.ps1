@@ -68,7 +68,7 @@ Update-AzFunctionAppSetting -Name $applicationName -ResourceGroupName $resourceG
 
 Write-Output '=========='
 Write-Output 'Synchronize triggers...'
-Invoke-AzureRmResourceAction -ResourceGroupName $resourceGroupName -ResourceType $applicationType -ResourceName $applicationName -Action syncfunctiontriggers | Out-Null
+Invoke-AzResourceAction -ResourceGroupName $resourceGroupName -ResourceType $applicationType -ResourceName $applicationName -Action syncfunctiontriggers | Out-Null
 
 Write-Output '=========='
 Write-Output 'Check application health...'
