@@ -158,8 +158,7 @@ if ($scope -eq 'resourceGroup') {
     -ResourceGroupName $resourceGroupName `
     -TemplateFile $templateFilePath `
     -TemplateParameterFile $parametersFilePath `
-    -TemplateParameterObject $templateExtraParameters `
-    -SkipTemplateParameterPrompt
+    @templateExtraParameters
 
   Write-Output 'Deployment is now completed on resource group.'
 } elseif ($scope -eq 'subscription') {
@@ -172,8 +171,7 @@ if ($scope -eq 'resourceGroup') {
     -Location $managementGroupLocation `
     -TemplateFile $templateFilePath `
     -TemplateParameterFile $parametersFilePath `
-    -TemplateParameterObject $templateExtraParameters `
-    -SkipTemplateParameterPrompt
+    @templateExtraParameters
 
   Write-Output 'Deployment is now completed on subscription.'
 } elseif ($scope -eq 'managementGroup') {
@@ -187,8 +185,7 @@ if ($scope -eq 'resourceGroup') {
     -Location $managementGroupLocation `
     -TemplateFile $templateFilePath `
     -TemplateParameterFile $parametersFilePath `
-    -TemplateParameterObject $templateExtraParameters `
-    -SkipTemplateParameterPrompt
+    @templateExtraParameters
 
   Write-Output 'Deployment is now completed on management group.'
 } else {
