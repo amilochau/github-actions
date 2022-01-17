@@ -43,7 +43,7 @@ Write-Output '=========='
 Write-Output 'Create deployment package...'
 $currentDate = Get-Date -Format yyyyMMdd_HHmmss
 $currentLocation = Get-Location
-$fileName = "$currentLocation/FunctionsApp_$currentDate.zip"
+$fileName = "FunctionsApp_$currentDate.zip"
 $filePath = "$currentLocation/$fileName"
 [System.IO.Compression.ZipFile]::CreateFromDirectory("$currentLocation/output", $filePath)
 Write-Output "Deployment package has been created ($filePath)."
