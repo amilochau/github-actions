@@ -19,7 +19,6 @@ The following actions are proposed, and can be freely used:
 | `build/netcore` | Build and Test .NET projects | [README.md](./build/netcore/README.md) |
 | `build/node` | Build and Test Node.js projects | [README.md](./build/node/README.md) |
 | `deploy/functions` | Deploy Azure Functions applications | [README.md](./deploy/functions/README.md) |
-| `deploy/gateway-backend` | Deploy an API Management backend | [README.md](./deploy/gateway-backend/README.md) |
 | `deploy/infrastructure` | Deploy Azure infrastructure | [README.md](./deploy/infrastructure/README.md) |
 | `deploy/static-web-apps` | Deploy Static Web Apps applications | [README.md](./deploy/static-web-apps/README.md) |
 | `release/basic` | Create complete GitHub Releases with a simple process | [README.md](./release/basic/README.md) |
