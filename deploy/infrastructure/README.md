@@ -35,7 +35,6 @@ jobs:
           scopeType: ${{ env.INFRA_SCOPE_TYPE }}
           resourceGroupName: ${{ env.INFRA_RG_NAME }}
           resourceGroupLocation: ${{ env.INFRA_RG_LOCATION }}
-          templateFilePath: ${{ env.INFRA_DEPLOY_TEMPLATE_PATH }}
           parametersFilePath: ${{ env.INFRA_DEPLOY_PARAMETERS_PATH }}
 ```
 
@@ -51,8 +50,8 @@ jobs:
 | `subscriptionRegion` | The region of the Azure subscription | *true if scope is `subscription`* |
 | `managementGroupId` | The ID of the Azure management group | *true if scope is `managementGroup`* |
 | `managementGroupRegion` | The region of the Azure management group | *true if scope is `managementGroup`* |
-| `templateFilePath` | The path of the infrastructure template to deploy | **true** |
 | `scopeType` | The deployment scope type | **true** | `resourceGroup` |
+| `templateType` | The type of Azure templates to use | **true** |
 | `parametersFilePath` | The path of the parameters files to use during deployment | **true** |
 | `deploymentName` | The path of the deployment into Azure | *false* | `Deployment-GitHub` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
