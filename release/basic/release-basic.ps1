@@ -116,9 +116,8 @@ $headers = @{
   'Content-Type' = 'application/json'
 }
 
-Write-Output 'Checking if release notes must be included...'
+Write-Output 'Generating release notes...'
 $releaseNote = '...'
-Write-Output 'Release note must be included.'
 
 $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
 if ($response.tag_name) {

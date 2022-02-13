@@ -53,5 +53,6 @@ jobs:
 
 | Output | Description |
 | ------ | ----------- |
-| `versionNumber` | The version as defined in the Git tag |
+| `versionLong` | The long version as defined in the long Git tag |
+| `versionShort` | The short version as defined in the short Git tag |
 | `versionPrerelease` | If the version is recognized as a prerelease |
