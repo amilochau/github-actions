@@ -14,9 +14,10 @@ inputs:
   projectsToPublishPath:
     description: The path of the projects to publish, relative to the checkout path
     required: true
-  healthUrl:
-    description: The absolute URL of the health endpoint, from the Functions application
+  relativeHealthUrl:
+    description: The relative URL of the health endpoint, from the Functions application
     required: false
+    default: '/api/health'
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -43,6 +44,6 @@ runs:
         inlineScript: ${{ github.action_path }}/deploy-functions.ps1 `
           -projectsToPublishPath ${{ inputs.projectsToPublishPath }} `
           -applicationName ${{ inputs.applicationName }} `
-          -healthUrl "${{ inputs.healthUrl }}" `
+          -relativeHealthUrl ${{ inputs.relativeHealthUrl }} `
           -verbosity ${{ inputs.verbosity }}
         azPSVersion: 7.1.0

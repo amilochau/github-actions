@@ -28,10 +28,10 @@ jobs:
       - name: Deploy application
         uses: amilochau/github-actions/deploy/functions@v1
         with:
+          dotnetVersion: ${{ env.DOTNET_VERSION }}
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
           applicationName: ${{ env.INFRA_APP_NAME }}
           projectsToPublishPath: ${{ env.PROJECTS_PUBLISH }}
-          dotnetVersion: ${{ env.DOTNET_VERSION }}
 ```
 
 ### Inputs
@@ -42,7 +42,7 @@ jobs:
 | `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
 | `applicationName` | The application name, as defined on Azure | **true** |
 | `projectsToPublishPath` | The path of the projects to publish, relative to the checkout path | **true** |
-| `healthUrl` | The absolute URL of the health endpoint, from the Functions application | *false* |
+| `relativeHealthUrl` | The relative URL of the health endpoint, from the Functions application | *false* | `/api/health` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs

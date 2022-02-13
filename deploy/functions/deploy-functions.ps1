@@ -7,8 +7,8 @@
   The verbosity level
   .PARAMETER applicationName
   The application name
-  .PARAMETER healthUrl
-  The health URL
+  .PARAMETER relativeHealthUrl
+  The relative health URL
 #>
 
 [CmdletBinding()]
@@ -23,14 +23,14 @@ Param(
   [parameter(Mandatory = $true)]
   [string]$applicationName,
 
-  [parameter(Mandatory = $false)]
-  [string]$healthUrl
+  [parameter(Mandatory = $true)]
+  [string]$relativeHealthUrl
 )
 
 Write-Output "Projects to publish path is: $projectsToPublishPath"
 Write-Output "Verbosity is: $verbosity"
 Write-Output "Application name is: $applicationName"
-Write-Output "Health URL is: $healthUrl"
+Write-Output "Relative health URL is: $relativeHealthUrl"
 
 Write-Output '=========='
 Write-Output 'Moving into projects to publish path...'
@@ -85,13 +85,8 @@ Invoke-AzResourceAction -ResourceGroupName $resourceGroupName -ResourceType $app
 
 Write-Output '=========='
 Write-Output 'Check application health...'
-
-if (($null -ne $healthUrl) -and ($healthUrl.Length -gt 0)) {
-  Write-Host "Using configured health URL: $healthUrl"
-} else {
-  $healthUrl="https://$defaultHostName/api/health"
-  Write-Host "Using default health URL: $healthUrl"
-}
+$healthUrl = "https://$defaultHostName$relativeHealthUrl"
+Write-Host "Using default health URL: $healthUrl"
 
 Invoke-WebRequest $healthUrl -TimeoutSec 120 -MaximumRetryCount 12 -RetryIntervalSec 10
 
