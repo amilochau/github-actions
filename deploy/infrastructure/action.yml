@@ -16,23 +16,17 @@ inputs:
     - subscription
     - managementGroup
     default: resourceGroup
+  scopeLocation:
+    description: The deployment scope location (Azure region)
+    required: true
   resourceGroupName:
     description: The name of the resource group where to deploy the infrastructure
-    required: false
-  resourceGroupLocation:
-    description: The location of the resource group where to deploy the infrastructure
     required: false
   subscriptionId:
     description: The ID of the Azure subscription
     required: false
-  subscriptionRegion:
-    description: The region of the Azure subscription
-    required: false
   managementGroupId:
     description: The ID of the Azure management group
-    required: false
-  managementGroupRegion:
-    description: The region of the Azure management group
     required: false
   templateType:
     description: The type of Azure templates to use
@@ -87,12 +81,10 @@ runs:
       with:
         inlineScript: ${{ github.action_path }}/deploy-infrastructure.ps1 `
           -scopeType ${{ inputs.scopeType }} `
+          -scopeLocation ${{ inputs.scopeLocation }} `
           -resourceGroupName "${{ inputs.resourceGroupName }}" `
-          -resourceGroupLocation "${{ inputs.resourceGroupLocation }}" `
           -subscriptionId "${{ inputs.subscriptionId }}" `
-          -subscriptionLocation "${{ inputs.subscriptionRegion }}" `
           -managementGroupId "${{ inputs.managementGroupId }}" `
-          -managementGroupLocation "${{ inputs.managementGroupRegion }}" `
           -templateType ${{ inputs.templateType }} `
           -parametersFilePath ${{ inputs.parametersFilePath }} `
           -deploymentName ${{ inputs.deploymentName }} `

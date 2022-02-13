@@ -3,18 +3,14 @@
   This script deploys infrastructure on Azure
   .PARAMETER scopeType
   The deployment scope type
+  .PARAMETER scopeLocation
+  The deployment scope location (Azure region)
   .PARAMETER resourceGroupName
   The name of the resource group
-  .PARAMETER resourceGroupLocation
-  The location of the resource group
   .PARAMETER subscriptionId
   The ID of the subscription
-  .PARAMETER subscriptionLocation
-  The location of the subscription
   .PARAMETER managementGroupId
   The ID of the management group
-  .PARAMETER managementGroupLocation
-  The location of the management group
   .PARAMETER templateType
   The type of Azure templates to use
   .PARAMETER parametersFilePath
@@ -31,23 +27,17 @@ Param(
   [ValidateSet('resourceGroup', 'subscription', 'managementGroup')]
   [string]$scopeType,
 
-  [parameter(Mandatory = $false)]
-  [string]$resourceGroupName,
+  [parameter(Mandatory = $true)]
+  [string]$scopeLocation,
 
   [parameter(Mandatory = $false)]
-  [string]$resourceGroupLocation,
+  [string]$resourceGroupName,
 
   [parameter(Mandatory = $false)]
   [string]$subscriptionId,
 
   [parameter(Mandatory = $false)]
-  [string]$subscriptionLocation,
-
-  [parameter(Mandatory = $false)]
   [string]$managementGroupId,
-
-  [parameter(Mandatory = $false)]
-  [string]$managementGroupLocation,
 
   [parameter(Mandatory = $true)]
   [ValidateSet('configuration', 'functions', 'functions/api-registration', 'functions/local-dependencies', 'gateway', 'management-group', 'monitoring', 'static-web-apps')]
@@ -64,12 +54,10 @@ Param(
 )
 
 Write-Output "Scope type is: $scopeType"
+Write-Output "Scope location is: $scopeLocation"
 Write-Output "Resource group name is: $resourceGroupName"
-Write-Output "Resource group location is: $resourceGroupLocation"
 Write-Output "Subscription ID is: $subscriptionId"
-Write-Output "Subscription location is: $subscriptionLocation"
 Write-Output "Management group ID is: $managementGroupId"
-Write-Output "Management group location is: $managementGroupLocation"
 Write-Output "Template type is: $templateType"
 Write-Output "Parameters file path is: $parametersFilePath"
 Write-Output "Templates directory path is: $templatesDirectory"
@@ -110,7 +98,7 @@ if ($scopeType -eq 'resourceGroup') {
   Write-Output 'Create Resource Group...'
   if (!(Get-AzResourceGroup -Name $resourceGroupName -ErrorAction SilentlyContinue)) {
     Write-Output 'Creating the resource group...'
-    New-AzResourceGroup -Name $resourceGroupName -Location $resourceGroupLocation
+    New-AzResourceGroup -Name $resourceGroupName -Location $scopeLocation
     Write-Output 'Resource group has been be created.'
   }
 
@@ -188,7 +176,7 @@ if ($scopeType -eq 'resourceGroup') {
   $result = New-AzManagementGroupDeployment `
     -Name $deploymentName `
     -ManagementGroupId $managementGroupId `
-    -Location $managementGroupLocation `
+    -Location $scopeLocation `
     -TemplateFile $templateFilePath `
     -TemplateParameterFile $parametersFilePath `
     @templateExtraParameters

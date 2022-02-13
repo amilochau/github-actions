@@ -33,8 +33,8 @@ jobs:
           azureTemplateVersion: ${{ env.TEMPLATES_VERSION }}
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
           scopeType: ${{ env.INFRA_SCOPE_TYPE }}
+          scopeLocation: ${{ env.INFRA_SCOPE_LOCATION }}
           resourceGroupName: ${{ env.INFRA_RG_NAME }}
-          resourceGroupLocation: ${{ env.INFRA_RG_LOCATION }}
           parametersFilePath: ${{ env.INFRA_DEPLOY_PARAMETERS_PATH }}
 ```
 
@@ -44,13 +44,11 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `azureTemplateVersion` | The version of 'azure-templates' to use | **true** |
 | `azureCredentials` | Azure credentials, typically get from `secrets.AZURE_CREDENTIALS` | **true** |
-| `resourceGroupName` | The name of the resource group where to deploy the infrastructure | *true if scope is `resourceGroup`* |
-| `resourceGroupLocation` | The location of the resource group where to deploy the infrastructure | *true if scope is `resourceGroup`* |
-| `subscriptionId` | The ID of the Azure subscription | *true if scope is `subscription`* |
-| `subscriptionRegion` | The region of the Azure subscription | *true if scope is `subscription`* |
-| `managementGroupId` | The ID of the Azure management group | *true if scope is `managementGroup`* |
-| `managementGroupRegion` | The region of the Azure management group | *true if scope is `managementGroup`* |
 | `scopeType` | The deployment scope type | **true** | `resourceGroup` |
+| `scopeLocation` | The deployment scope location (Azure region) | **true** |
+| `resourceGroupName` | The name of the resource group where to deploy the infrastructure | *true if scope type is `resourceGroup`* |
+| `subscriptionId` | The ID of the Azure subscription | *true if scope type is `subscription`* |
+| `managementGroupId` | The ID of the Azure management group | *true if scope type is `managementGroup`* |
 | `templateType` | The type of Azure templates to use | **true** |
 | `parametersFilePath` | The path of the parameters files to use during deployment | **true** |
 | `deploymentName` | The path of the deployment into Azure | *false* | `Deployment-GitHub` |
