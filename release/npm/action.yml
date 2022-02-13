@@ -12,10 +12,6 @@ inputs:
     description: Disable GitHub Release creation for unstable version
     required: false
     default: true
-  generateReleaseNotes:
-    description: Generate automatic release notes
-    required: false
-    default: false
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
@@ -58,8 +54,7 @@ runs:
         -currentBranch ${{ github.ref }} `
         -npmjsToken "${{ inputs.npmjsComToken }}" `
         -githubToken ${{ inputs.githubToken }} `
-        -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
-        -generateReleaseNotes ${{ inputs.generateReleaseNotes }}
+        -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }}
       working-directory: ${{ inputs.projectWorkspace }}
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}
