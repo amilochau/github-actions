@@ -185,7 +185,7 @@ if ($scope -eq 'resourceGroup') {
   Write-Output 'Deploy ARM template file...'
   $result = New-AzSubscriptionDeployment `
     -Name $deploymentName `
-    -Location $managementGroupLocation `
+    -Location $subscriptionLocation `
     -TemplateFile $templateFilePath `
     -TemplateParameterFile $parametersFilePath `
     @templateExtraParameters
