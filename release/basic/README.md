@@ -50,7 +50,6 @@ jobs:
           versionUnstableSuffix: ${{ github.event.inputs.versionUnstableSuffix }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           avoidGitHubPrerelease: ${{ github.event.inputs.avoidGitHubPrerelease }}
-          generateReleaseNotes: true
 ```
 
 ### Inputs
@@ -63,7 +62,6 @@ jobs:
 | `versionUnstableSuffix` | The unstable suffix version - must be added when you want to create a pre-release | *false* | `''` |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
-| `generateReleaseNotes` | Generate automatic release notes |  *false* | `false` |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 

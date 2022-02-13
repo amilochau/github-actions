@@ -21,10 +21,6 @@ inputs:
     description: Disable GitHub Release creation for unstable version
     required: false
     default: true
-  generateReleaseNotes:
-    description: Generate automatic release notes
-    required: false
-    default: false
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
@@ -73,7 +69,6 @@ runs:
         -nugetOrgToken "${{ inputs.nugetOrgToken }}" `
         -githubToken ${{ inputs.githubToken }} `
         -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
-        -generateReleaseNotes ${{ inputs.generateReleaseNotes }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
       env:

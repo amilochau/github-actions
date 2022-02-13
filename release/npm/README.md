@@ -28,7 +28,6 @@ jobs:
           versionFile: ${{ env.VERSION_FILE }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           avoidGitHubPrerelease: true
-          generateReleaseNotes: true
 ```
 
 ### Inputs
@@ -39,7 +38,6 @@ jobs:
 | `nodeVersion` | The Node.js version to use | *false* | `16.x` |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
-| `generateReleaseNotes` | Generate automatic release notes |  *false* | `false` |
 | `npmjsComToken` |  The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com | *false* | `''` |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |

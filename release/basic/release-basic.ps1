@@ -17,8 +17,6 @@
   The GitHub token
   .PARAMETER avoidGithubPrerelease
   Avoid creating GitHub release for prerelease versions
-  .PARAMETER generateReleaseNotes
-  Generate release notes
 #>
 
 [CmdletBinding()]
@@ -45,10 +43,7 @@ Param(
   [string]$githubToken,
   
   [parameter(Mandatory = $true)]
-  [string]$avoidGithubPrerelease,
-  
-  [parameter(Mandatory = $true)]
-  [string]$generateReleaseNotes
+  [string]$avoidGithubPrerelease
 )
 
 Write-Output "Main branch is: $mainBranch"
@@ -56,9 +51,6 @@ Write-Output "Current branch is: $currentBranch"
 
 [System.Convert]::ToBoolean($avoidGithubPrerelease)
 Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
-
-[System.Convert]::ToBoolean($generateReleaseNotes)
-Write-Output "Generate release notes is: $generateReleaseNotes"
 
 
 Write-Output '=========='
@@ -126,30 +118,24 @@ $headers = @{
 
 Write-Output 'Checking if release notes must be included...'
 $releaseNote = '...'
-if ($generateReleaseNotes) {
-  Write-Output 'Release note must be included.'
+Write-Output 'Release note must be included.'
 
-  $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
-  if ($response.tag_name) {
-    $lastRelease = $response.tag_name
-    Write-Output "Latest release is $($lastRelease)."
+$response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
+if ($response.tag_name) {
+  $lastRelease = $response.tag_name
+  Write-Output "Latest release is $($lastRelease)."
 
-    $body = @{
-      tag_name = "$version";
-      previous_tag_name = $lastRelease;
-    } | ConvertTo-Json
+  $body = @{
+    tag_name = "$version";
+    previous_tag_name = $lastRelease;
+  } | ConvertTo-Json
 
-    $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" -Method 'POST' -Headers $headers -Body $body
-    $releaseNote = $response.body
-    
-    Write-Output 'Release note has been generated.'
-  } else {
-    Write-Output 'No release has been found, release note can''t be generated.'
-  }
+  $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" -Method 'POST' -Headers $headers -Body $body
+  $releaseNote = $response.body
+  
+  Write-Output 'Release note has been generated.'
 } else {
-  Write-Output 'Release note is read from CHANGELOG.md'
-  $releaseNote = Get-Content 'CHANGELOG.md' | Out-String
-  Write-Output 'Release note has been read.'
+  Write-Output 'No release has been found, release note can''t be generated.'
 }
 
 Write-Debug $releaseNote
