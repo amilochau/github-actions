@@ -34,12 +34,9 @@ inputs:
   managementGroupRegion:
     description: The region of the Azure management group
     required: false
-  templateFilePath:
-    description: OBSOLETE (use 'templateType') The path of the infrastructure template to deploy
-    required: false
   templateType:
     description: The type of Azure templates to use
-    required: false
+    required: true
     options:
     - configuration
     - functions
@@ -96,9 +93,8 @@ runs:
           -subscriptionLocation "${{ inputs.subscriptionRegion }}" `
           -managementGroupId "${{ inputs.managementGroupId }}" `
           -managementGroupLocation "${{ inputs.managementGroupRegion }}" `
-          -templateFilePath "${{ inputs.templateFilePath }}" `
-          -templateType "${{ inputs.templateType }}"
+          -templateType ${{ inputs.templateType }} `
           -parametersFilePath ${{ inputs.parametersFilePath }} `
-          -deploymentName ${{ inputs.deploymentName }}
+          -deploymentName ${{ inputs.deploymentName }} `
           -templatesDirectory ./templates
         azPSVersion: 7.1.0

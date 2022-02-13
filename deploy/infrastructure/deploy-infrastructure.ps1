@@ -15,8 +15,6 @@
   The ID of the management group
   .PARAMETER managementGroupLocation
   The location of the management group
-  .PARAMETER templateFilePath
-  OBSOLETE The path of the template file
   .PARAMETER templateType
   The type of Azure templates to use
   .PARAMETER parametersFilePath
@@ -51,11 +49,8 @@ Param(
   [parameter(Mandatory = $false)]
   [string]$managementGroupLocation,
 
-  [parameter(Mandatory = $false)]
-  [string]$templateFilePath,
-
-  [parameter(Mandatory = $false)]
-  [ValidateSet('', 'configuration', 'functions', 'functions/api-registration', 'functions/local-dependencies', 'gateway', 'management-group', 'monitoring', 'static-web-apps')]
+  [parameter(Mandatory = $true)]
+  [ValidateSet('configuration', 'functions', 'functions/api-registration', 'functions/local-dependencies', 'gateway', 'management-group', 'monitoring', 'static-web-apps')]
   [string]$templateType,
 
   [parameter(Mandatory = $true)]
@@ -75,7 +70,6 @@ Write-Output "Subscription ID is: $subscriptionId"
 Write-Output "Subscription location is: $subscriptionLocation"
 Write-Output "Management group ID is: $managementGroupId"
 Write-Output "Management group location is: $managementGroupLocation"
-Write-Output "Template file path is: $templateFilePath"
 Write-Output "Template type is: $templateType"
 Write-Output "Parameters file path is: $parametersFilePath"
 Write-Output "Templates directory path is: $templatesDirectory"
@@ -91,24 +85,19 @@ if (($null -ne $subscriptionId) -and ($subscriptionId.Length -gt 0)) {
   throw 'A subscription ID must be set to deploy on a subscription scope.'
 }
 
-if (($null -ne $templateType) -and ($templateType.Length -gt 0)) {
-  switch ($templateType) {
-    'configuration' { $templateFilePath = './templates/configuration/template.bicep' }
-    'functions' { $templateFilePath = './templates/functions/template.bicep' }
-    'functions' { $templateFilePath = './templates/functions/template.bicep' }
-    'functions/api-registration' { $templateFilePath = './templates/functions/api-registration.bicep' }
-    'functions/local-dependencies' { $templateFilePath = './templates/functions/local-dependencies.bicep' }
-    'gateway' { $templateFilePath = './templates/gateway/template.bicep' }
-    'management-group' { $templateFilePath = './templates/functions/template.bicep' }
-    'monitoring' { $templateFilePath = './templates/monitoring/template.bicep' }
-    'static-web-apps' { $templateFilePath = './templates/static-web-apps/template.bicep' }
-    default {
-      Write-Warning 'No template type is defined.'
-      if (($null -eq $templateFilePath) -or ($templateFilePath.Length -eq 0)) {
-        Write-Host 'No template reference can be found.'
-        throw 'You should define a template reference; use "templateType" parameter.'
-      }
-    }
+switch ($templateType) {
+  'configuration' { $templateFilePath = './templates/configuration/template.bicep' }
+  'functions' { $templateFilePath = './templates/functions/template.bicep' }
+  'functions' { $templateFilePath = './templates/functions/template.bicep' }
+  'functions/api-registration' { $templateFilePath = './templates/functions/api-registration.bicep' }
+  'functions/local-dependencies' { $templateFilePath = './templates/functions/local-dependencies.bicep' }
+  'gateway' { $templateFilePath = './templates/gateway/template.bicep' }
+  'management-group' { $templateFilePath = './templates/functions/template.bicep' }
+  'monitoring' { $templateFilePath = './templates/monitoring/template.bicep' }
+  'static-web-apps' { $templateFilePath = './templates/static-web-apps/template.bicep' }
+  default {
+    Write-Warning 'No template type is defined.'
+    throw 'You should define a template reference; use "templateType" parameter.'
   }
 }
 
