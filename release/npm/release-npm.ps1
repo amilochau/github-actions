@@ -43,8 +43,12 @@ Write-Output 'Get current version...'
 
 $versionFileContent = Get-Content -Path package.json | ConvertFrom-Json
 $version = "v" + $versionFileContent.version
-Write-Output "Version is: $version"
-Write-Host "::set-output name=versionNumber::$version"
+Write-Output "Set long version to $version"
+Write-Output "::set-output name=versionLong::$version"
+
+$versionShort = ($version -split '\.')[0]
+Write-Output "Set short version to $versionShort"
+Write-Output "::set-output name=versionShort::$versionShort"
 
 $exp = '^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
 $match = $version -match $exp
@@ -84,6 +88,29 @@ npm set //npm.pkg.github.com/:_authToken $githubToken
 npm publish
 
 Write-Output '=========='
+Write-Output 'Remove precedent tags for short and long versions...'
+if ($match -ne $true) {
+  git push origin :refs/tags/$versionShort
+  Write-Output "Precedent tag for short version has been removed ($versionShort)."
+}
+git push origin :refs/tags/$version
+Write-Output "Precedent tag for long version has been removed ($version)."
+
+Write-Output '=========='
+Write-Output 'Set short and long versions tags...'
+git config --global user.email "actions@github.com"
+git config --global user.name "Github Actions"
+
+if ($match -ne $true) {
+  git tag -fa $versionShort -m "Version $versionShort"
+  Write-Output "Short version tag has been set ($versionShort)."
+}
+
+git tag -fa $version -m "Version $version"
+Write-Output "Long version tag has been set ($version)."
+git push origin --tags
+
+Write-Output '=========='
 Write-Output 'Create GitHub Release...'
 if ($match -And $avoidGithubPrerelease) {
   Write-Output 'No release must be created.'
@@ -96,9 +123,8 @@ $headers = @{
   'Content-Type' = 'application/json'
 }
 
-Write-Output 'Checking if release notes must be included...'
+Write-Output 'Generating release notes...'
 $releaseNote = '...'
-Write-Output 'Release note must be included.'
 
 $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
 if ($response.tag_name) {
