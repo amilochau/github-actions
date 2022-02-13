@@ -47,13 +47,6 @@ inputs:
     description: The name of the deployment into Azure
     required: false
     default: 'Deployment-GitHub'
-outputs:
-  resourceId:
-    description: "The ID of the main deployed resource"
-    value: ${{ steps.deploy.outputs.resourceId }}
-  resourceName:
-    description: "The name of the main deployed resource"
-    value: ${{ steps.deploy.outputs.resourceName }}
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -61,6 +54,13 @@ outputs:
     - minimal
     - normal
     - detailed
+outputs:
+  resourceId:
+    description: "The ID of the main deployed resource"
+    value: ${{ steps.deploy.outputs.resourceId }}
+  resourceName:
+    description: "The name of the main deployed resource"
+    value: ${{ steps.deploy.outputs.resourceName }}
 runs:
   using: composite
   steps:
