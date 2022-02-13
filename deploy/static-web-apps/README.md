@@ -46,6 +46,7 @@ jobs:
 | `projectOutput` | The path to the output of the build project | *false* | `./dist` |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `nodeVersion` | The Node.js version to use | *false* | `16.x` |
+| `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
 

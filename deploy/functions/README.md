@@ -40,11 +40,11 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | *false* | | **OBSOLETE** parameter |
 | `dotnetVersion` | The .NET version to use | *false* | `''` | If you don't specify this, you should use your own `actions/setup-dotnet` task before |
-| `verbosity` | The verbosity of the dotnet CLI | *false* | `minimal` |
 | `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
 | `applicationName` | The application name, as defined on Azure | **true** |
 | `projectsToPublishPath` | The path of the projects to publish, relative to the checkout path | **true** |
 | `healthUrl` | The absolute URL of the health endpoint, from the Functions application | *false* |
+| `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
 

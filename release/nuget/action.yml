@@ -37,8 +37,12 @@ inputs:
     default: ''
     required: false
   verbosity:
-    description: The verbosity of the dotnet CLI
+    description: The verbosity of the scripts
     default: minimal
+    options:
+    - minimal
+    - normal
+    - detailed
 outputs:
   versionNumber:
     description: The version as defined in the Git tag
@@ -66,11 +70,11 @@ runs:
         -currentBranch ${{ github.ref }} `
         -projectsToBuild ${{ inputs.projectsToBuild }} `
         -projectsToPublish ${{ inputs.projectsToPublish }} `
-        -verbosity ${{ inputs.verbosity }} `
         -nugetOrgToken "${{ inputs.nugetOrgToken }}" `
         -githubToken ${{ inputs.githubToken }} `
         -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
-        -generateReleaseNotes ${{ inputs.generateReleaseNotes }}
+        -generateReleaseNotes ${{ inputs.generateReleaseNotes }} `
+        -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}

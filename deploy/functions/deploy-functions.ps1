@@ -17,6 +17,7 @@ Param(
   [string]$projectsToPublishPath,
 
   [parameter(Mandatory = $true)]
+  [ValidateSet('minimal', 'normal', 'detailed')]
   [string]$verbosity,
 
   [parameter(Mandatory = $true)]

@@ -30,6 +30,13 @@ inputs:
     description: The name of the main branch
     default: 'refs/heads/main'
     required: false
+  verbosity:
+    description: The verbosity of the scripts
+    default: minimal
+    options:
+    - minimal
+    - normal
+    - detailed
 outputs:
   versionLong:
     description: The long version as defined in the long Git tag

@@ -63,6 +63,13 @@ outputs:
   resourceName:
     description: "The name of the main deployed resource"
     value: ${{ steps.deploy.outputs.resourceName }}
+  verbosity:
+    description: The verbosity of the scripts
+    default: minimal
+    options:
+    - minimal
+    - normal
+    - detailed
 runs:
   using: composite
   steps:
