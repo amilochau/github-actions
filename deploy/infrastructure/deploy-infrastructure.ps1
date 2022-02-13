@@ -1,8 +1,8 @@
 <#
   .SYNOPSIS
   This script deploys infrastructure on Azure
-  .PARAMETER scope
-  The deployment scope
+  .PARAMETER scopeType
+  The deployment scope type
   .PARAMETER resourceGroupName
   The name of the resource group
   .PARAMETER resourceGroupLocation
@@ -31,7 +31,7 @@
 Param(
   [parameter(Mandatory = $true)]
   [ValidateSet('resourceGroup', 'subscription', 'managementGroup')]
-  [string]$scope,
+  [string]$scopeType,
 
   [parameter(Mandatory = $false)]
   [string]$resourceGroupName,
@@ -68,7 +68,7 @@ Param(
   [string]$deploymentName
 )
 
-Write-Output "Scope is: $scope"
+Write-Output "Scope type is: $scopeType"
 Write-Output "Resource group name is: $resourceGroupName"
 Write-Output "Resource group location is: $resourceGroupLocation"
 Write-Output "Subscription ID is: $subscriptionId"
@@ -86,7 +86,7 @@ Write-Host 'Define default subscription...'
 if (($null -ne $subscriptionId) -and ($subscriptionId.Length -gt 0)) {
   Set-AzContext -Subscription $subscriptionId
   Write-Output "Default subscription set: $subscriptionId"
-} elseif ($scope -eq 'subscription') {
+} elseif ($scopeType -eq 'subscription') {
   Write-Host 'No subscription ID found; we require it on a subscription scope, for security reasons.'
   throw 'A subscription ID must be set to deploy on a subscription scope.'
 }
@@ -114,7 +114,7 @@ if (($null -ne $templateType) -and ($templateType.Length -gt 0)) {
 
 $templateExtraParameters = @{}
 
-if ($scope -eq 'resourceGroup') {
+if ($scopeType -eq 'resourceGroup') {
   Write-Output 'SCOPE: RESOURCE GROUP'
 
   Write-Output '=========='
@@ -178,7 +178,7 @@ if ($scope -eq 'resourceGroup') {
     @templateExtraParameters
 
   Write-Output 'Deployment is now completed on resource group.'
-} elseif ($scope -eq 'subscription') {
+} elseif ($scopeType -eq 'subscription') {
   Write-Output 'SCOPE: SUBSCRIPTION'
 
   Write-Output '=========='
@@ -191,7 +191,7 @@ if ($scope -eq 'resourceGroup') {
     @templateExtraParameters
 
   Write-Output 'Deployment is now completed on subscription.'
-} elseif ($scope -eq 'managementGroup') {
+} elseif ($scopeType -eq 'managementGroup') {
   Write-Output 'SCOPE: MANAGEMENT GROUP'
   
   Write-Output '=========='
@@ -206,8 +206,8 @@ if ($scope -eq 'resourceGroup') {
 
   Write-Output 'Deployment is now completed on management group.'
 } else {
-  Write-Host 'No scope found.'
-  throw 'You must provide a scope.'
+  Write-Host 'No scope type found.'
+  throw 'You must provide a scope type.'
 }
 
 Write-Output '=========='

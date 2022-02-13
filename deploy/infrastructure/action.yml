@@ -8,8 +8,8 @@ inputs:
   azureCredentials:
     description: Azure credentials, typically get from secrets.AZURE_CREDENTIALS
     required: true
-  scope:
-    description: Deployment scope
+  scopeType:
+    description: The deployment scope type
     type: choice
     options:
     - resourceGroup
@@ -89,7 +89,7 @@ runs:
       uses: azure/powershell@v1
       with:
         inlineScript: ${{ github.action_path }}/deploy-infrastructure.ps1 `
-          -scope ${{ inputs.scope }} `
+          -scopeType ${{ inputs.scopeType }} `
           -resourceGroupName "${{ inputs.resourceGroupName }}" `
           -resourceGroupLocation "${{ inputs.resourceGroupLocation }}" `
           -subscriptionId "${{ inputs.subscriptionId }}" `
