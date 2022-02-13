@@ -12,8 +12,12 @@ inputs:
     description: The .NET version to use
     default: ''
   verbosity:
-    description: The verbosity of the dotnet CLI
+    description: The verbosity of the scripts
     default: minimal
+    options:
+    - minimal
+    - normal
+    - detailed
 runs:
   using: composite
   steps:

@@ -20,6 +20,13 @@ inputs:
   nodeVersion:
     description: The Node.js version to use
     default: 16.x
+  verbosity:
+    description: The verbosity of the scripts
+    default: minimal
+    options:
+    - minimal
+    - normal
+    - detailed
 runs:
   using: composite
   steps:

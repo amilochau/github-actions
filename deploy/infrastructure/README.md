@@ -54,6 +54,7 @@ jobs:
 | `templateFilePath` | The path of the infrastructure template to deploy | **true** |
 | `parametersFilePath` | The path of the parameters files to use during deployment | **true** |
 | `deploymentName` | The path of the deployment into Azure | *false* | `Deployment-GitHub` |
+| `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
 

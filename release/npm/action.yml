@@ -27,6 +27,13 @@ inputs:
     description: The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com
     default: ''
     required: false
+  verbosity:
+    description: The verbosity of the scripts
+    default: minimal
+    options:
+    - minimal
+    - normal
+    - detailed
 outputs:
   versionNumber:
     description: The version as defined in the Git tag

@@ -65,6 +65,7 @@ jobs:
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
 | `generateReleaseNotes` | Generate automatic release notes |  *false* | `false` |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
+| `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
 

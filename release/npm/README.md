@@ -42,6 +42,7 @@ jobs:
 | `generateReleaseNotes` | Generate automatic release notes |  *false* | `false` |
 | `npmjsComToken` |  The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com | *false* | `''` |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
+| `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
 

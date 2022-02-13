@@ -35,6 +35,7 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectWorkspace` | The path to the project to build | *false* | `.` |
 | `nodeVersion` | The Node.js version to use | *false* | `16.x` |
+| `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
 
