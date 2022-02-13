@@ -8,6 +8,18 @@ inputs:
   azureCredentials:
     description: Azure credentials, typically get from secrets.AZURE_CREDENTIALS
     required: true
+  templateType:
+    description: The type of Azure templates to use
+    required: true
+    options:
+    - configuration
+    - functions
+    - functions/api-registration
+    - functions/local-dependencies
+    - gateway
+    - management-group
+    - monitoring
+    - static-web-apps
   scopeType:
     description: The deployment scope type
     type: choice
@@ -28,18 +40,6 @@ inputs:
   managementGroupId:
     description: The ID of the Azure management group
     required: false
-  templateType:
-    description: The type of Azure templates to use
-    required: true
-    options:
-    - configuration
-    - functions
-    - functions/api-registration
-    - functions/local-dependencies
-    - gateway
-    - management-group
-    - monitoring
-    - static-web-apps
   parametersFilePath:
     description: The path of the parameters files to use during deployment
     required: true

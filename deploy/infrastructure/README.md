@@ -44,12 +44,12 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `azureTemplateVersion` | The version of 'azure-templates' to use | **true** |
 | `azureCredentials` | Azure credentials, typically get from `secrets.AZURE_CREDENTIALS` | **true** |
+| `templateType` | The type of Azure templates to use | **true** |
 | `scopeType` | The deployment scope type | **true** | `resourceGroup` |
 | `scopeLocation` | The deployment scope location (Azure region) | **true** |
 | `resourceGroupName` | The name of the resource group where to deploy the infrastructure | *true if scope type is `resourceGroup`* |
 | `subscriptionId` | The ID of the Azure subscription | *true if scope type is `subscription`* |
 | `managementGroupId` | The ID of the Azure management group | *true if scope type is `managementGroup`* |
-| `templateType` | The type of Azure templates to use | **true** |
 | `parametersFilePath` | The path of the parameters files to use during deployment | **true** |
 | `deploymentName` | The path of the deployment into Azure | *false* | `Deployment-GitHub` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |

@@ -1,6 +1,8 @@
 <#
   .SYNOPSIS
   This script deploys infrastructure on Azure
+  .PARAMETER templateType
+  The type of Azure templates to use
   .PARAMETER scopeType
   The deployment scope type
   .PARAMETER scopeLocation
@@ -11,8 +13,6 @@
   The ID of the subscription
   .PARAMETER managementGroupId
   The ID of the management group
-  .PARAMETER templateType
-  The type of Azure templates to use
   .PARAMETER parametersFilePath
   The path of the parameters file
   .PARAMETER templatesDirectory
@@ -23,6 +23,10 @@
 
 [CmdletBinding()]
 Param(
+  [parameter(Mandatory = $true)]
+  [ValidateSet('configuration', 'functions', 'functions/api-registration', 'functions/local-dependencies', 'gateway', 'management-group', 'monitoring', 'static-web-apps')]
+  [string]$templateType,
+
   [parameter(Mandatory = $true)]
   [ValidateSet('resourceGroup', 'subscription', 'managementGroup')]
   [string]$scopeType,
@@ -40,10 +44,6 @@ Param(
   [string]$managementGroupId,
 
   [parameter(Mandatory = $true)]
-  [ValidateSet('configuration', 'functions', 'functions/api-registration', 'functions/local-dependencies', 'gateway', 'management-group', 'monitoring', 'static-web-apps')]
-  [string]$templateType,
-
-  [parameter(Mandatory = $true)]
   [string]$parametersFilePath,
 
   [parameter(Mandatory = $true)]
@@ -53,12 +53,12 @@ Param(
   [string]$deploymentName
 )
 
+Write-Output "Template type is: $templateType"
 Write-Output "Scope type is: $scopeType"
 Write-Output "Scope location is: $scopeLocation"
 Write-Output "Resource group name is: $resourceGroupName"
 Write-Output "Subscription ID is: $subscriptionId"
 Write-Output "Management group ID is: $managementGroupId"
-Write-Output "Template type is: $templateType"
 Write-Output "Parameters file path is: $parametersFilePath"
 Write-Output "Templates directory path is: $templatesDirectory"
 Write-Output "Deployment name is: $deploymentName"
