@@ -32,6 +32,7 @@ jobs:
         with:
           azureTemplateVersion: ${{ env.TEMPLATES_VERSION }}
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+          scopeType: ${{ env.INFRA_SCOPE_TYPE }}
           resourceGroupName: ${{ env.INFRA_RG_NAME }}
           resourceGroupLocation: ${{ env.INFRA_RG_LOCATION }}
           templateFilePath: ${{ env.INFRA_DEPLOY_TEMPLATE_PATH }}
@@ -44,7 +45,6 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `azureTemplateVersion` | The version of 'azure-templates' to use | **true** |
 | `azureCredentials` | Azure credentials, typically get from `secrets.AZURE_CREDENTIALS` | **true** |
-| `scope` | Deployment scope | *false* | `resourceGroup` |
 | `resourceGroupName` | The name of the resource group where to deploy the infrastructure | *true if scope is `resourceGroup`* |
 | `resourceGroupLocation` | The location of the resource group where to deploy the infrastructure | *true if scope is `resourceGroup`* |
 | `subscriptionId` | The ID of the Azure subscription | *true if scope is `subscription`* |
@@ -52,6 +52,7 @@ jobs:
 | `managementGroupId` | The ID of the Azure management group | *true if scope is `managementGroup`* |
 | `managementGroupRegion` | The region of the Azure management group | *true if scope is `managementGroup`* |
 | `templateFilePath` | The path of the infrastructure template to deploy | **true** |
+| `scopeType` | The deployment scope type | **true** | `resourceGroup` |
 | `parametersFilePath` | The path of the parameters files to use during deployment | **true** |
 | `deploymentName` | The path of the deployment into Azure | *false* | `Deployment-GitHub` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
