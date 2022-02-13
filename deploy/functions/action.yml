@@ -2,9 +2,6 @@ name: Deploy Azure Functions application
 description: Deploy Azure Functions application
 author: Antoine Milochau
 inputs:
-  projectsToBuild:
-    description: OBSOLETE PARAMETER - The path to the projects to build - can be a .csproj or a .sln file
-    required: false
   dotnetVersion:
     description: The .NET version to use
     default: ''
@@ -44,8 +41,8 @@ runs:
       uses: azure/powershell@v1
       with:
         inlineScript: ${{ github.action_path }}/deploy-functions.ps1 `
-          -projectsToPublishPath ${{ inputs.projectsToPublishPath }}
-          -verbosity ${{ inputs.verbosity }} `
-          -applicationName ${{ inputs.applicationName }}
-          -healthUrl "${{ inputs.healthUrl }}"
+          -projectsToPublishPath ${{ inputs.projectsToPublishPath }} `
+          -applicationName ${{ inputs.applicationName }} `
+          -healthUrl "${{ inputs.healthUrl }}" `
+          -verbosity ${{ inputs.verbosity }}
         azPSVersion: 7.1.0

@@ -38,7 +38,6 @@ jobs:
 
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
-| `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | *false* | | **OBSOLETE** parameter |
 | `dotnetVersion` | The .NET version to use | *false* | `''` | If you don't specify this, you should use your own `actions/setup-dotnet` task before |
 | `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
 | `applicationName` | The application name, as defined on Azure | **true** |
