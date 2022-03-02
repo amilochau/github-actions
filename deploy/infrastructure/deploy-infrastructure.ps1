@@ -136,6 +136,23 @@ if ($scopeType -eq 'resourceGroup') {
   }
 
   Write-Output '=========='
+  Write-Output 'Get Key Vault secrets...'
+  if ($templateType -eq 'functions') {
+    $kv = Get-AzKeyVault -ResourceGroupName $resourceGroupName
+    if (!!$kv) {
+      $secrets = Get-AzKeyVaultSecret $kv.VaultName | ForEach-Object { $_.Name }
+      if (($null -ne $secrets) -and ($secrets.Length -gt 0)) {
+        foreach ($secret in $secrets) {
+          $templateExtraParameters.Add('applicationSecretNames', $secret)
+        }
+        Write-Output "Key Vault secrets found ($($secrets.Length) secrets)."
+      }
+    } else {
+      Write-Output "Key Vault not found."
+    }
+  }
+
+  Write-Output '=========='
   Write-Output 'Determine template version...'
   $scriptLocation = Get-Location
   Set-Location $templatesDirectory
