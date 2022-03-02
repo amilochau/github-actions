@@ -76,7 +76,6 @@ if (($null -ne $subscriptionId) -and ($subscriptionId.Length -gt 0)) {
 switch ($templateType) {
   'configuration' { $templateFilePath = './templates/configuration/template.bicep' }
   'functions' { $templateFilePath = './templates/functions/template.bicep' }
-  'functions' { $templateFilePath = './templates/functions/template.bicep' }
   'functions/api-registration' { $templateFilePath = './templates/functions/api-registration.bicep' }
   'functions/local-dependencies' { $templateFilePath = './templates/functions/local-dependencies.bicep' }
   'gateway' { $templateFilePath = './templates/gateway/template.bicep' }
