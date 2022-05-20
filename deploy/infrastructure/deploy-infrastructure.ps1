@@ -127,7 +127,7 @@ if ($scopeType -eq 'resourceGroup') {
 
   if ($templateVersion -eq $lastTemplateVersion) {
     Write-Output "Template has already been deployed."
-    if ($forceDeployment) {
+    if ($forceDeployment -eq $true) {
       Write-Output "Force deployment is enabled, deployment will continue."
     } else {
       Write-Output "Force deployment is disabled, deployment will resume."
