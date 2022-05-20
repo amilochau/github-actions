@@ -2,24 +2,30 @@ name: Deploy Azure Static Web Apps application
 description: Deploy Azure Static Web Apps application
 author: Antoine Milochau
 inputs:
-  azureCredentials:
-    description: Azure credentials, typically get from secrets.AZURE_CREDENTIALS
-    required: true
-  applicationName:
-    description: The application name, as defined on Azure
-    required: true 
-  projectWorkspace:
-    description: The path to the project to build
-    default: '.'
-  projectOutput:
-    description: The path to the output of the build project
-    default: './dist'
-  githubToken:
-    description: The GitHub token, typically get from secrets.GITHUB_TOKEN
-    required: true
   nodeVersion:
     description: The Node.js version to use
     default: 16.x
+  azureCredentials:
+    description: Azure credentials, typically get from secrets.AZURE_CREDENTIALS
+    required: true
+  resourceGroupName:
+    description: The resource group name, as defined on Azure
+    required: true
+  applicationName:
+    description: The application name, as defined on Azure
+    required: true
+  projectsToPublishPath:
+    description: The path of the projects to publish, relative to the checkout path
+    required: true
+  relativeOutputPath:
+    description: The path of the built application, relative to the 'projectsToPublishPath'
+    default: '/dist'
+  npmBuildScript:
+    description: The npm script to run, to build the application
+    default: 'build'
+  githubToken:
+    description: The GitHub token, typically get from secrets.GITHUB_TOKEN
+    required: true
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -30,37 +36,34 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Login on Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ inputs.azureCredentials }}
-    - name: Use Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
         node-version: ${{ inputs.nodeVersion }}
         cache: 'npm'
-        cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
-    - name: Restore dependencies
-      shell: bash
-      run: npm ci
-      working-directory: ${{ inputs.projectWorkspace }}
-    - name: Build application
-      shell: bash
-      run: npm run build
-      working-directory: ${{ inputs.projectWorkspace }}
-    - name: Determine Static Web Apps deployment token
-      id: get-secrets
-      shell: pwsh
-      run: |
-        az staticwebapp disconnect --name '${{ inputs.applicationName }}'
-        $token = (az staticwebapp secrets list --name '${{ inputs.applicationName }}' | ConvertFrom-Json).properties.apiKey
-        Write-Host "::set-output name=token::$token"
+        cache-dependency-path: "${{ inputs.projectsToPublishPath }}/package-lock.json"
+    - name: Login on Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ inputs.azureCredentials }}
+        enable-AzPSSession: true
+    - name: Build Static Web Apps application
+      uses: azure/powershell@v1
+      id: build-swa
+      with:
+        inlineScript: ${{ github.action_path }}/deploy-static-web-apps.ps1 `
+          -projectsToPublishPath ${{ inputs.projectsToPublishPath }} `
+          -resourceGroupName ${{ inputs.resourceGroupName }} `
+          -applicationName ${{ inputs.applicationName }} `
+          -npmBuildScript '${{ inputs.npmBuildScript }}' `
+          -verbosity ${{ inputs.verbosity }}
+        azPSVersion: 7.1.0
     - name: Build and deploy Azure Static Web Apps application 
       uses: Azure/static-web-apps-deploy@v1
       with:
-        azure_static_web_apps_api_token: ${{ steps.get-secrets.outputs.token }}
+        azure_static_web_apps_api_token: ${{ steps.build-swa.outputs.token }}
         repo_token: ${{ inputs.githubToken }}
         action: 'upload'
-        app_location: ${{ inputs.projectOutput }}
+        app_location: ${{ inputs.projectsToPublishPath }}${{ inputs.relativeOutputPath }}
         output_location: ''
         skip_app_build: true
