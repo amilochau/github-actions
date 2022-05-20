@@ -19,6 +19,8 @@
   The directory of the ARM templates
   .PARAMETER deploymentName
   The name of the deployment
+  .PARAMETER forceDeployment
+  Force deployment if the last template used is the same as the current one
 #>
 
 [CmdletBinding()]
@@ -50,7 +52,10 @@ Param(
   [string]$templatesDirectory,
 
   [parameter(Mandatory = $true)]
-  [string]$deploymentName
+  [string]$deploymentName,
+
+  [parameter(Mandatory = $false)]
+  [string]$forceDeployment
 )
 
 Write-Output "Template type is: $templateType"
@@ -62,6 +67,10 @@ Write-Output "Management group ID is: $managementGroupId"
 Write-Output "Parameters file path is: $parametersFilePath"
 Write-Output "Templates directory path is: $templatesDirectory"
 Write-Output "Deployment name is: $deploymentName"
+
+$forceDeployment = [System.Convert]::ToBoolean($forceDeployment)
+Write-Output "Force deployment is: $forceDeployment"
+
 
 Write-Output '=========='
 Write-Host 'Define default subscription...'
@@ -95,10 +104,30 @@ if ($scopeType -eq 'resourceGroup') {
 
   Write-Output '=========='
   Write-Output 'Create Resource Group...'
-  if (!(Get-AzResourceGroup -Name $resourceGroupName -ErrorAction SilentlyContinue)) {
+  $resourceGroup = Get-AzResourceGroup -Name $resourceGroupName -ErrorAction SilentlyContinue
+  if (!($resourceGroup)) {
     Write-Output 'Creating the resource group...'
     New-AzResourceGroup -Name $resourceGroupName -Location $scopeLocation
     Write-Output 'Resource group has been be created.'
+  }
+  
+  Write-Output '=========='
+  Write-Output 'Determine template version to use...'
+  $scriptLocation = Get-Location
+  Set-Location $templatesDirectory
+  $templateVersion=$(git describe --tags --match v*.*.*)
+  $templateExtraParameters.Add('templateVersion', $templateVersion)
+  Write-Output "Template version is $templateVersion"
+  Set-Location $scriptLocation
+
+  Write-Output '=========='
+  Write-Output 'Determine last template version used...'
+  $lastTemplateVersion = $resourceGroup.Tags['templateVersion']
+  Write-Output "Last template version is $lastTemplateVersion"
+
+  if (($templateVersion -eq $lastTemplateVersion) -and !($forceDeployment)) {
+    Write-Output "Template has already been deployed without force deployment, we will now exit."
+    return;
   }
 
   Write-Output '=========='
@@ -134,15 +163,6 @@ if ($scopeType -eq 'resourceGroup') {
       }
     }
   }
-
-  Write-Output '=========='
-  Write-Output 'Determine template version...'
-  $scriptLocation = Get-Location
-  Set-Location $templatesDirectory
-  $templateVersion=$(git describe --tags --match v*.*.*)
-  $templateExtraParameters.Add('templateVersion', $templateVersion)
-  Write-Output "Template version is $templateVersion"
-  Set-Location $scriptLocation
 
   Write-Output '=========='
   Write-Output 'Deploy ARM template file...'

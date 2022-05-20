@@ -34,7 +34,7 @@ Param(
 Write-Output "Main branch is: $mainBranch"
 Write-Output "Current branch is: $currentBranch"
 
-[System.Convert]::ToBoolean($avoidGithubPrerelease)
+$avoidGithubPrerelease = [System.Convert]::ToBoolean($avoidGithubPrerelease)
 Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
 
 

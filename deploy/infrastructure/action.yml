@@ -47,6 +47,11 @@ inputs:
     description: The name of the deployment into Azure
     required: false
     default: 'Deployment-GitHub'
+  forceDeployment:
+    description: Force deployment if the last template used is the same as the current one
+    required: false
+    default: false
+    type: boolean
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -88,5 +93,6 @@ runs:
           -templateType ${{ inputs.templateType }} `
           -parametersFilePath ${{ inputs.parametersFilePath }} `
           -deploymentName ${{ inputs.deploymentName }} `
-          -templatesDirectory ./templates
+          -templatesDirectory ./templates `
+          -forceDeployment ${{ inputs.forceDeployment }}
         azPSVersion: 7.1.0

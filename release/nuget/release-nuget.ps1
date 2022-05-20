@@ -58,7 +58,7 @@ Write-Output "Projects to build are: $projectsToBuild"
 Write-Output "Projects to publish are: $projectsToPublish"
 Write-Output "Verbosity is: $verbosity"
 
-[System.Convert]::ToBoolean($avoidGithubPrerelease)
+$avoidGithubPrerelease = [System.Convert]::ToBoolean($avoidGithubPrerelease)
 Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
 
 
