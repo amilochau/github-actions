@@ -16,7 +16,7 @@ inputs:
     required: true
   projectsToPublishPath:
     description: The path of the projects to publish, relative to the checkout path
-    required: true
+    default: '.'
   relativeOutputPath:
     description: The path of the built application, relative to the 'projectsToPublishPath'
     default: '/dist'
