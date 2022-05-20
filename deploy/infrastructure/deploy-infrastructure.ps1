@@ -125,9 +125,14 @@ if ($scopeType -eq 'resourceGroup') {
   $lastTemplateVersion = $resourceGroup.Tags['templateVersion']
   Write-Output "Last template version is $lastTemplateVersion"
 
-  if ((($templateVersion -eq $lastTemplateVersion) -and !($forceDeployment)) -ne $false) {
-    Write-Output "Template has already been deployed without force deployment, we will now exit."
-    return;
+  if ($templateVersion -eq $lastTemplateVersion) {
+    Write-Output "Template has already been deployed."
+    if ($forceDeployment) {
+      Write-Output "Force deployment is enabled, deployment will continue."
+    } else {
+      Write-Output "Force deployment is disabled, deployment will resume."
+      return
+    }
   }
 
   Write-Output '=========='
