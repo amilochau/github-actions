@@ -46,6 +46,7 @@ runs:
       uses: azure/login@v1
       with:
         creds: ${{ inputs.azureCredentials }}
+        enable-AzPSSession: true
     - name: Build Static Web Apps application
       uses: azure/powershell@v1
       id: build-swa
