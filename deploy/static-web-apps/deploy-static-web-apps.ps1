@@ -58,5 +58,7 @@ Write-Output '=========='
 Write-Output 'Determine Static Web Apps deployment token'
 $swaSecrets = Get-AzStaticWebAppSecret -ResourceGroupName $resourceGroupName -Name $applicationName
 $token = $swaSecrets.Property['apiKey']
-Write-Output ::set-output name=token::$token
+Write-Output "::set-output name=token::$token"
 Write-Output "Deployment token found ($($token.Length) characters)."
+
+Write-Output '=========='
