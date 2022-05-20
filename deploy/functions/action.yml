@@ -8,6 +8,9 @@ inputs:
   azureCredentials:
     description: Azure credentials, typically get from secrets.AZURE_CREDENTIALS
     required: true
+  resourceGroupName:
+    description: The resource group name, as defined on Azure
+    required: true
   applicationName:
     description: The application name, as defined on Azure
     required: true
@@ -43,6 +46,7 @@ runs:
       with:
         inlineScript: ${{ github.action_path }}/deploy-functions.ps1 `
           -projectsToPublishPath ${{ inputs.projectsToPublishPath }} `
+          -resourceGroupName ${{ inputs.resourceGroupName }} `
           -applicationName ${{ inputs.applicationName }} `
           -relativeHealthUrl ${{ inputs.relativeHealthUrl }} `
           -verbosity ${{ inputs.verbosity }}

@@ -40,7 +40,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up a GitHub Release
         uses: amilochau/github-actions/release/basic@v1
         with:

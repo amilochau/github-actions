@@ -47,6 +47,11 @@ inputs:
     description: The name of the deployment into Azure
     required: false
     default: 'Deployment-GitHub'
+  forceDeployment:
+    description: Force deployment if the last template used is the same as the current one
+    required: false
+    default: false
+    type: boolean
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -64,7 +69,7 @@ outputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v2 # For template file
+    - uses: actions/checkout@v3 # For template file
       with:
         repository: amilochau/azure-templates
         ref: ${{ inputs.azureTemplateVersion }}
@@ -88,5 +93,6 @@ runs:
           -templateType ${{ inputs.templateType }} `
           -parametersFilePath ${{ inputs.parametersFilePath }} `
           -deploymentName ${{ inputs.deploymentName }} `
-          -templatesDirectory ./templates
+          -templatesDirectory ./templates `
+          -forceDeployment ${{ inputs.forceDeployment }}
         azPSVersion: 7.1.0

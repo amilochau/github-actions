@@ -24,7 +24,7 @@ jobs:
     name: Deploy infrastructure
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: app
       - name: Deploy application
@@ -52,6 +52,7 @@ jobs:
 | `managementGroupId` | The ID of the Azure management group | *true if scope type is `managementGroup`* |
 | `parametersFilePath` | The path of the parameters files to use during deployment | **true** |
 | `deploymentName` | The path of the deployment into Azure | *false* | `Deployment-GitHub` |
+| `forceDeployment` | Force deployment if the last template used is the same as the current one | *false* | `false` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs

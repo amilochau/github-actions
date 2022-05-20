@@ -24,15 +24,15 @@ jobs:
     name: Deploy application
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Deploy application
         uses: amilochau/github-actions/deploy//static-web-apps@v1
         with:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
-          staticWebAppsName: ${{ env.INFRA_APP_NAME }}
-          projectWorkspace: ${{ env.PROJECT_WORKSPACE }}
-          projectOutput: ${{ env.PROJECT_OUTPUT }}
-          azureStaticWebAppsApiToken: ${{ secrets.SWA_TOKEN }}
+          resourceGroupName: ${{ env.INFRA_RG_NAME }}
+          applicationName: ${{ env.INFRA_APP_NAME }}
+          projectsToPublishPath: ${{ env.PROJECT_WORKSPACE }}
+          npmBuildScript: ${{ env.PROJECT_COMMAND }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 ```
 
@@ -40,12 +40,14 @@ jobs:
 
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
-| `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
-| `applicationName` | The application name, as defined on Azure | **true** |
-| `projectWorkspace` | The path to the project to build | *false* | `.` |
-| `projectOutput` | The path to the output of the build project | *false* | `./dist` |
-| `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `nodeVersion` | The Node.js version to use | *false* | `16.x` |
+| `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
+| `resourceGroupName` | The resource group name, as defined on Azure | **true** |
+| `applicationName` | The application name, as defined on Azure | **true** |
+| `projectsToPublishPath` | The path of the projects to publish, relative to the checkout path | *false* | `.` |
+| `relativeOutputPath` | The path to the output of the build project | *false* | `./dist` |
+| `npmBuildScript` | The npm script to run, to build the application | *false* | `build` |
+| `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
