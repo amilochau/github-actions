@@ -110,7 +110,7 @@ if ($scopeType -eq 'resourceGroup') {
     New-AzResourceGroup -Name $resourceGroupName -Location $scopeLocation
     Write-Output 'Resource group has been be created.'
   }
-  
+
   Write-Output '=========='
   Write-Output 'Determine template version to use...'
   $scriptLocation = Get-Location
@@ -125,7 +125,7 @@ if ($scopeType -eq 'resourceGroup') {
   $lastTemplateVersion = $resourceGroup.Tags['templateVersion']
   Write-Output "Last template version is $lastTemplateVersion"
 
-  if (($templateVersion -eq $lastTemplateVersion) -and (-not $forceDeployment)) {
+  if ((($templateVersion -eq $lastTemplateVersion) -and !($forceDeployment)) -ne $false) {
     Write-Output "Template has already been deployed without force deployment, we will now exit."
     return;
   }
