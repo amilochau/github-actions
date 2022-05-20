@@ -40,12 +40,14 @@ jobs:
 
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
-| `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
-| `applicationName` | The application name, as defined on Azure | **true** |
-| `projectWorkspace` | The path to the project to build | *false* | `.` |
-| `projectOutput` | The path to the output of the build project | *false* | `./dist` |
-| `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `nodeVersion` | The Node.js version to use | *false* | `16.x` |
+| `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
+| `resourceGroupName` | The resource group name, as defined on Azure | **true** |
+| `applicationName` | The application name, as defined on Azure | **true** |
+| `projectsToPublishPath` | The path of the projects to publish, relative to the checkout path | *false* | `.` |
+| `relativeOutputPath` | The path to the output of the build project | *false* | `./dist` |
+| `npmBuildScript` | The npm script to run, to build the application | *false* | `build` |
+| `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
