@@ -55,7 +55,7 @@ runs:
           -projectsToPublishPath ${{ inputs.projectsToPublishPath }} `
           -resourceGroupName ${{ inputs.resourceGroupName }} `
           -applicationName ${{ inputs.applicationName }} `
-          -npmBuildScript '${{ inputs.npmBuildScript }}' `
+          -npmBuildScript "${{ inputs.npmBuildScript }}" `
           -verbosity ${{ inputs.verbosity }}
         azPSVersion: 7.1.0
     - name: Build and deploy Azure Static Web Apps application 
