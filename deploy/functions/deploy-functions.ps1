@@ -5,6 +5,8 @@
   The path of the projects to publish
   .PARAMETER verbosity
   The verbosity level
+  .PARAMETER resourceGroupName
+  The resource group name
   .PARAMETER applicationName
   The application name
   .PARAMETER relativeHealthUrl
@@ -21,6 +23,9 @@ Param(
   [string]$verbosity,
 
   [parameter(Mandatory = $true)]
+  [string]$resourceGroupName,
+
+  [parameter(Mandatory = $true)]
   [string]$applicationName,
 
   [parameter(Mandatory = $true)]
@@ -29,6 +34,7 @@ Param(
 
 Write-Output "Projects to publish path is: $projectsToPublishPath"
 Write-Output "Verbosity is: $verbosity"
+Write-Output "Resource group name is: $resourceGroupName"
 Write-Output "Application name is: $applicationName"
 Write-Output "Relative health URL is: $relativeHealthUrl"
 
@@ -51,8 +57,7 @@ Write-Output "Deployment package has been created ($filePath)."
 
 Write-Output '=========='
 Write-Output 'Get application information from application settings...'
-$app = Get-AzFunctionApp | Where-Object { $_.Name -eq $applicationName } # Would be easier to get with resource group @next-major-version
-$resourceGroupName = $app.ResourceGroupName
+$app = Get-AzFunctionApp -Name $applicationName -ResourceGroupName $resourceGroupName
 $applicationType = $app.Type
 $defaultHostName = $app.DefaultHostName
 Write-Output "Resource group name: $resourceGroupName"

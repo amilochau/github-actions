@@ -30,6 +30,7 @@ jobs:
         with:
           dotnetVersion: ${{ env.DOTNET_VERSION }}
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+          resourceGroupName: ${{ env.INFRA_RG_NAME }}
           applicationName: ${{ env.INFRA_APP_NAME }}
           projectsToPublishPath: ${{ env.PROJECTS_PUBLISH }}
 ```
@@ -40,6 +41,7 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `dotnetVersion` | The .NET version to use | *false* | `''` | If you don't specify this, you should use your own `actions/setup-dotnet` task before |
 | `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
+| `resourceGroupName` | The resource group name, as defined on Azure | **true** |
 | `applicationName` | The application name, as defined on Azure | **true** |
 | `projectsToPublishPath` | The path of the projects to publish, relative to the checkout path | **true** |
 | `relativeHealthUrl` | The relative URL of the health endpoint, from the Functions application | *false* | `/api/health` |

@@ -29,10 +29,10 @@ jobs:
         uses: amilochau/github-actions/deploy//static-web-apps@v1
         with:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
-          staticWebAppsName: ${{ env.INFRA_APP_NAME }}
-          projectWorkspace: ${{ env.PROJECT_WORKSPACE }}
-          projectOutput: ${{ env.PROJECT_OUTPUT }}
-          azureStaticWebAppsApiToken: ${{ secrets.SWA_TOKEN }}
+          resourceGroupName: ${{ env.INFRA_RG_NAME }}
+          applicationName: ${{ env.INFRA_APP_NAME }}
+          projectsToPublishPath: ${{ env.PROJECT_WORKSPACE }}
+          npmBuildScript: ${{ env.PROJECT_COMMAND }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 ```
 
