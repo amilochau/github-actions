@@ -88,7 +88,7 @@ switch ($templateType) {
   'functions/api-registration' { $templateFilePath = './templates/functions/api-registration.bicep' }
   'functions/local-dependencies' { $templateFilePath = './templates/functions/local-dependencies.bicep' }
   'gateway' { $templateFilePath = './templates/gateway/template.bicep' }
-  'management-group' { $templateFilePath = './templates/functions/template.bicep' }
+  'management-group' { $templateFilePath = './templates/management-group/template.bicep' }
   'monitoring' { $templateFilePath = './templates/monitoring/template.bicep' }
   'static-web-apps' { $templateFilePath = './templates/static-web-apps/template.bicep' }
   default {
