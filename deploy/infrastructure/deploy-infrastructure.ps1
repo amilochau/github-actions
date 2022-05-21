@@ -54,7 +54,7 @@ Param(
   [parameter(Mandatory = $true)]
   [string]$deploymentName,
 
-  [parameter(Mandatory = $false)]
+  [parameter(Mandatory = $true)]
   [string]$forceDeployment
 )
 
