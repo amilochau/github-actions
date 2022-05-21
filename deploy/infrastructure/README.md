@@ -15,7 +15,14 @@ Use this GitHub action if you have ARM templates that you want to deploy, typica
 ```yaml
 name: Deploy infrastructure
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      forceDeployment:
+        description: Force infrastructure deployment if the last infrastructure template used is the same as the current one
+        required: false
+        default: false
+        type: boolean
 
 concurrency: deploy_infra_[NAME OF ENV]
 
@@ -36,6 +43,7 @@ jobs:
           scopeLocation: ${{ env.INFRA_SCOPE_LOCATION }}
           resourceGroupName: ${{ env.INFRA_RG_NAME }}
           parametersFilePath: ${{ env.INFRA_DEPLOY_PARAMETERS_PATH }}
+          forceDeployment: ${{ github.event.inputs.forceDeployment }}
 ```
 
 ### Inputs
@@ -52,7 +60,7 @@ jobs:
 | `managementGroupId` | The ID of the Azure management group | *true if scope type is `managementGroup`* |
 | `parametersFilePath` | The path of the parameters files to use during deployment | **true** |
 | `deploymentName` | The path of the deployment into Azure | *false* | `Deployment-GitHub` |
-| `forceDeployment` | Force deployment if the last template used is the same as the current one | *false* | `false` |
+| `forceDeployment` | Force deployment if the last template used is the same as the current one | **true** |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
