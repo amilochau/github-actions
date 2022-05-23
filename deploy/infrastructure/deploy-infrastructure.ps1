@@ -122,16 +122,20 @@ if ($scopeType -eq 'resourceGroup') {
 
   Write-Output '=========='
   Write-Output 'Determine last template version used...'
-  $lastTemplateVersion = $resourceGroup.Tags['templateVersion']
-  Write-Output "Last template version is $lastTemplateVersion"
-
-  if ($templateVersion -eq $lastTemplateVersion) {
-    Write-Output "Template has already been deployed."
-    if ($forceDeployment -eq $true) {
-      Write-Output "Force deployment is enabled, deployment will continue."
-    } else {
-      Write-Output "Force deployment is disabled, deployment will resume."
-      return
+  if (!$resourceGroup.Tags) {
+    Write-Output "No tag found in resource group '$resourceGroup.Name'"
+  } else {
+    $lastTemplateVersion = $resourceGroup.Tags['templateVersion']
+    Write-Output "Last template version is $lastTemplateVersion"
+  
+    if ($templateVersion -eq $lastTemplateVersion) {
+      Write-Output "Template has already been deployed."
+      if ($forceDeployment -eq $true) {
+        Write-Output "Force deployment is enabled, deployment will continue."
+      } else {
+        Write-Output "Force deployment is disabled, deployment will resume."
+        return
+      }
     }
   }
 
