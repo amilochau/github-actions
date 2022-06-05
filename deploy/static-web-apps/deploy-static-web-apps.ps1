@@ -10,7 +10,7 @@
   .PARAMETER applicationName
   The application name
   .PARAMETER npmBuildScript
-  The application name
+  The npm script to build
 #>
 
 [CmdletBinding()]
