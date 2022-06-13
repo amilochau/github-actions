@@ -74,7 +74,7 @@ npm run build
 
 Write-Output '=========='
 Write-Output 'Publish projects to npmjs.com...'
-if (($null -ne $npmjsToken) -and ($npmjsToken.length -gt 0)) {
+if ($npmjsToken) {
   Write-Output 'Token for npmjs.com is found.'
   npm set registry "https://registry.npmjs.org"
   npm set //registry.npmjs.org/:_authToken $npmjsToken

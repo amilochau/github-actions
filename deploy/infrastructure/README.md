@@ -41,6 +41,7 @@ jobs:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
           scopeType: ${{ env.INFRA_SCOPE_TYPE }}
           scopeLocation: ${{ env.INFRA_SCOPE_LOCATION }}
+          templateType: ${{ env.INFRA_DEPLOY_TYPE }}
           resourceGroupName: ${{ env.INFRA_RG_NAME }}
           parametersFilePath: ${{ env.INFRA_DEPLOY_PARAMETERS_PATH }}
           forceDeployment: ${{ github.event.inputs.forceDeployment }}

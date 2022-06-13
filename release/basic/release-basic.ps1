@@ -56,7 +56,7 @@ Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
 Write-Output '=========='
 Write-Output 'Get current version...'
 
-if (($null -ne $versionUnstableSuffix) -and ($versionUnstableSuffix.Length -gt 0)) {
+if ($versionUnstableSuffix) {
   $version="v$versionMajor.$versionMinor.$versionPatch-$versionUnstableSuffix"
   $match = $true
   Write-Host "::set-output name=versionPrerelease::$true"

@@ -29,7 +29,7 @@ npm run $npmBuildScript
 
 Write-Output '=========='
 Write-Output 'Run linter...'
-if (($null -ne $npmLintScript) -and ($npmLintScript.length -gt 0)) {
+if ($npmLintScript) {
   npm run $npmLintScript
 }
 

@@ -74,7 +74,7 @@ Write-Output "Force deployment is: $forceDeployment"
 
 Write-Output '=========='
 Write-Host 'Define default subscription...'
-if (($null -ne $subscriptionId) -and ($subscriptionId.Length -gt 0)) {
+if ($subscriptionId) {
   Set-AzContext -Subscription $subscriptionId
   Write-Output "Default subscription set: $subscriptionId"
 } elseif ($scopeType -eq 'subscription') {
@@ -164,7 +164,7 @@ if ($scopeType -eq 'resourceGroup') {
       $appSettings = Get-AzFunctionAppSetting -Name $applicationName -ResourceGroupName $resourceGroupName
   
       $applicationPackageUri = $appSettings['WEBSITE_RUN_FROM_PACKAGE']
-      if (($null -ne $applicationPackageUri) -and ($applicationPackageUri.Length -gt 0)) {
+      if ($applicationPackageUri) {
         $templateExtraParameters.Add('applicationPackageUri', $applicationPackageUri)
         Write-Output "Application package URI found ($($applicationPackageUri.Length) characters)."
       } else {
