@@ -141,17 +141,17 @@ if ($scopeType -eq 'resourceGroup') {
 
   Write-Output '=========='
   Write-Output 'Detach Static Web Apps...'
-  if ($templateType -eq 'static-web-apps') {
+  if ($templateType -eq 'static-web-apps' -or $templateType -eq 'functions') {
     Write-Host 'Static Web Apps should be detached before upgrading infrastucture.'
     # @last-major-version only detach static web apps here
-  }
-
-  $staticWebApp = Get-AzStaticWebApp -ResourceGroupName $resourceGroupName
-  if (!!$staticWebApp) {
-    $staticWebAppName = $staticWebApp.Name
-    Write-Output "Disconnecting application: $staticWebAppName..."
-    Remove-AzStaticWebAppAttachedRepository -ResourceGroupName $resourceGroupName -Name $staticWebAppName
-    Write-Output 'Application has been disconnected.'
+    
+    $staticWebApp = Get-AzStaticWebApp -ResourceGroupName $resourceGroupName
+    if (!!$staticWebApp) {
+      $staticWebAppName = $staticWebApp.Name
+      Write-Output "Disconnecting application: $staticWebAppName..."
+      Remove-AzStaticWebAppAttachedRepository -ResourceGroupName $resourceGroupName -Name $staticWebAppName
+      Write-Output 'Application has been disconnected.'
+    }
   }
 
   Write-Output '=========='
