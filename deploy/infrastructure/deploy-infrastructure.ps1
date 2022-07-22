@@ -165,7 +165,7 @@ if ($scopeType -eq 'resourceGroup') {
   
       $applicationPackageUri = $appSettings['WEBSITE_RUN_FROM_PACKAGE']
       if ($applicationPackageUri) {
-        $templateExtraParameters.Add('applicationPackageUri', $applicationPackageUri)
+        $templateExtraParameters.Add('functionsAppOptions.extraAppSettings', "('WEBSITE_RUN_FROM_PACKAGE', '$applicationPackageUri')")
         Write-Output "Application package URI found ($($applicationPackageUri.Length) characters)."
       } else {
         Write-Output "Application package URI not found."
