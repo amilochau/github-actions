@@ -144,7 +144,7 @@ if ($scopeType -eq 'resourceGroup') {
   if ($templateType -eq 'static-web-apps' -or $templateType -eq 'functions') {
     Write-Host 'Static Web Apps should be detached before upgrading infrastucture.'
     # @last-major-version only detach static web apps here
-
+    
     $staticWebApp = Get-AzStaticWebApp -ResourceGroupName $resourceGroupName
     if (!!$staticWebApp) {
       $staticWebAppName = $staticWebApp.Name
@@ -165,7 +165,7 @@ if ($scopeType -eq 'resourceGroup') {
   
       $applicationPackageUri = $appSettings['WEBSITE_RUN_FROM_PACKAGE']
       if ($applicationPackageUri) {
-        $templateExtraParameters.Add('functionsAppOptions.extraAppSettings', "('WEBSITE_RUN_FROM_PACKAGE', '$applicationPackageUri')")
+        $templateExtraParameters.Add('applicationPackageUri', $applicationPackageUri)
         Write-Output "Application package URI found ($($applicationPackageUri.Length) characters)."
       } else {
         Write-Output "Application package URI not found."
