@@ -183,6 +183,49 @@ if ($scopeType -eq 'resourceGroup') {
     @templateExtraParameters
 
   Write-Output 'Deployment is now completed on resource group.'
+
+  Write-Output 'Post-deployment steps...'
+
+  Write-Output '=========='
+  Write-Output 'Enable HTTPS for CDN custom domains...'
+  if ($templateType -eq 'functions' -or $templateType -eq 'functions/local-dependencies') {
+    Write-Host 'Functions (template and local dependencies) template must enable HTTPS for CDN custom domains.'
+    $cdnProfiles = Get-AzCdnProfile -ResourceGroupName $resourceGroupName -ErrorAction SilentlyContinue
+    if (!!$cdnProfiles) {
+      Write-Output "CDN profiles found ($($cdnProfiles.Length) profiles)."
+      $customDomainHttpsParameter = New-AzCdnManagedHttpsParametersObject -CertificateSourceParameterCertificateType Dedicated -CertificateSource Cdn -ProtocolType ServerNameIndication -MinimumTlsVersion TLS12
+      foreach ($cdnProfile in $cdnProfiles) {
+        $cdnProfileName = $cdnProfile.Name
+        $cdnEndpoints = Get-AzCdnEndpoint -ResourceGroupName $resourceGroupName -ProfileName $cdnProfileName -ErrorAction SilentlyContinue
+        if (!!$cdnEndpoints) {
+          Write-Output "CDN endpoints found ($($cdnEndpoints.Length) endpoints) for CDN profile '$cdnProfileName'."
+          foreach ($cdnEndpoint in $cdnEndpoints) {
+            $cdnEndpointName = $cdnEndpoint.Name
+            $customDomains = Get-AzCdnCustomDomain -ResourceGroupName $resourceGroupName -ProfileName $cdnProfileName -EndpointName $cdnEndpointName -ErrorAction SilentlyContinue
+            if (!!$customDomains) {
+              Write-Output "CDN custom domains found ($($customDomains.Length) endpoints) for CDN endpoint '$cdnEndpointName'."
+              foreach ($customDomain in $customDomains) {
+                $customDomainName = $customDomain.Name
+                $customDomainHttpsProvisioningState = $customDomain.CustomHttpsProvisioningState
+                if ($customDomainHttpsProvisioningState -eq 'Disabled') {
+                  Write-Output "HTTPS is disabled for CDN custom domains '$customDomainName', it will now be enabled."
+                  Enable-AzCdnCustomDomainCustomHttps -ResourceGroupName $resourceGroupName -ProfileName $cdnProfileName -EndpointName $cdnEndpointName -CustomDomainName $customDomainName -CustomDomainHttpsParameter $customDomainHttpsParameter -ErrorAction SilentlyContinue
+                }
+              }
+            } else {
+              Write-Output "No custom domain found for CDN endpoint '$cdnEndpointName'."
+            }
+          }
+        } else {
+          Write-Output "No CDN profile found for CDN profile '$cdnProfileName'."
+        }
+      }
+    } else {
+      Write-Output "No CDN profile found."
+    }
+  }
+
+  Write-Output 'Post-deployment steps done.'
 } elseif ($scopeType -eq 'subscription') {
   Write-Output 'SCOPE: SUBSCRIPTION'
 
