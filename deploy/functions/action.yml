@@ -36,7 +36,7 @@ runs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ inputs.dotnetVersion }}
-    - name: Login on Azure
+    - name: Login to Azure
       uses: azure/login@v1
       with:
         creds: ${{ inputs.azureCredentials }}

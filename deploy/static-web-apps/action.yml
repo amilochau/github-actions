@@ -42,7 +42,7 @@ runs:
         node-version: ${{ inputs.nodeVersion }}
         cache: 'npm'
         cache-dependency-path: "${{ inputs.projectsToPublishPath }}/package-lock.json"
-    - name: Login on Azure
+    - name: Login to Azure
       uses: azure/login@v1
       with:
         creds: ${{ inputs.azureCredentials }}

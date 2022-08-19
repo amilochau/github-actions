@@ -74,7 +74,7 @@ runs:
         ref: ${{ inputs.azureTemplateVersion }}
         path: templates
         fetch-depth: 0
-    - name: Login on Azure
+    - name: Login to Azure
       uses: azure/login@v1
       with:
         creds: ${{ inputs.azureCredentials }}
