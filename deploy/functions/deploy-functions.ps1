@@ -86,7 +86,7 @@ Update-AzFunctionAppSetting -Name $applicationName -ResourceGroupName $resourceG
 
 Write-Output '=========='
 Write-Output 'Synchronize triggers...'
-Invoke-AzResourceAction -ResourceGroupName $resourceGroupName -ResourceType $applicationType -ResourceName $applicationName -Action syncfunctiontriggers -Force | Out-Null
+SynchronizeTriggers -resourceGroupName $resourceGroupName -applicationType $applicationType -applicationName $applicationName
 
 Write-Output '=========='
 Write-Output 'Check application health...'
@@ -96,3 +96,27 @@ Write-Host "Using default health URL: $healthUrl"
 Invoke-WebRequest $healthUrl -TimeoutSec 120 -MaximumRetryCount 12 -RetryIntervalSec 10
 
 Write-Output 'Deployment is done.'
+
+Function SynchronizeTriggers($resourceGroupName, $applicationType, $applicationName) {
+  $retries = 3
+  $retriesDelayInSeconds = 5
+
+  $retrycount = 0
+  $completed = $false
+
+  while (-not $completed) {
+    try {
+      Invoke-AzResourceAction -ResourceGroupName $resourceGroupName -ResourceType $applicationType -ResourceName $applicationName -Action syncfunctiontriggers -Force -ErrorAction Stop  | Out-Null
+      $completed = $true
+    } catch {
+      if ($retrycount -ge $retries) {
+        Write-Verbose "Synchronize triggers failed after $retrycount times."
+        throw
+      } else {
+        Write-Verbose "Synchronize triggers failed. Retrying in $retriesDelayInSeconds seconds."
+        Start-Sleep $retriesDelayInSeconds
+        $retrycount++
+      }
+    }
+  }
+}
