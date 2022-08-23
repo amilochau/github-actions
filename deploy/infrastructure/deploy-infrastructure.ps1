@@ -23,9 +23,6 @@
   Force deployment if the last template used is the same as the current one
 #>
 
-#Requires -Modules Az
-#Requires -Modules Az.Cdn
-
 [CmdletBinding()]
 Param(
   [parameter(Mandatory = $true)]
@@ -196,6 +193,7 @@ if ($scopeType -eq 'resourceGroup') {
     $cdnProfiles = Get-AzCdnProfile -ResourceGroupName $resourceGroupName -ErrorAction SilentlyContinue
     if (!!$cdnProfiles) {
       Write-Output "CDN profiles found ($($cdnProfiles.Length) profiles)."
+      Install Az.Cdn
       $customDomainHttpsParameter = New-AzCdnManagedHttpsParametersObject -CertificateSourceParameterCertificateType Dedicated -CertificateSource Cdn -ProtocolType ServerNameIndication -MinimumTlsVersion TLS12
       foreach ($cdnProfile in $cdnProfiles) {
         $cdnProfileName = $cdnProfile.Name
