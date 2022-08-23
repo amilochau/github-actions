@@ -23,6 +23,9 @@
   Force deployment if the last template used is the same as the current one
 #>
 
+#Requires -Modules Az
+#Requires -Modules Az.Cdn
+
 [CmdletBinding()]
 Param(
   [parameter(Mandatory = $true)]
