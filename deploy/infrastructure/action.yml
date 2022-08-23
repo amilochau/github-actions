@@ -94,3 +94,4 @@ runs:
           -deploymentName ${{ inputs.deploymentName }} `
           -templatesDirectory ./templates `
           -forceDeployment ${{ inputs.forceDeployment }}
+        azPSVersion: latest
