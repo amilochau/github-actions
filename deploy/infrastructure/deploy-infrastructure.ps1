@@ -193,7 +193,7 @@ if ($scopeType -eq 'resourceGroup') {
     $cdnProfiles = Get-AzCdnProfile -ResourceGroupName $resourceGroupName -ErrorAction SilentlyContinue
     if (!!$cdnProfiles) {
       Write-Output "CDN profiles found ($($cdnProfiles.Length) profiles)."
-      Install-Module Az.Cdn
+      Install-Module -Name Az.Cdn -Scope CurrentUser -Force
       $customDomainHttpsParameter = New-AzCdnManagedHttpsParametersObject -CertificateSourceParameterCertificateType Dedicated -CertificateSource Cdn -ProtocolType ServerNameIndication -MinimumTlsVersion TLS12
       foreach ($cdnProfile in $cdnProfiles) {
         $cdnProfileName = $cdnProfile.Name
