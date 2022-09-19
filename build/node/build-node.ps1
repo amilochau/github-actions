@@ -1,6 +1,6 @@
 <#
   .SYNOPSIS
-  This script build and tests a Node.js application
+  This script builds and tests a Node.js application
   .PARAMETER npmBuildScript
   The npm script to build
   .PARAMETER npmLintScript
