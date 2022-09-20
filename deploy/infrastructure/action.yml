@@ -20,6 +20,7 @@ inputs:
     - management-group
     - monitoring
     - static-web-apps
+    - web
   scopeType:
     description: The deployment scope type
     type: choice
