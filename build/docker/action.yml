@@ -1,5 +1,5 @@
-name: Build .NET Core projects
-description: Build and test .NET Core projects
+name: Build Docker applications
+description: Build Docker applications
 author: Antoine Milochau
 inputs:
   context:
@@ -26,13 +26,17 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Login to the Container Registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ inputs.dockerRegistryHost }}
+        username: ${{ inputs.dockerRegistryUsername }}
+        password: ${{ inputs.dockerRegistryPassword }}
     - name: Build Docker application with script
       shell: pwsh
       run: ${{ github.action_path }}/build-docker.ps1 `
         -context "${{ inputs.context }}" `
         -dockerfile "${{ inputs.dockerfile }}" `
         -dockerRegistryHost ${{ inputs.dockerRegistryHost }} `
-        -dockerRegistryUsername ${{ inputs.dockerRegistryUsername }} `
-        -dockerRegistryPassword ${{ inputs.dockerRegistryPassword }} `
         -dockerImageName ${{ inputs.dockerImageName }} `
         -dockerImageTag ${{ inputs.dockerImageTag }}

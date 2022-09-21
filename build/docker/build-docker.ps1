@@ -7,10 +7,6 @@
   The path of the Dockerfile
   .PARAMETER dockerRegistryHost
   The host of the Docker registry - with a leading slash
-  .PARAMETER dockerRegistryUsername
-  The username to login to Docker registry
-  .PARAMETER dockerRegistryPassword
-  The password to login to Docker registry
   .PARAMETER dockerImageName
   The name of the Docker image
   .PARAMETER dockerImageTag
@@ -27,12 +23,6 @@ Param(
 
   [parameter(Mandatory = $true)]
   [string]$dockerRegistryHost,
-
-  [parameter(Mandatory = $true)]
-  [string]$dockerRegistryUsername,
-
-  [parameter(Mandatory = $true)]
-  [string]$dockerRegistryPassword,
 
   [parameter(Mandatory = $true)]
   [string]$dockerImageName,
@@ -55,10 +45,6 @@ Write-Output "Docker image reference: $dockerImageReference"
 Write-Output '=========='
 Write-Output 'Building Docker image...'
 docker build $context --file $dockerfile --tag $dockerImageReference
-
-Write-Output '=========='
-Write-Output 'Loging to Container Registry...'
-docker login $dockerRegistryHost --username $dockerRegistryUsername --password $dockerRegistryPassword
 
 Write-Output '=========='
 Write-Output 'Pushing to Container Registry...'
