@@ -26,7 +26,7 @@
 [CmdletBinding()]
 Param(
   [parameter(Mandatory = $true)]
-  [ValidateSet('configuration', 'functions', 'functions/api-registration', 'functions/local-dependencies', 'gateway', 'management-group', 'monitoring', 'static-web-apps')]
+  [ValidateSet('configuration', 'functions', 'functions/api-registration', 'functions/local-dependencies', 'gateway', 'management-group', 'monitoring', 'static-web-apps', 'web')]
   [string]$templateType,
 
   [parameter(Mandatory = $true)]
@@ -91,6 +91,7 @@ switch ($templateType) {
   'management-group' { $templateFilePath = './templates/management-group/template.bicep' }
   'monitoring' { $templateFilePath = './templates/monitoring/template.bicep' }
   'static-web-apps' { $templateFilePath = './templates/static-web-apps/template.bicep' }
+  'web' { $templateFilePath = './templates/web/template.bicep' }
   default {
     Write-Warning 'No template type is defined.'
     throw 'You should define a template reference; use "templateType" parameter.'
@@ -141,7 +142,7 @@ if ($scopeType -eq 'resourceGroup') {
 
   Write-Output '=========='
   Write-Output 'Detach Static Web Apps...'
-  if ($templateType -eq 'static-web-apps' -or $templateType -eq 'functions') {
+  if ($templateType -eq 'static-web-apps' -or $templateType -eq 'functions' -or $templateType -eq 'web') {
     Write-Host 'Static Web Apps should be detached before upgrading infrastucture.'
     # @last-major-version only detach static web apps here
     
@@ -174,6 +175,25 @@ if ($scopeType -eq 'resourceGroup') {
   }
 
   Write-Output '=========='
+  Write-Output 'Get Web application settings...'
+  if ($templateType -eq 'web') {
+    $app = Get-AzWebApp -ResourceGroupName $resourceGroupName
+    if (!!$app) {
+      $applicationName = $app.Name
+      Write-Output "Application name: $applicationName"
+      $appSettings = Get-AzFunctionAppSetting -Name $applicationName -ResourceGroupName $resourceGroupName
+  
+      $applicationLinuxFxVersion = $app.siteConfig.LinuxFxVersion
+      if ($applicationLinuxFxVersion) {
+        $templateExtraParameters.Add('applicationImageReference', $applicationLinuxFxVersion)
+        Write-Output "Application image reference found ($($applicationLinuxFxVersion.Length) characters)."
+      } else {
+        Write-Output "Application image reference not found."
+      }
+    }
+  }
+
+  Write-Output '=========='
   Write-Output 'Deploy ARM template file...'
   $result = New-AzResourceGroupDeployment `
     -Name $deploymentName `
@@ -188,7 +208,7 @@ if ($scopeType -eq 'resourceGroup') {
 
   Write-Output '=========='
   Write-Output 'Enable HTTPS for CDN custom domains...'
-  if ($templateType -eq 'functions' -or $templateType -eq 'functions/local-dependencies') {
+  if ($templateType -eq 'functions' -or $templateType -eq 'functions/local-dependencies' -or $templateType -eq 'web') {
     Write-Host 'Functions (template and local dependencies) template must enable HTTPS for CDN custom domains.'
     $cdnProfiles = Get-AzCdnProfile -ResourceGroupName $resourceGroupName -ErrorAction SilentlyContinue
     if (!!$cdnProfiles) {
