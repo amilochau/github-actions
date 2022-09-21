@@ -30,11 +30,11 @@ Param(
   $dockerRegistryHost,
 
   [parameter(Mandatory = $true)]
-  [securestring]
+  [string]
   $dockerRegistryUsername,
 
   [parameter(Mandatory = $true)]
-  [securestring]
+  [string]
   $dockerRegistryPassword,
 
   [parameter(Mandatory = $true)]
