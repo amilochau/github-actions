@@ -21,6 +21,10 @@ Param(
   [string]$verbosity
 )
 
+Write-Output "Projects to build is: $projectsToBuild"
+Write-Output "Projects to test is: $projectsToTest"
+Write-Output "Verbosity is: $verbosity"
+
 Write-Output '=========='
 Write-Output 'Install packages...'
 dotnet restore $projectsToBuild --verbosity $verbosity

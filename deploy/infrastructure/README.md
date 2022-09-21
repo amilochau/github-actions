@@ -35,7 +35,7 @@ jobs:
         with:
           path: app
       - name: Deploy application
-        uses: amilochau/github-actions/deploy/infrastructure@v1
+        uses: amilochau/github-actions/deploy/infrastructure@v3
         with:
           azureTemplateVersion: ${{ env.TEMPLATES_VERSION }}
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}

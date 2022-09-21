@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Deploy application
-        uses: amilochau/github-actions/deploy/functions@v1
+        uses: amilochau/github-actions/deploy/functions@v3
         with:
           dotnetVersion: ${{ env.DOTNET_VERSION }}
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
