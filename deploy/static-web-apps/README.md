@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Deploy application
-        uses: amilochau/github-actions/deploy//static-web-apps@v1
+        uses: amilochau/github-actions/deploy//static-web-apps@v3
         with:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
           resourceGroupName: ${{ env.INFRA_RG_NAME }}

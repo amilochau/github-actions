@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build and test projects
-        uses: amilochau/github-actions/build/node@v1
+        uses: amilochau/github-actions/build/node@v3
         with:
           projectWorkspace: ${{ env.PROJECT_WORKSPACE }}
 ```

@@ -84,7 +84,6 @@ Write-Output 'Get application information from application settings...'
 $app = Get-AzFunctionApp -Name $applicationName -ResourceGroupName $resourceGroupName
 $applicationType = $app.Type
 $defaultHostName = $app.DefaultHostName
-Write-Output "Resource group name: $resourceGroupName"
 Write-Output "Application type: $applicationType"
 Write-Output "Default host name: $defaultHostName"
 
@@ -121,3 +120,4 @@ Invoke-WebRequest $healthUrl -TimeoutSec 120 -MaximumRetryCount 12 -RetryInterva
 
 Write-Output 'Deployment is done.'
 
+Write-Output '=========='

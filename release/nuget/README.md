@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Deploy libraries
-        uses: amilochau/github-actions/release/nuget@v1
+        uses: amilochau/github-actions/release/nuget@v3
         with:
           projectsToBuild: ${{ env.PROJECTS_BUILD }}
           projectsToPublish: ${{ env.PROJECTS_SDK }}

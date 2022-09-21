@@ -289,3 +289,5 @@ Write-Host "[Output] resourceId: $resourceId"
 $resourceName = $result.Outputs.resourceName.Value
 Write-Host "::set-output name=resourceName::$resourceName"
 Write-Host "[Output] resourceName: $resourceName"
+
+Write-Output '=========='

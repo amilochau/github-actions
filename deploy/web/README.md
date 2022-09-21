@@ -1,14 +1,14 @@
-# Readme - deploy/functions
+# Readme - deploy/web
 
 ## Introduction
 
-`amilochau/github-actions/deploy/functions` is a GitHub Action developed to deploy Azure Functions applications.
+`amilochau/github-actions/deploy/web` is a GitHub Action developed to deploy Web applications from Docker images.
 
 ---
 
 ## Usage
 
-Use this GitHub action if you want have one Azure Functions application that you want to publish, typically in a Continuous Delivery process.
+Use this GitHub action if you want have one Web application that you want to deploy from a Docker image, typically in a Continuous Delivery process.
 
 ### Example workflow
 
@@ -26,26 +26,26 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Deploy application
-        uses: amilochau/github-actions/deploy/functions@v3
+        uses: amilochau/github-actions/deploy/web@v3
         with:
-          dotnetVersion: ${{ env.DOTNET_VERSION }}
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+          dockerImageName: ${{ env.DOCKER_IMAGE_NAME }}
+          dockerImageTag: ${{ github.sha }}
           resourceGroupName: ${{ env.INFRA_RG_NAME }}
           applicationName: ${{ env.INFRA_APP_NAME }}
-          projectsToPublishPath: ${{ env.PROJECTS_PUBLISH }}
 ```
 
 ### Inputs
 
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
-| `dotnetVersion` | The .NET version to use | *false* | `''` | If you don't specify this, you should use your own `actions/setup-dotnet` task before |
 | `azureCredentials` | Azure credentials, typically get from secrets.AZURE_CREDENTIALS | **true** |
+| `dockerRegistryHost` | The host of the Docker registry | *false* | `ghcr.io/` | Should end with a leading slash |
+| `dockerImageName` | The name of the Docker image | **true** |
+| `dockerImageTag` | The tag of the Docker image | **true** |
 | `resourceGroupName` | The resource group name, as defined on Azure | **true** |
 | `applicationName` | The application name, as defined on Azure | **true** |
-| `projectsToPublishPath` | The path of the projects to publish, relative to the checkout path | **true** |
 | `relativeHealthUrl` | The relative URL of the health endpoint, from the Functions application | *false* | `/api/health` |
-| `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
 
