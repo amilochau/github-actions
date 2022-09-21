@@ -26,24 +26,19 @@ Param(
   [string]$dockerfile,
 
   [parameter(Mandatory = $true)]
-  [string]
-  $dockerRegistryHost,
+  [string]$dockerRegistryHost,
 
   [parameter(Mandatory = $true)]
-  [string]
-  $dockerRegistryUsername,
+  [string]$dockerRegistryUsername,
 
   [parameter(Mandatory = $true)]
-  [string]
-  $dockerRegistryPassword,
+  [string]$dockerRegistryPassword,
 
   [parameter(Mandatory = $true)]
-  [string]
-  $dockerImageName,
+  [string]$dockerImageName,
 
   [parameter(Mandatory = $true)]
-  [string]
-  $dockerImageTag
+  [string]$dockerImageTag
 )
 
 Write-Output "Context is: $context"

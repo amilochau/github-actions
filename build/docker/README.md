@@ -40,9 +40,9 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `context` | The path of the context where to build | **true** |
 | `dockerfile` | The path of the Dockerfile | **true** |
-| `dockerRegistryHost` | The host of the Docker registry | *false* | `ghcr.io/` | Should end with a leading slash |
-| `dockerRegistryUsername` |The username to login to Docker registry | **true** | 
-| `dockerRegistryPassword` | The password to login to Docker registry | **true** | 
+| `dockerRegistryHost` | The host of the Docker registry |*false* | `ghcr.io/` | Should end with a leading slash |
+| `dockerRegistryUsername` |The username to login to Docker registry | **true** |
+| `dockerRegistryPassword` | The password to login to Docker registry | **true** |
 | `dockerImageName` | The name of the Docker image | **true** | 
 | `dockerImageTag` | The tag of the Docker image | **true** | 
 
