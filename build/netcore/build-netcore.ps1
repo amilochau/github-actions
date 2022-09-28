@@ -29,7 +29,7 @@ Write-Output "Verbosity is: $verbosity"
 Write-Output '=========='
 Write-Output 'Install packages...'
 dotnet restore $projectsToBuild --verbosity $verbosity
- 
+
 Write-Output '=========='
 Write-Output 'Build application...'
 dotnet build $projectsToBuild --configuration Release --no-restore --verbosity $verbosity
@@ -37,5 +37,9 @@ dotnet build $projectsToBuild --configuration Release --no-restore --verbosity $
 Write-Output '=========='
 Write-Output 'Run tests...'
 dotnet test $projectsToTest --configuration Release --no-restore --no-build --verbosity $verbosity
+
+Write-Output '=========='
+Write-Output 'Publish application...'
+dotnet publish $projectsToTest --configuration Release --no-restore --no-build --runtime linux-x64 --no-self-contained --output ./output --verbosity $verbosity
 
 Write-Output '=========='

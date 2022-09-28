@@ -14,6 +14,9 @@ inputs:
   npmLintScript:
     description: The npm script to run, to lint the application
     default: ''
+  relativeOutputPath:
+    description: The path of the built application, relative to the 'projectsToPublishPath'
+    default: '/dist'
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -37,3 +40,8 @@ runs:
         -npmLintScript "${{ inputs.npmLintScript }}" `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-node
+        path: ${{ inputs.projectWorkspace }}${{ inputs.relativeOutputPath }}

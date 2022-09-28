@@ -32,3 +32,8 @@ runs:
         -projectsToBuild ${{ inputs.projectsToBuild }} `
         -projectsToTest ${{ inputs.projectsToTest }} `
         -verbosity ${{ inputs.verbosity }}
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-netcore
+        path: ./output

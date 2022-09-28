@@ -35,6 +35,9 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectWorkspace` | The path to the project to build | *false* | `.` |
 | `nodeVersion` | The Node.js version to use | *false* | `16.x` |
+| `npmBuildScript` | The npm script to run, to build the application | *false* | `build` |
+| `npmLintScript` | The npm script to run, to lint the application | *false* | `''` |
+| `relativeOutputPath` | The path to the output of the build project | *false* | `./dist` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
