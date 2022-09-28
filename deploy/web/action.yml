@@ -24,6 +24,13 @@ inputs:
     description: The relative URL of the health endpoint, from the Functions application
     required: false
     default: '/api/health'
+  verbosity:
+    description: The verbosity of the scripts
+    default: minimal
+    options:
+    - minimal
+    - normal
+    - detailed
 runs:
   using: composite
   steps:
@@ -41,5 +48,6 @@ runs:
           -dockerImageTag ${{ inputs.dockerImageTag }} `
           -resourceGroupName ${{ inputs.resourceGroupName }} `
           -applicationName ${{ inputs.applicationName }} `
-          -relativeHealthUrl ${{ inputs.relativeHealthUrl }}
+          -relativeHealthUrl ${{ inputs.relativeHealthUrl }} `
+          -verbosity ${{ inputs.verbosity }}
         azPSVersion: 7.1.0

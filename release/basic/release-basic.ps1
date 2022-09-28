@@ -17,6 +17,8 @@
   The GitHub token
   .PARAMETER avoidGithubPrerelease
   Avoid creating GitHub release for prerelease versions
+  .PARAMETER verbosity
+  The verbosity level
 #>
 
 [CmdletBinding()]
@@ -43,11 +45,16 @@ Param(
   [string]$githubToken,
   
   [parameter(Mandatory = $true)]
-  [string]$avoidGithubPrerelease
+  [string]$avoidGithubPrerelease,
+  
+  [parameter(Mandatory = $true)]
+  [ValidateSet('minimal', 'normal', 'detailed')]
+  [string]$verbosity
 )
 
 Write-Output "Main branch is: $mainBranch"
 Write-Output "Current branch is: $currentBranch"
+Write-Output "Verbosity is: $verbosity"
 
 $avoidGithubPrerelease = [System.Convert]::ToBoolean($avoidGithubPrerelease)
 Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"

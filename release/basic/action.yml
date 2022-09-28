@@ -57,6 +57,7 @@ runs:
         -mainBranch ${{ inputs.mainBranch }} `
         -currentBranch ${{ github.ref }} `
         -githubToken ${{ inputs.githubToken }} `
-        -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }}
+        -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
+        -verbosity ${{ inputs.verbosity }}
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}

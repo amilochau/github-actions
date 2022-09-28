@@ -54,7 +54,8 @@ runs:
         -currentBranch ${{ github.ref }} `
         -npmjsToken "${{ inputs.npmjsComToken }}" `
         -githubToken ${{ inputs.githubToken }} `
-        -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }}
+        -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
+        -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
       env:
         GITHUB_TOKEN: ${{ inputs.githubToken }}

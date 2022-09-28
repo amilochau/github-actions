@@ -13,6 +13,8 @@
   The application name
   .PARAMETER relativeHealthUrl
   The relative health URL
+  .PARAMETER verbosity
+  The verbosity level
 #>
 
 [CmdletBinding()]
@@ -33,7 +35,11 @@ Param(
   [string]$applicationName,
 
   [parameter(Mandatory = $true)]
-  [string]$relativeHealthUrl
+  [string]$relativeHealthUrl,
+  
+  [parameter(Mandatory = $true)]
+  [ValidateSet('minimal', 'normal', 'detailed')]
+  [string]$verbosity
 )
 
 Write-Output "Docker registry host is: $dockerRegistryHost"
@@ -42,6 +48,7 @@ Write-Output "Docker image tag is: $dockerImageTag"
 Write-Output "Resource group name is: $resourceGroupName"
 Write-Output "Application name is: $applicationName"
 Write-Output "Relative health URL is: $relativeHealthUrl"
+Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
 Write-Output 'Set local variables...'

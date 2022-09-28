@@ -45,6 +45,7 @@ jobs:
 | `dockerRegistryPassword` | The password to login to Docker registry | **true** |
 | `dockerImageName` | The name of the Docker image | **true** | 
 | `dockerImageTag` | The tag of the Docker image | **true** | 
+| `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
 

@@ -11,14 +11,14 @@
   The projects to build
   .PARAMETER projectsToPublish
   The projects to publish
-  .PARAMETER verbosity
-  The .NET CLI verbosity level
   .PARAMETER nugetOrgToken
   The nuget.org token
   .PARAMETER githubToken
   The GitHub token
   .PARAMETER avoidGithubPrerelease
   Avoid creating GitHub release for prerelease versions
+  .PARAMETER verbosity
+  The verbosity level
 #>
 
 [CmdletBinding()]
@@ -39,16 +39,17 @@ Param(
   [string]$projectsToPublish,
 
   [parameter(Mandatory = $true)]
-  [string]$verbosity,
-
-  [parameter(Mandatory = $true)]
   [string]$nugetOrgToken,
 
   [parameter(Mandatory = $true)]
   [string]$githubToken,
   
   [parameter(Mandatory = $true)]
-  [string]$avoidGithubPrerelease
+  [string]$avoidGithubPrerelease,
+  
+  [parameter(Mandatory = $true)]
+  [ValidateSet('minimal', 'normal', 'detailed')]
+  [string]$verbosity
 )
 
 Write-Output "Version file is: $versionFile"

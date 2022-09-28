@@ -16,8 +16,9 @@ Param(
 
   [parameter(Mandatory = $true)]
   [string]$projectsToTest,
-
+  
   [parameter(Mandatory = $true)]
+  [ValidateSet('minimal', 'normal', 'detailed')]
   [string]$verbosity
 )
 
