@@ -94,5 +94,6 @@ runs:
           -parametersFilePath ${{ inputs.parametersFilePath }} `
           -deploymentName ${{ inputs.deploymentName }} `
           -templatesDirectory ./templates `
-          -forceDeployment ${{ inputs.forceDeployment }}
+          -forceDeployment ${{ inputs.forceDeployment }} `
+          -verbosity ${{ inputs.verbosity }}
         azPSVersion: latest

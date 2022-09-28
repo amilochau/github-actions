@@ -21,6 +21,8 @@
   The name of the deployment
   .PARAMETER forceDeployment
   Force deployment if the last template used is the same as the current one
+  .PARAMETER verbosity
+  The verbosity level
 #>
 
 [CmdletBinding()]
@@ -55,7 +57,11 @@ Param(
   [string]$deploymentName,
 
   [parameter(Mandatory = $true)]
-  [string]$forceDeployment
+  [string]$forceDeployment,
+  
+  [parameter(Mandatory = $true)]
+  [ValidateSet('minimal', 'normal', 'detailed')]
+  [string]$verbosity
 )
 
 Write-Output "Template type is: $templateType"
@@ -67,6 +73,7 @@ Write-Output "Management group ID is: $managementGroupId"
 Write-Output "Parameters file path is: $parametersFilePath"
 Write-Output "Templates directory path is: $templatesDirectory"
 Write-Output "Deployment name is: $deploymentName"
+Write-Output "Verbosity is: $verbosity"
 
 $forceDeployment = [System.Convert]::ToBoolean($forceDeployment)
 Write-Output "Force deployment is: $forceDeployment"

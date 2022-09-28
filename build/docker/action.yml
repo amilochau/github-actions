@@ -23,6 +23,13 @@ inputs:
   dockerImageTag:
     description: The tag of the Docker image
     required: true
+  verbosity:
+    description: The verbosity of the scripts
+    default: minimal
+    options:
+    - minimal
+    - normal
+    - detailed
 runs:
   using: composite
   steps:
@@ -39,4 +46,5 @@ runs:
         -dockerfile "${{ inputs.dockerfile }}" `
         -dockerRegistryHost ${{ inputs.dockerRegistryHost }} `
         -dockerImageName ${{ inputs.dockerImageName }} `
-        -dockerImageTag ${{ inputs.dockerImageTag }}
+        -dockerImageTag ${{ inputs.dockerImageTag }} `
+        -verbosity ${{ inputs.verbosity }}

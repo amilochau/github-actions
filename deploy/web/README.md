@@ -46,6 +46,7 @@ jobs:
 | `resourceGroupName` | The resource group name, as defined on Azure | **true** |
 | `applicationName` | The application name, as defined on Azure | **true** |
 | `relativeHealthUrl` | The relative URL of the health endpoint, from the Functions application | *false* | `/api/health` |
+| `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
 

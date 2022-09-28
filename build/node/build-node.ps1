@@ -5,6 +5,8 @@
   The npm script to build
   .PARAMETER npmLintScript
   The npm script to lint
+  .PARAMETER verbosity
+  The verbosity level
 #>
 
 [CmdletBinding()]
@@ -13,11 +15,16 @@ Param(
   [string]$npmBuildScript,
   
   [parameter(Mandatory = $false)]
-  [string]$npmLintScript
+  [string]$npmLintScript,
+  
+  [parameter(Mandatory = $true)]
+  [ValidateSet('minimal', 'normal', 'detailed')]
+  [string]$verbosity
 )
 
 Write-Output "npm build script is: $npmBuildScript"
 Write-Output "npm lint script is: $npmLintScript"
+Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
 Write-Output 'Install packages...'

@@ -3,14 +3,14 @@
   This script deploys a Functions application
   .PARAMETER projectsToPublishPath
   The path of the projects to publish
-  .PARAMETER verbosity
-  The verbosity level
   .PARAMETER resourceGroupName
   The resource group name
   .PARAMETER applicationName
   The application name
   .PARAMETER relativeHealthUrl
   The relative health URL
+  .PARAMETER verbosity
+  The verbosity level
 #>
 
 [CmdletBinding()]
@@ -19,17 +19,17 @@ Param(
   [string]$projectsToPublishPath,
 
   [parameter(Mandatory = $true)]
-  [ValidateSet('minimal', 'normal', 'detailed')]
-  [string]$verbosity,
-
-  [parameter(Mandatory = $true)]
   [string]$resourceGroupName,
 
   [parameter(Mandatory = $true)]
   [string]$applicationName,
 
   [parameter(Mandatory = $true)]
-  [string]$relativeHealthUrl
+  [string]$relativeHealthUrl,
+  
+  [parameter(Mandatory = $true)]
+  [ValidateSet('minimal', 'normal', 'detailed')]
+  [string]$verbosity
 )
 
 Function SynchronizeTriggers($resourceGroupName, $applicationType, $applicationName) {
@@ -57,10 +57,10 @@ Function SynchronizeTriggers($resourceGroupName, $applicationType, $applicationN
 }
 
 Write-Output "Projects to publish path is: $projectsToPublishPath"
-Write-Output "Verbosity is: $verbosity"
 Write-Output "Resource group name is: $resourceGroupName"
 Write-Output "Application name is: $applicationName"
 Write-Output "Relative health URL is: $relativeHealthUrl"
+Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
 Write-Output 'Moving into projects to publish path...'

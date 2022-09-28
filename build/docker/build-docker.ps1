@@ -11,6 +11,8 @@
   The name of the Docker image
   .PARAMETER dockerImageTag
   The tag of the Docker image
+  .PARAMETER verbosity
+  The verbosity level
 #>
 
 [CmdletBinding()]
@@ -28,7 +30,11 @@ Param(
   [string]$dockerImageName,
 
   [parameter(Mandatory = $true)]
-  [string]$dockerImageTag
+  [string]$dockerImageTag,
+  
+  [parameter(Mandatory = $true)]
+  [ValidateSet('minimal', 'normal', 'detailed')]
+  [string]$verbosity
 )
 
 Write-Output "Context is: $context"
@@ -36,6 +42,7 @@ Write-Output "Docker file is: $dockerfile"
 Write-Output "Docker registry host is: $dockerRegistryHost"
 Write-Output "Docker image name is: $dockerImageName"
 Write-Output "Docker image tag is: $dockerImageTag"
+Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
 Write-Output 'Set local variables...'
