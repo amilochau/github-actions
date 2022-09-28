@@ -47,6 +47,10 @@ runs:
       with:
         creds: ${{ inputs.azureCredentials }}
         enable-AzPSSession: true
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: build-node-BADNAME
     - name: Build Static Web Apps application
       uses: azure/powershell@v1
       id: build-swa
