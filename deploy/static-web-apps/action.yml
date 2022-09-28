@@ -67,6 +67,7 @@ runs:
           -resourceGroupName ${{ inputs.resourceGroupName }} `
           -applicationName ${{ inputs.applicationName }} `
           -npmBuildScript "${{ inputs.npmBuildScript }}" `
+          -relativeOutputPath ${{ inputs.relativeOutputPath }}
           -distSource ${{ inputs.distSource }} `
           -verbosity ${{ inputs.verbosity }}
         azPSVersion: 7.1.0

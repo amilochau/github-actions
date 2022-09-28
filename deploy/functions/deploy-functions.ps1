@@ -30,6 +30,7 @@ Param(
   [string]$relativeHealthUrl,
   
   [parameter(Mandatory = $true)]
+  [ValidateSet('build', 'artifact')]
   [string]$distSource,
 
   [parameter(Mandatory = $true)]

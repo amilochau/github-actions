@@ -49,3 +49,4 @@ runs:
       with:
         name: build-node
         path: ${{ inputs.projectWorkspace }}${{ inputs.relativeOutputPath }}
+        if-no-files-found: error

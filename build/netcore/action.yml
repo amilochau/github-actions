@@ -37,3 +37,4 @@ runs:
       with:
         name: build-netcore
         path: ./output
+        if-no-files-found: error
