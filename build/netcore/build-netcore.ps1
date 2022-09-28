@@ -40,6 +40,6 @@ dotnet test $projectsToTest --configuration Release --no-restore --no-build --ve
 
 Write-Output '=========='
 Write-Output 'Publish application...'
-dotnet publish $projectsToTest --configuration Release --runtime linux-x64 --no-self-contained --output ./output --verbosity $verbosity
+dotnet publish $projectsToBuild --configuration Release --runtime linux-x64 --no-self-contained --output ./output --verbosity $verbosity
 
 Write-Output '=========='
