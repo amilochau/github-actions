@@ -9,6 +9,8 @@
   The application name
   .PARAMETER relativeHealthUrl
   The relative health URL
+  .PARAMETER distSource
+  The source of the dist files
   .PARAMETER verbosity
   The verbosity level
 #>
@@ -27,6 +29,9 @@ Param(
   [parameter(Mandatory = $true)]
   [string]$relativeHealthUrl,
   
+  [parameter(Mandatory = $true)]
+  [string]$distSource,
+
   [parameter(Mandatory = $true)]
   [ValidateSet('minimal', 'normal', 'detailed')]
   [string]$verbosity
@@ -60,6 +65,7 @@ Write-Output "Projects to publish path is: $projectsToPublishPath"
 Write-Output "Resource group name is: $resourceGroupName"
 Write-Output "Application name is: $applicationName"
 Write-Output "Relative health URL is: $relativeHealthUrl"
+Write-Output "Dist source is: $distSource"
 Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='

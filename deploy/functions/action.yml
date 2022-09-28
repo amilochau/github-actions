@@ -21,6 +21,12 @@ inputs:
     description: The relative URL of the health endpoint, from the Functions application
     required: false
     default: '/api/health'
+  distSource:
+    description: The source of the dist files
+    default: 'build'
+    options:
+    - build
+    - artifact
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -41,6 +47,11 @@ runs:
       with:
         creds: ${{ inputs.azureCredentials }}
         enable-AzPSSession: true
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      if: inputs.distSource == 'artifact'
+      with:
+        name: build-netcore-BADNAME
     - name: Deploy Functions application
       uses: azure/powershell@v1
       with:
@@ -49,5 +60,6 @@ runs:
           -resourceGroupName ${{ inputs.resourceGroupName }} `
           -applicationName ${{ inputs.applicationName }} `
           -relativeHealthUrl ${{ inputs.relativeHealthUrl }} `
+          -distSource ${{ inputs.distSource }} `
           -verbosity ${{ inputs.verbosity }}
         azPSVersion: 7.1.0

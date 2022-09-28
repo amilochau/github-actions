@@ -26,6 +26,12 @@ inputs:
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
+  distSource:
+    description: The source of the dist files
+    default: 'build'
+    options:
+    - build
+    - artifact
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -49,6 +55,7 @@ runs:
         enable-AzPSSession: true
     - name: Download artifact
       uses: actions/download-artifact@v3
+      if: inputs.distSource == 'artifact'
       with:
         name: build-node-BADNAME
     - name: Build Static Web Apps application
@@ -60,6 +67,7 @@ runs:
           -resourceGroupName ${{ inputs.resourceGroupName }} `
           -applicationName ${{ inputs.applicationName }} `
           -npmBuildScript "${{ inputs.npmBuildScript }}" `
+          -distSource ${{ inputs.distSource }} `
           -verbosity ${{ inputs.verbosity }}
         azPSVersion: 7.1.0
     - name: Build and deploy Azure Static Web Apps application 

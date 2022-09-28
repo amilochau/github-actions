@@ -48,6 +48,7 @@ jobs:
 | `relativeOutputPath` | The path to the output of the build project | *false* | `./dist` |
 | `npmBuildScript` | The npm script to run, to build the application | *false* | `build` |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
+| `distSource` | The source of the dist files | *false* | `build` | Set to `build` or `artifact` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs

@@ -9,6 +9,8 @@
   The application name
   .PARAMETER npmBuildScript
   The npm script to build
+  .PARAMETER distSource
+  The source of the dist files
   .PARAMETER verbosity
   The verbosity level
 #>
@@ -28,6 +30,9 @@ Param(
   [string]$npmBuildScript,
   
   [parameter(Mandatory = $true)]
+  [string]$distSource,
+
+  [parameter(Mandatory = $true)]
   [ValidateSet('minimal', 'normal', 'detailed')]
   [string]$verbosity
 )
@@ -36,6 +41,7 @@ Write-Output "Projects to publish path is: $projectsToPublishPath"
 Write-Output "Resource group name is: $resourceGroupName"
 Write-Output "Application name is: $applicationName"
 Write-Output "npm build script is: $npmBuildScript"
+Write-Output "Dist source is: $distSource"
 Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
