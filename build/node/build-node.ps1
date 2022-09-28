@@ -5,6 +5,8 @@
   The npm script to build
   .PARAMETER npmLintScript
   The npm script to lint
+  .PARAMETER npmTestScript
+  The npm script to test
   .PARAMETER verbosity
   The verbosity level
 #>
@@ -14,8 +16,11 @@ Param(
   [parameter(Mandatory = $true)]
   [string]$npmBuildScript,
   
-  [parameter(Mandatory = $false)]
+  [parameter(Mandatory = $true)]
   [string]$npmLintScript,
+  
+  [parameter(Mandatory = $true)]
+  [string]$npmTestScript,
   
   [parameter(Mandatory = $true)]
   [ValidateSet('minimal', 'normal', 'detailed')]
@@ -24,6 +29,7 @@ Param(
 
 Write-Output "npm build script is: $npmBuildScript"
 Write-Output "npm lint script is: $npmLintScript"
+Write-Output "npm test script is: $npmTestScript"
 Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
@@ -36,12 +42,10 @@ npm run $npmBuildScript
 
 Write-Output '=========='
 Write-Output 'Run linter...'
-if ($npmLintScript) {
-  npm run $npmLintScript
-}
+npm run $npmLintScript --if-present
 
 Write-Output '=========='
 Write-Output 'Run tests...'
-npm test --if-present
+npm run $npmTestScript --if-present
 
 Write-Output '=========='

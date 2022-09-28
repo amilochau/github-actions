@@ -13,7 +13,10 @@ inputs:
     default: 'build'
   npmLintScript:
     description: The npm script to run, to lint the application
-    default: ''
+    default: 'lint'
+  npmTestScript:
+    description: The npm script to run, to test the application
+    default: 'test'
   relativeOutputPath:
     description: The path of the built application, relative to the 'projectsToPublishPath'
     default: '/dist'
@@ -37,7 +40,8 @@ runs:
       shell: pwsh
       run: ${{ github.action_path }}/build-node.ps1 `
         -npmBuildScript ${{ inputs.npmBuildScript }} `
-        -npmLintScript "${{ inputs.npmLintScript }}" `
+        -npmLintScript ${{ inputs.npmLintScript }} `
+        -npmTestScript ${{ inputs.npmTestScript }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Upload artifact
