@@ -67,7 +67,6 @@ if ($distSource -eq 'build') {
   Write-Output '=========='
   Write-Output 'Build application...'
   npm run $npmBuildScript
-
 } else {
   Write-Output "Source has already been built. App location is '$projectsToPublishPath$relativeOutputPath'"
   Write-Output "::set-output name=app_location::$projectsToPublishPath$relativeOutputPath"

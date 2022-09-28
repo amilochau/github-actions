@@ -74,8 +74,16 @@ Write-Output 'Moving into projects to publish path...'
 Set-Location $projectsToPublishPath
 
 Write-Output '=========='
-Write-Output 'Publish application...'
-dotnet publish --configuration Release --runtime linux-x64 --no-self-contained --output ./output --verbosity $verbosity
+Write-Output 'Determining source source...'
+if ($distSource -eq 'build') {
+  Write-Output 'Source has to be built.'
+
+  Write-Output '=========='
+  Write-Output 'Publish application...'
+  dotnet publish --configuration Release --runtime linux-x64 --no-self-contained --output ./output --verbosity $verbosity
+} else {
+  Write-Output 'Source has already been built.'
+}
 
 Write-Output '=========='
 Write-Output 'Create deployment package...'
