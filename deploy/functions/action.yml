@@ -49,9 +49,10 @@ runs:
         enable-AzPSSession: true
     - name: Download artifact
       uses: actions/download-artifact@v3
-      #if: inputs.distSource == 'artifact'
+      if: inputs.distSource == 'artifact'
       with:
         name: build-netcore
+        path: ${{ inputs.projectsToPublishPath }}/output
     - name: Deploy Functions application
       uses: azure/powershell@v1
       with:
