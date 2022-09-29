@@ -55,7 +55,7 @@ runs:
         enable-AzPSSession: true
     - name: Download artifact
       uses: actions/download-artifact@v3
-      if: inputs.distSource == 'artifact'
+      #if: inputs.distSource == 'artifact'
       with:
         name: build-node
     - name: Build Static Web Apps application
