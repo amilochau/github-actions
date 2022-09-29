@@ -50,7 +50,7 @@ inputs:
     default: 'Deployment-GitHub'
   forceDeployment:
     description: Force deployment if the last template used is the same as the current one
-    required: true
+    default: false
     type: boolean
   verbosity:
     description: The verbosity of the scripts
