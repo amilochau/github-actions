@@ -38,8 +38,8 @@ runs:
   using: composite
   steps:
     - name: Setup .NET Core
-      if: ${{ inputs.dotnetVersion != '' }}
       uses: actions/setup-dotnet@v1
+      if: ${{ inputs.dotnetVersion != '' && inputs.distSource != 'artifact' }}
       with:
         dotnet-version: ${{ inputs.dotnetVersion }}
     - name: Login to Azure
