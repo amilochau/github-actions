@@ -9,6 +9,8 @@
   The application name
   .PARAMETER relativeHealthUrl
   The relative health URL
+  .PARAMETER distSource
+  The source of the dist files
   .PARAMETER verbosity
   The verbosity level
 #>
@@ -27,6 +29,10 @@ Param(
   [parameter(Mandatory = $true)]
   [string]$relativeHealthUrl,
   
+  [parameter(Mandatory = $true)]
+  [ValidateSet('build', 'artifact')]
+  [string]$distSource,
+
   [parameter(Mandatory = $true)]
   [ValidateSet('minimal', 'normal', 'detailed')]
   [string]$verbosity
@@ -60,6 +66,7 @@ Write-Output "Projects to publish path is: $projectsToPublishPath"
 Write-Output "Resource group name is: $resourceGroupName"
 Write-Output "Application name is: $applicationName"
 Write-Output "Relative health URL is: $relativeHealthUrl"
+Write-Output "Dist source is: $distSource"
 Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
@@ -67,8 +74,16 @@ Write-Output 'Moving into projects to publish path...'
 Set-Location $projectsToPublishPath
 
 Write-Output '=========='
-Write-Output 'Publish application...'
-dotnet publish --configuration Release --runtime linux-x64 --no-self-contained --output ./output --verbosity $verbosity
+Write-Output 'Determining source source...'
+if ($distSource -eq 'build') {
+  Write-Output 'Source has to be built.'
+
+  Write-Output '=========='
+  Write-Output 'Publish application...'
+  dotnet publish --configuration Release --runtime linux-x64 --no-self-contained --output ./output --verbosity $verbosity
+} else {
+  Write-Output 'Source has already been built.'
+}
 
 Write-Output '=========='
 Write-Output 'Create deployment package...'

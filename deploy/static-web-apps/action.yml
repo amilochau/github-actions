@@ -26,6 +26,12 @@ inputs:
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
+  distSource:
+    description: The source of the dist files
+    default: 'build'
+    options:
+    - build
+    - artifact
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -38,6 +44,7 @@ runs:
   steps:
     - name: Setup Node.js
       uses: actions/setup-node@v2
+      if: ${{ inputs.distSource != 'artifact' }}
       with:
         node-version: ${{ inputs.nodeVersion }}
         cache: 'npm'
@@ -47,6 +54,12 @@ runs:
       with:
         creds: ${{ inputs.azureCredentials }}
         enable-AzPSSession: true
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      if: inputs.distSource == 'artifact'
+      with:
+        name: build-node
+        path: ${{ inputs.projectsToPublishPath }}${{ inputs.relativeOutputPath }}
     - name: Build Static Web Apps application
       uses: azure/powershell@v1
       id: build-swa
@@ -56,6 +69,8 @@ runs:
           -resourceGroupName ${{ inputs.resourceGroupName }} `
           -applicationName ${{ inputs.applicationName }} `
           -npmBuildScript "${{ inputs.npmBuildScript }}" `
+          -relativeOutputPath ${{ inputs.relativeOutputPath }}
+          -distSource ${{ inputs.distSource }} `
           -verbosity ${{ inputs.verbosity }}
         azPSVersion: 7.1.0
     - name: Build and deploy Azure Static Web Apps application 
