@@ -57,7 +57,7 @@ runs:
       uses: actions/download-artifact@v3
       if: inputs.distSource == 'artifact'
       with:
-        name: build-node-BADNAME
+        name: build-node
     - name: Build Static Web Apps application
       uses: azure/powershell@v1
       id: build-swa

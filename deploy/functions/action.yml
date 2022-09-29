@@ -51,7 +51,7 @@ runs:
       uses: actions/download-artifact@v3
       if: inputs.distSource == 'artifact'
       with:
-        name: build-netcore-BADNAME
+        name: build-netcore
     - name: Deploy Functions application
       uses: azure/powershell@v1
       with:
