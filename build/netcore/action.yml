@@ -38,3 +38,4 @@ runs:
         name: build-netcore
         path: ./output
         if-no-files-found: error
+        retention-days: 1
