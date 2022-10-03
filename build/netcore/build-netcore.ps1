@@ -47,6 +47,7 @@ Write-Output 'Create deployment package...'
 $currentDate = Get-Date -Format yyyyMMdd_HHmmss
 $fileName = "App_$currentDate.zip"
 $filePath = "./output-compressed/$fileName"
+New-Item -Path "./output-compressed" -ItemType Directory
 [System.IO.Compression.ZipFile]::CreateFromDirectory("./output", $filePath)
 
 Write-Output '=========='
