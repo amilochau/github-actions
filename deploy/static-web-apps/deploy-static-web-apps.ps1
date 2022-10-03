@@ -74,7 +74,7 @@ if ($distSource -eq 'build') {
   Write-Output 'Extracting archive...'
   $compressedFilePath = "./output-compressed/app.zip"
   New-Item -Path ".$relativeOutputPath" -ItemType Directory
-  [System.IO.Compression.ZipFile]::CreateFromDirectory($compressedFilePath, $relativeOutputPath)
+  [System.IO.Compression.ZipFile]::CreateFromDirectory($compressedFilePath, ".$relativeOutputPath")
   
   Write-Output "Source has already been extracted. App location is '$projectsToPublishPath$relativeOutputPath'"
   Write-Output "::set-output name=app_location::$projectsToPublishPath$relativeOutputPath"
