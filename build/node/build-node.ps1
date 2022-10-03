@@ -56,10 +56,8 @@ npm run $npmTestScript --if-present
 
 Write-Output '=========='
 Write-Output 'Create compressed artifact...'
-$currentDate = Get-Date -Format yyyyMMdd_HHmmss
-$fileName = "App_$currentDate.zip"
-$filePath = "./output-compressed/$fileName"
+$compressedFilePath = './output-compressed/app.zip'
 New-Item -Path "./output-compressed" -ItemType Directory
-[System.IO.Compression.ZipFile]::CreateFromDirectory("./relativeOutputPath", $filePath)
+[System.IO.Compression.ZipFile]::CreateFromDirectory($relativeOutputPath, $compressedFilePath)
 
 Write-Output '=========='

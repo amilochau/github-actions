@@ -44,10 +44,8 @@ dotnet publish $projectsToBuild --configuration Release --runtime linux-x64 --no
 
 Write-Output '=========='
 Write-Output 'Create compressed artifact...'
-$currentDate = Get-Date -Format yyyyMMdd_HHmmss
-$fileName = "App_$currentDate.zip"
-$filePath = "./output-compressed/$fileName"
+$compressedFilePath = './output-compressed/app.zip'
 New-Item -Path "./output-compressed" -ItemType Directory
-[System.IO.Compression.ZipFile]::CreateFromDirectory("./output", $filePath)
+[System.IO.Compression.ZipFile]::CreateFromDirectory("./output", $compressedFilePath)
 
 Write-Output '=========='

@@ -74,6 +74,14 @@ Write-Output 'Moving into projects to publish path...'
 Set-Location $projectsToPublishPath
 
 Write-Output '=========='
+Write-Output 'Determining deployment package name...'
+$currentDate = Get-Date -Format yyyyMMdd_HHmmss
+$currentLocation = Get-Location
+$fileName = "FunctionsApp_$currentDate.zip"
+$filePath = "$currentLocation/$fileName"
+Write-Output "Package deployment name is $filePath"
+
+Write-Output '=========='
 Write-Output 'Determining source source...'
 if ($distSource -eq 'build') {
   Write-Output 'Source has to be built.'
@@ -81,18 +89,20 @@ if ($distSource -eq 'build') {
   Write-Output '=========='
   Write-Output 'Publish application...'
   dotnet publish --configuration Release --runtime linux-x64 --no-self-contained --output ./output --verbosity $verbosity
+
+  Write-Output '=========='
+  Write-Output 'Create deployment package...'
+  [System.IO.Compression.ZipFile]::CreateFromDirectory("$currentLocation/output", $filePath)
+  Write-Output "Deployment package has been created."
 } else {
   Write-Output 'Source has already been built.'
+  
+  Write-Output '=========='
+  Write-Output 'Renaming deployment package...'
+  $compressedFilePath = './output-compressed/app.zip'
+  Rename-Item -Path $compressedFilePath -NewName $filePath
+  Write-Output "Deployment package has been renamed."
 }
-
-Write-Output '=========='
-Write-Output 'Create deployment package...'
-$currentDate = Get-Date -Format yyyyMMdd_HHmmss
-$currentLocation = Get-Location
-$fileName = "FunctionsApp_$currentDate.zip"
-$filePath = "$currentLocation/$fileName"
-[System.IO.Compression.ZipFile]::CreateFromDirectory("$currentLocation/output", $filePath)
-Write-Output "Deployment package has been created ($filePath)."
 
 Write-Output '=========='
 Write-Output 'Get application information from application settings...'
