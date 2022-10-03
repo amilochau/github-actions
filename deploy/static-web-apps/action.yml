@@ -59,7 +59,7 @@ runs:
       if: inputs.distSource == 'artifact'
       with:
         name: build-node-compressed
-        path: ${{ inputs.projectsToPublishPath }}/output-compressed
+        path: ./output-compressed
     - name: Build Static Web Apps application
       uses: azure/powershell@v1
       id: build-swa
