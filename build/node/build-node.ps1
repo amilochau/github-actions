@@ -7,6 +7,8 @@
   The npm script to lint
   .PARAMETER npmTestScript
   The npm script to test
+  .PARAMETER relativeOutputPath
+  The path of the built application
   .PARAMETER verbosity
   The verbosity level
 #>
@@ -21,6 +23,9 @@ Param(
   
   [parameter(Mandatory = $true)]
   [string]$npmTestScript,
+
+  [parameter(Mandatory = $true)]
+  [string]$relativeOutputPath,
   
   [parameter(Mandatory = $true)]
   [ValidateSet('minimal', 'normal', 'detailed')]
@@ -30,6 +35,7 @@ Param(
 Write-Output "npm build script is: $npmBuildScript"
 Write-Output "npm lint script is: $npmLintScript"
 Write-Output "npm test script is: $npmTestScript"
+Write-Output "Relative output path is: $relativeOutputPath"
 Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
@@ -47,5 +53,13 @@ npm run $npmLintScript --if-present
 Write-Output '=========='
 Write-Output 'Run tests...'
 npm run $npmTestScript --if-present
+
+Write-Output '=========='
+Write-Output 'Create compressed artifact...'
+$currentDate = Get-Date -Format yyyyMMdd_HHmmss
+$fileName = "App_$currentDate.zip"
+$filePath = "./output-compressed/$fileName"
+New-Item -Path "./output-compressed" -ItemType Directory
+[System.IO.Compression.ZipFile]::CreateFromDirectory("./relativeOutputPath", $filePath)
 
 Write-Output '=========='

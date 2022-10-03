@@ -42,6 +42,7 @@ runs:
         -npmBuildScript ${{ inputs.npmBuildScript }} `
         -npmLintScript ${{ inputs.npmLintScript }} `
         -npmTestScript ${{ inputs.npmTestScript }} `
+        -relativeOutputPath ${{ inputs.relativeOutputPath }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Upload artifact
@@ -49,5 +50,12 @@ runs:
       with:
         name: build-node
         path: ${{ inputs.projectWorkspace }}${{ inputs.relativeOutputPath }}
+        if-no-files-found: error
+        retention-days: 1
+    - name: Upload artifact (compressed)
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-node-compressed
+        path: ${{ inputs.projectWorkspace }}/output-compressed
         if-no-files-found: error
         retention-days: 1
