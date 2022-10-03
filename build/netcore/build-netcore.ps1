@@ -43,3 +43,10 @@ Write-Output 'Publish application...'
 dotnet publish $projectsToBuild --configuration Release --runtime linux-x64 --no-self-contained --output ./output --verbosity $verbosity
 
 Write-Output '=========='
+Write-Output 'Create deployment package...'
+$currentDate = Get-Date -Format yyyyMMdd_HHmmss
+$fileName = "App_$currentDate.zip"
+$filePath = "./output-compressed/$fileName"
+[System.IO.Compression.ZipFile]::CreateFromDirectory("./output", $filePath)
+
+Write-Output '=========='

@@ -39,3 +39,10 @@ runs:
         path: ./output
         if-no-files-found: error
         retention-days: 1
+    - name: Upload artifact (compressed)
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-netcore
+        path: ./output-compressed
+        if-no-files-found: error
+        retention-days: 1
