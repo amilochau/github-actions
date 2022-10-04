@@ -100,7 +100,7 @@ if ($distSource -eq 'build') {
   Write-Output '=========='
   Write-Output 'Renaming deployment package...'
   $compressedFilePath = './output-compressed/app.zip'
-  Rename-Item -Path $compressedFilePath -NewName $filePath
+  Move-Item -Path $compressedFilePath -NewName $filePath
   Write-Output "Deployment package has been renamed."
 }
 
