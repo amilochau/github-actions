@@ -76,10 +76,10 @@ if ($distSource -eq 'build') {
   New-Item -Path ".$relativeOutputPath" -ItemType Directory | Out-Null
   [System.IO.Compression.ZipFile]::ExtractToDirectory($compressedFilePath, ".$relativeOutputPath")
 
-  Write-Output "Projects to publish path: $(Resolve-Path $projectsToPublishPath)"
+  #Write-Output "Projects to publish path: $(Resolve-Path $projectsToPublishPath)"
   Write-Output "Compressed file path: $(Resolve-Path $compressedFilePath)"
   Write-Output "Extract output path: $(Resolve-Path ".$relativeOutputPath")"
-  Write-Output "App location: $(Resolve-Path $projectsToPublishPath$relativeOutputPath)"
+  #Write-Output "App location: $(Resolve-Path $projectsToPublishPath$relativeOutputPath)"
 
   Write-Output "Get-ChildItem - ." | Select-Object { $_.Name }
   Write-Output "Get-ChildItem - .$relativeOutputPath" | Select-Object { $_.Name }
