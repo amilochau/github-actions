@@ -76,17 +76,17 @@ if ($distSource -eq 'build') {
   New-Item -Path ".$relativeOutputPath" -ItemType Directory | Out-Null
   [System.IO.Compression.ZipFile]::ExtractToDirectory($compressedFilePath, "$projectsToPublishPath$relativeOutputPath")
 
-  Write-Output "Projects to publish path: $(Resolve-Path $projectsToPublishPath)"
-  Write-Output "Compressed file path: $(Resolve-Path $compressedFilePath)"
-  Write-Output "Extract output path: $(Resolve-Path "$projectsToPublishPath$relativeOutputPath")"
-  Write-Output "App location: $(Resolve-Path $projectsToPublishPath$relativeOutputPath)"
-
-  Write-Output "Get-ChildItem - ."
-  Get-ChildItem -Path "."
-  Write-Output "Get-ChildItem - $projectsToPublishPath"
-  Get-ChildItem -Path "$projectsToPublishPath"
-  Write-Output "Get-ChildItem - $projectsToPublishPath$relativeOutputPath"
-  Get-ChildItem -Path "$projectsToPublishPath$relativeOutputPath"
+  #Write-Output "Projects to publish path: $(Resolve-Path $projectsToPublishPath)"
+  #Write-Output "Compressed file path: $(Resolve-Path $compressedFilePath)"
+  #Write-Output "Extract output path: $(Resolve-Path "$projectsToPublishPath$relativeOutputPath")"
+  #Write-Output "App location: $(Resolve-Path $projectsToPublishPath$relativeOutputPath)"
+  
+  #Write-Output "Get-ChildItem - ."
+  #Get-ChildItem -Path "."
+  #Write-Output "Get-ChildItem - $projectsToPublishPath"
+  #Get-ChildItem -Path "$projectsToPublishPath"
+  #Write-Output "Get-ChildItem - $projectsToPublishPath$relativeOutputPath"
+  #Get-ChildItem -Path "$projectsToPublishPath$relativeOutputPath"
 
   Write-Output "Source has already been extracted. App location is '$projectsToPublishPath$relativeOutputPath'"
   Write-Output "::set-output name=app_location::$projectsToPublishPath$relativeOutputPath"
