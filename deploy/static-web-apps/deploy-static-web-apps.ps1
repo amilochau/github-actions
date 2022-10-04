@@ -76,6 +76,8 @@ if ($distSource -eq 'build') {
   New-Item -Path ".$relativeOutputPath" -ItemType Directory | Out-Null
   [System.IO.Compression.ZipFile]::ExtractToDirectory($compressedFilePath, ".$relativeOutputPath")
 
+  Write-Output "Get-ChildItem - ."
+  Write-Output "Get-ChildItem - .$relativeOutputPath"
   Get-ChildItem -Path "."
   Get-ChildItem -Path ".$relativeOutputPath"
 
