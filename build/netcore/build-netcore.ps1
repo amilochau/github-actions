@@ -46,6 +46,6 @@ Write-Output '=========='
 Write-Output 'Create compressed artifact...'
 $compressedFilePath = './output-compressed/app.zip'
 New-Item -Path "./output-compressed" -ItemType Directory
-[System.IO.Compression.ZipFile]::CreateFromDirectory("./output", $compressedFilePath) | Out-Null
+[System.IO.Compression.ZipFile]::CreateFromDirectory("./output", $compressedFilePath)
 
 Write-Output '=========='

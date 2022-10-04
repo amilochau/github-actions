@@ -92,7 +92,7 @@ if ($distSource -eq 'build') {
 
   Write-Output '=========='
   Write-Output 'Create deployment package...'
-  [System.IO.Compression.ZipFile]::CreateFromDirectory("$currentLocation/output", $filePath) | Out-Null
+  [System.IO.Compression.ZipFile]::CreateFromDirectory("$currentLocation/output", $filePath)
   Write-Output "Deployment package has been created."
 } else {
   Write-Output 'Source has already been built.'
