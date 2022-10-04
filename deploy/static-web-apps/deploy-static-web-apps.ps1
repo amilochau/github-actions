@@ -51,15 +51,15 @@ Write-Output "Dist source is: $distSource"
 Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
-Write-Output 'Moving into projects to publish path...'
-Set-Location $projectsToPublishPath
-
-Write-Output '=========='
 Write-Output 'Determining source source...'
 if ($distSource -eq 'build') {
   Write-Output "Source has to be built. App location will be '$projectsToPublishPath$relativeOutputPath'"
   Write-Output "::set-output name=app_location::$projectsToPublishPath$relativeOutputPath"
 
+  Write-Output '=========='
+  Write-Output 'Moving into projects to publish path...'
+  Set-Location $projectsToPublishPath
+  
   Write-Output '=========='
   Write-Output 'Install npm packages...'
   npm ci
@@ -73,10 +73,8 @@ if ($distSource -eq 'build') {
   Write-Output '=========='
   Write-Output 'Extracting archive...'
   $compressedFilePath = "./output-compressed/app.zip"
-  #New-Item -Path ".$relativeOutputPath" -ItemType Directory | Out-Null
+  New-Item -Path ".$relativeOutputPath" -ItemType Directory | Out-Null
   [System.IO.Compression.ZipFile]::ExtractToDirectory($compressedFilePath, ".$relativeOutputPath")
-
-  Get-ChildItem -Path ".$relativeOutputPath"
   
   Write-Output "Source has already been extracted. App location is '$projectsToPublishPath$relativeOutputPath'"
   Write-Output "::set-output name=app_location::$projectsToPublishPath$relativeOutputPath"
