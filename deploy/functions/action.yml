@@ -51,8 +51,8 @@ runs:
       uses: actions/download-artifact@v3
       if: inputs.distSource == 'artifact'
       with:
-        name: build-netcore
-        path: ${{ inputs.projectsToPublishPath }}/output
+        name: build-netcore-compressed
+        path: ${{ inputs.projectsToPublishPath }}/output-compressed
     - name: Deploy Functions application
       uses: azure/powershell@v1
       with:

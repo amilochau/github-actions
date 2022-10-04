@@ -43,3 +43,9 @@ Write-Output 'Publish application...'
 dotnet publish $projectsToBuild --configuration Release --runtime linux-x64 --no-self-contained --output ./output --verbosity $verbosity
 
 Write-Output '=========='
+Write-Output 'Create compressed artifact...'
+$compressedFilePath = './output-compressed/app.zip'
+New-Item -Path "./output-compressed" -ItemType Directory
+[System.IO.Compression.ZipFile]::CreateFromDirectory("./output", $compressedFilePath)
+
+Write-Output '=========='
