@@ -73,7 +73,7 @@ if ($distSource -eq 'build') {
   Write-Output '=========='
   Write-Output 'Extracting archive...'
   $compressedFilePath = "./output-compressed/app.zip"
-  New-Item -Path ".$relativeOutputPath" -ItemType Directory
+  #New-Item -Path ".$relativeOutputPath" -ItemType Directory | Out-Null
   [System.IO.Compression.ZipFile]::ExtractToDirectory($compressedFilePath, ".$relativeOutputPath")
 
   Get-ChildItem -Path ".$relativeOutputPath"
