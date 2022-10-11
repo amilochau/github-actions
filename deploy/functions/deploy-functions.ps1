@@ -88,7 +88,7 @@ if ($distSource -eq 'build') {
 
   Write-Output '=========='
   Write-Output 'Publish application...'
-  dotnet publish --configuration Release --runtime linux-x64 --no-self-contained --output ./output --verbosity $verbosity
+  dotnet publish --configuration Release --runtime linux-x64 --no-self-contained --output ./output -p:PublishReadyToRun=true --verbosity $verbosity
 
   Write-Output '=========='
   Write-Output 'Create deployment package...'
