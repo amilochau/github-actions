@@ -32,7 +32,7 @@ dotnet restore $projectsToBuild --runtime linux-x64 -p:PublishReadyToRun=true --
 
 Write-Output '=========='
 Write-Output 'Build application...'
-dotnet build $projectsToBuild --configuration Release --no-restore --runtime linux-x64 -p:PublishReadyToRun=true --verbosity $verbosity
+dotnet build $projectsToBuild --configuration Release --no-restore --runtime linux-x64 --no-self-contained -p:PublishReadyToRun=true --verbosity $verbosity
 
 Write-Output '=========='
 Write-Output 'Run tests...'
