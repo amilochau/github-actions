@@ -38,7 +38,7 @@ runs:
   using: composite
   steps:
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       if: ${{ inputs.dotnetVersion != '' && inputs.distSource != 'artifact' }}
       with:
         dotnet-version: ${{ inputs.dotnetVersion }}
