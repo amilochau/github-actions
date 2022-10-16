@@ -44,7 +44,7 @@ npm ci
 
 Write-Output '=========='
 Write-Output 'Build application...'
-npm run $npmBuildScript
+npm run $npmBuildScript --if-present
 
 Write-Output '=========='
 Write-Output 'Run linter...'
@@ -57,7 +57,7 @@ npm run $npmTestScript --if-present
 Write-Output '=========='
 Write-Output 'Create compressed artifact...'
 $compressedFilePath = './output-compressed/app.zip'
-New-Item -Path "./output-compressed" -ItemType Directory
+New-Item -Path "./output-compressed" -ItemType Directory | Out-Null
 [System.IO.Compression.ZipFile]::CreateFromDirectory(".$relativeOutputPath", $compressedFilePath)
 
 Write-Output '=========='
