@@ -44,15 +44,15 @@ npm ci
 
 Write-Output '=========='
 Write-Output 'Build application...'
-npm run $npmBuildScript
+Invoke-Expression "npm run $npmBuildScript"
 
 Write-Output '=========='
 Write-Output 'Run linter...'
-npm run $npmLintScript
+Invoke-Expression "npm run $npmLintScript"
 
 Write-Output '=========='
 Write-Output 'Run tests...'
-npm run $npmTestScript
+Invoke-Expression "npm run $npmTestScript"
 
 Write-Output '=========='
 Write-Output 'Create compressed artifact...'

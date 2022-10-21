@@ -89,7 +89,7 @@ npm ci
 
 Write-Output '=========='
 Write-Output 'Build application...'
-npm run $npmBuildScript
+Invoke-Expression "npm run $npmBuildScript"
 
 Write-Output '=========='
 Write-Output 'Publish projects to npmjs.com...'
@@ -97,14 +97,14 @@ if ($npmjsToken) {
   Write-Output 'Token for npmjs.com is found.'
   npm set registry "https://registry.npmjs.org"
   npm set //registry.npmjs.org/:_authToken $npmjsToken
-  npm $npmPublishCommand
+  Invoke-Expression "npm $npmPublishCommand"
 }
 
 Write-Output '=========='
 Write-Output 'Publish projects to GitHub Packages...'
 npm set registry "https://npm.pkg.github.com"
 npm set //npm.pkg.github.com/:_authToken $githubToken
-npm npmPublishCommand
+Invoke-Expression "npm $npmPublishCommand"
 
 Write-Output '=========='
 Write-Output 'Remove precedent tags for short and long versions...'
