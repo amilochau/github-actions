@@ -36,6 +36,8 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectWorkspace` | The path to the project workspace | *false* | `.` |
 | `nodeVersion` | The Node.js version to use | *false* | `16.x` |
+| `npmBuildScript` | The npm script to run, to build the application | *false* | `build` |
+| `npmPublishCommand` | The npm command to run, to publish the application | *false* | `publish` |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
 | `npmjsComToken` |  The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com | *false* | `''` |

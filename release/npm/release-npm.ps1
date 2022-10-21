@@ -5,6 +5,10 @@
   The main branch
   .PARAMETER currentBranch
   The current branch
+  .PARAMETER npmBuildScript
+  The npm script to build
+  .PARAMETER npmPublishCommand
+  The npm command to publish
   .PARAMETER npmjsToken
   The npmjs.com token
   .PARAMETER githubToken
@@ -23,6 +27,12 @@ Param(
   [parameter(Mandatory = $true)]
   [string]$currentBranch,
   
+  [parameter(Mandatory = $true)]
+  [string]$npmBuildScript,
+  
+  [parameter(Mandatory = $true)]
+  [string]$npmPublishCommand,
+  
   [parameter(Mandatory = $false)]
   [string]$npmjsToken,
   
@@ -39,6 +49,8 @@ Param(
 
 Write-Output "Main branch is: $mainBranch"
 Write-Output "Current branch is: $currentBranch"
+Write-Output "npm build script is: $npmBuildScript"
+Write-Output "npm publish command is: $npmPublishCommand"
 Write-Output "Verbosity is: $verbosity"
 
 $avoidGithubPrerelease = [System.Convert]::ToBoolean($avoidGithubPrerelease)
@@ -77,7 +89,7 @@ npm ci
 
 Write-Output '=========='
 Write-Output 'Build application...'
-npm run build
+npm run $npmBuildScript --if-present
 
 Write-Output '=========='
 Write-Output 'Publish projects to npmjs.com...'
@@ -85,14 +97,14 @@ if ($npmjsToken) {
   Write-Output 'Token for npmjs.com is found.'
   npm set registry "https://registry.npmjs.org"
   npm set //registry.npmjs.org/:_authToken $npmjsToken
-  npm publish
+  npm $npmPublishCommand
 }
 
 Write-Output '=========='
 Write-Output 'Publish projects to GitHub Packages...'
 npm set registry "https://npm.pkg.github.com"
 npm set //npm.pkg.github.com/:_authToken $githubToken
-npm publish
+npm npmPublishCommand
 
 Write-Output '=========='
 Write-Output 'Remove precedent tags for short and long versions...'
