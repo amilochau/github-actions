@@ -8,6 +8,12 @@ inputs:
   nodeVersion:
     description: The Node.js version to use
     default: 16.x
+  npmBuildScript:
+    description: The npm script to run, to build the application
+    default: 'build'
+  npmBuildCommand:
+    description: The npm command to run, to publis the application
+    default: 'publish'
   avoidGitHubPrerelease:
     description: Disable GitHub Release creation for unstable version
     required: false
@@ -52,6 +58,8 @@ runs:
       run: ${{ github.action_path }}/release-npm.ps1 `
         -mainBranch ${{ inputs.mainBranch }} `
         -currentBranch ${{ github.ref }} `
+        -npmBuildScript ${{ inputs.npmBuildScript }} `
+        -npmBuildCommand ${{ inputs.npmBuildCommand }} `
         -npmjsToken "${{ inputs.npmjsComToken }}" `
         -githubToken ${{ inputs.githubToken }} `
         -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
