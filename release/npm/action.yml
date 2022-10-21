@@ -11,8 +11,8 @@ inputs:
   npmBuildScript:
     description: The npm script to run, to build the application
     default: 'build --if-present'
-  npmBuildCommand:
-    description: The npm command to run, to publis the application
+  npmPublishCommand:
+    description: The npm command to run, to publish the application
     default: 'publish'
   avoidGitHubPrerelease:
     description: Disable GitHub Release creation for unstable version
@@ -59,7 +59,7 @@ runs:
         -mainBranch ${{ inputs.mainBranch }} `
         -currentBranch ${{ github.ref }} `
         -npmBuildScript "${{ inputs.npmBuildScript }}" `
-        -npmBuildCommand "${{ inputs.npmBuildCommand }}" `
+        -npmPublishCommand "${{ inputs.npmPublishCommand }}" `
         -npmjsToken "${{ inputs.npmjsComToken }}" `
         -githubToken ${{ inputs.githubToken }} `
         -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
