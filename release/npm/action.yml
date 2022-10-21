@@ -10,7 +10,7 @@ inputs:
     default: 16.x
   npmBuildScript:
     description: The npm script to run, to build the application
-    default: 'build'
+    default: 'build --if-present'
   npmBuildCommand:
     description: The npm command to run, to publis the application
     default: 'publish'

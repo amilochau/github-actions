@@ -66,7 +66,7 @@ if ($distSource -eq 'build') {
   
   Write-Output '=========='
   Write-Output 'Build application...'
-  npm run $npmBuildScript --if-present
+  npm run $npmBuildScript
 } else {
   Write-Output "Source has already been built."
 

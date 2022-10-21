@@ -89,7 +89,7 @@ npm ci
 
 Write-Output '=========='
 Write-Output 'Build application...'
-npm run $npmBuildScript --if-present
+npm run $npmBuildScript
 
 Write-Output '=========='
 Write-Output 'Publish projects to npmjs.com...'
