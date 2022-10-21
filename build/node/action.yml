@@ -10,13 +10,13 @@ inputs:
     default: 16.x
   npmBuildScript:
     description: The npm script to run, to build the application
-    default: 'build'
+    default: 'build --if-present'
   npmLintScript:
     description: The npm script to run, to lint the application
-    default: 'lint'
+    default: 'lint --if-present'
   npmTestScript:
     description: The npm script to run, to test the application
-    default: 'test'
+    default: 'test --if-present'
   relativeOutputPath:
     description: The path of the built application, relative to the 'projectsToPublishPath'
     default: '/dist'

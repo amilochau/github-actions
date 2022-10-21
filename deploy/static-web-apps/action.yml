@@ -22,7 +22,7 @@ inputs:
     default: '/dist'
   npmBuildScript:
     description: The npm script to run, to build the application
-    default: 'build'
+    default: 'build --if-present'
   githubToken:
     description: The GitHub token, typically get from secrets.GITHUB_TOKEN
     required: true
