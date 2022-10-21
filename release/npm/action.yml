@@ -58,8 +58,8 @@ runs:
       run: ${{ github.action_path }}/release-npm.ps1 `
         -mainBranch ${{ inputs.mainBranch }} `
         -currentBranch ${{ github.ref }} `
-        -npmBuildScript ${{ inputs.npmBuildScript }} `
-        -npmBuildCommand ${{ inputs.npmBuildCommand }} `
+        -npmBuildScript "${{ inputs.npmBuildScript }}" `
+        -npmBuildCommand "${{ inputs.npmBuildCommand }}" `
         -npmjsToken "${{ inputs.npmjsComToken }}" `
         -githubToken ${{ inputs.githubToken }} `
         -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `

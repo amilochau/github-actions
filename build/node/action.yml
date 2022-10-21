@@ -39,9 +39,9 @@ runs:
     - name: Build Node.js application with script
       shell: pwsh
       run: ${{ github.action_path }}/build-node.ps1 `
-        -npmBuildScript ${{ inputs.npmBuildScript }} `
-        -npmLintScript ${{ inputs.npmLintScript }} `
-        -npmTestScript ${{ inputs.npmTestScript }} `
+        -npmBuildScript "${{ inputs.npmBuildScript }}" `
+        -npmLintScript "${{ inputs.npmLintScript }}" `
+        -npmTestScript "${{ inputs.npmTestScript }}" `
         -relativeOutputPath ${{ inputs.relativeOutputPath }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
