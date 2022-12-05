@@ -17,6 +17,7 @@ inputs:
     - functions/api-registration
     - functions/local-dependencies
     - gateway
+    - identity
     - management-group
     - monitoring
     - static-web-apps

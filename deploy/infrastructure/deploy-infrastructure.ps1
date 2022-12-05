@@ -28,7 +28,7 @@
 [CmdletBinding()]
 Param(
   [parameter(Mandatory = $true)]
-  [ValidateSet('configuration', 'functions', 'functions/api-registration', 'functions/local-dependencies', 'gateway', 'management-group', 'monitoring', 'static-web-apps', 'web')]
+  [ValidateSet('configuration', 'functions', 'functions/api-registration', 'functions/local-dependencies', 'gateway', 'identity', 'management-group', 'monitoring', 'static-web-apps', 'web')]
   [string]$templateType,
 
   [parameter(Mandatory = $true)]
@@ -95,6 +95,7 @@ switch ($templateType) {
   'functions/api-registration' { $templateFilePath = './templates/functions/api-registration.bicep' }
   'functions/local-dependencies' { $templateFilePath = './templates/functions/local-dependencies.bicep' }
   'gateway' { $templateFilePath = './templates/gateway/template.bicep' }
+  'identity' { $templateFilePath = './templates/identity/template.bicep' }
   'management-group' { $templateFilePath = './templates/management-group/template.bicep' }
   'monitoring' { $templateFilePath = './templates/monitoring/template.bicep' }
   'static-web-apps' { $templateFilePath = './templates/static-web-apps/template.bicep' }
