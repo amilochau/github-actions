@@ -1,4 +1,3 @@
-# Configuration to format automatic release notes
 changelog:
   categories:
     - title: Breaking Changes
