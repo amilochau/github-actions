@@ -1,0 +1,26 @@
+name: Build Terraform projects
+description: Build and test Terraform projects
+author: Antoine Milochau
+inputs:
+  modulesPath:
+    description: The path to the Terraform modules to build
+    default: .tf
+  modulesPathDepth:
+    description: The depth of the path search, to find the Terraform modules to build
+    default: 1
+  verbosity:
+    description: The verbosity of the scripts
+    default: minimal
+    options:
+    - minimal
+    - normal
+    - detailed
+runs:
+  using: composite
+  steps:
+    - name: Build Terraform modules with script
+      shell: pwsh
+      run: ${{ github.action_path }}/build-iac.ps1 `
+        -modulesPath "${{ inputs.modulesPath }}" `
+        -modulesPathDepth "${{ inputs.modulesPathDepth }}" `
+        -verbosity ${{ inputs.verbosity }}
