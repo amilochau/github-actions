@@ -28,6 +28,7 @@ Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
 
+$sw = [Diagnostics.Stopwatch]::StartNew()
 $pathFilter = 'main.tf'
 $childItems = Get-ChildItem -Path $path -Recurse -Depth $modulesPathDepth -Filter $pathFilter 
 $childItemsCount = $childItems.Length

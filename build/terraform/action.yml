@@ -4,7 +4,7 @@ author: Antoine Milochau
 inputs:
   modulesPath:
     description: The path to the Terraform modules to build
-    default: .tf
+    default: './.tf'
   modulesPathDepth:
     description: The depth of the path search, to find the Terraform modules to build
     default: '1'
