@@ -26,13 +26,13 @@ Write-Output "Modules path is: $modulesPath"
 Write-Output "Modules path depth is: $modulesPathDepth"
 Write-Output "Verbosity is: $verbosity"
 Write-Output "Current location is: $(Get-Location)"
-Write-Output "Child items are: $(Get-ChildItem)"
+Write-Output "Child items are: $(Get-ChildItem -Force)"
 
 Write-Output '=========='
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $pathFilter = 'main.tf'
-$childItems = Get-ChildItem -Path $path -Recurse -Depth 2 -Filter $pathFilter 
+$childItems = Get-ChildItem -Path $path -Recurse -Depth 2 -Filter $pathFilter -Force
 $childItemsCount = $childItems.Length
 Write-Output "Items found: $childItemsCount"
 
