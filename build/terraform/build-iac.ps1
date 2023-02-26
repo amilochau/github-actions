@@ -29,7 +29,7 @@ Write-Output "Verbosity is: $verbosity"
 Write-Output '=========='
 
 $pathFilter = 'main.tf'
-$childItems = Get-ChildItem -Path $path -Recurse -Depth $pathDepth -Filter $pathFilter 
+$childItems = Get-ChildItem -Path $path -Recurse -Depth $modulesPathDepth -Filter $pathFilter 
 $childItemsCount = $childItems.Length
 Write-Output "Items found: $childItemsCount"
 
