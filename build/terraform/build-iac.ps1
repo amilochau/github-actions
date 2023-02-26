@@ -31,7 +31,7 @@ Write-Output '=========='
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $pathFilter = 'main.tf'
-$childItems = Get-ChildItem -Path $path -Recurse -Depth $modulesPathDepth -Filter $pathFilter 
+$childItems = Get-ChildItem -Path $path -Recurse -Depth 1 -Filter $pathFilter 
 $childItemsCount = $childItems.Length
 Write-Output "Items found: $childItemsCount"
 
