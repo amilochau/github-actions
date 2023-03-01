@@ -1,0 +1,31 @@
+
+$functionsPath = './functions'
+$functionsPathFilter = '*.csproj'
+
+
+name: Build AWS Lambda functions
+description: Build AWS Lambda functions
+author: Antoine Milochau
+inputs:
+  functionsPath:
+    description: The path to the functions to deploy
+    required: true
+  functionsPathFilter:
+    description: The path filter to find the functions to deploy
+    default: '*.csproj'
+  verbosity:
+    description: The verbosity of the scripts
+    default: minimal
+    options:
+    - minimal
+    - normal
+    - detailed
+runs:
+  using: composite
+  steps:
+    - name: Build AWS Lambda functions with script
+      shell: pwsh
+      run: ${{ github.action_path }}/build-lambda-functions.ps1 `
+        -functionsPath "${{ inputs.functionsPath }}" `
+        -functionsPathFilter "${{ inputs.functionsPathFilter }}" `
+        -verbosity ${{ inputs.verbosity }}
