@@ -32,6 +32,9 @@ $sw = [Diagnostics.Stopwatch]::StartNew()
 $image = "public.ecr.aws/sam/build-dotnet7:latest-x86_64"
 $dir = (Get-Location).Path
 
+Write-Output "Pull Docker image, used to build functions"
+docker pull $image -q
+
 $childItems = Get-ChildItem -Path $functionsPath -Recurse -Filter $functionsPathFilter
 $childItemsCount = $childItems.Length
 Write-Output "Items found: $childItemsCount"
