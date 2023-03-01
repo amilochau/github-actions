@@ -54,7 +54,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
     Remove-Item -LiteralPath "$directoryAbsolutePath/dist" -Force -Recurse
   }
 
-  docker run --rm -v "$($dir):/src" -w /src $image dotnet publish "$fileAbsolutePath" -c Release -f net7.0 -r linux-x64 --sc true -p:BuildSource=AwsCmd /p:GenerateRuntimeConfigurationFiles=true /p:StripSymbols=true
+  docker run --rm -v "$($using:dir):/src" -w /src $using:image dotnet publish "$fileAbsolutePath" -c Release -f net7.0 -r linux-x64 --sc true -p:BuildSource=AwsCmd /p:GenerateRuntimeConfigurationFiles=true /p:StripSymbols=true
   Write-Output "[$directoryRelativePath] Done."
 }
 
