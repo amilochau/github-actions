@@ -42,10 +42,9 @@ Write-Output "Items found: $childItemsCount"
 $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
   $directoryAbsolutePath = $PSItem.Directory.FullName
   $directoryRelativePath = $PSItem.Directory.FullName | Resolve-Path -Relative
+  $fileRelativePath = $PSItem.FullName | Resolve-Path -Relative
   Write-Output "[$directoryRelativePath] Starting..."
   Set-Location $directoryAbsolutePath
-
-  $fileRelativePath = $PSItem.FullName | Resolve-Path -Relative
 
   if (Test-Path "$directoryAbsolutePath/obj") {
     Remove-Item -LiteralPath "$directoryAbsolutePath/obj" -Force -Recurse
