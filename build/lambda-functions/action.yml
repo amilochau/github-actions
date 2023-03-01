@@ -1,8 +1,3 @@
-
-$functionsPath = './functions'
-$functionsPathFilter = '*.csproj'
-
-
 name: Build AWS Lambda functions
 description: Build AWS Lambda functions
 author: Antoine Milochau
