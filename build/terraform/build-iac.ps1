@@ -52,5 +52,6 @@ $sw.Stop()
 Write-Output "Job duration: $($sw.Elapsed.ToString("c"))"
 
 if ($LASTEXITCODE -ne 0) {
-  exit 1
+  Write-Output "Last exit code: $LASTEXITCODE"
+  exit 1 # Used to force GitHub Action to fail if an error occurs in the script
 }
