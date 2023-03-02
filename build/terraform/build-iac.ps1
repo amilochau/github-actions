@@ -52,6 +52,5 @@ $sw.Stop()
 Write-Output "Job duration: $($sw.Elapsed.ToString("c"))"
 
 if ($LASTEXITCODE -ne 0) {
-  Write-Output "::error title=Terraform failed::The command failed"
   exit 1
 }
