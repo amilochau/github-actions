@@ -26,4 +26,3 @@ runs:
         -modulesPath "${{ inputs.modulesPath }}" `
         -modulesPathDepth "${{ inputs.modulesPathDepth }}" `
         -verbosity ${{ inputs.verbosity }}
-      continue-on-error: false
