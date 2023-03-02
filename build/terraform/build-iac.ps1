@@ -42,6 +42,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
   Set-Location $directoryAbsolutePath
 
   terraform init -input=false -backend=false
+  terraform fmt -check
   terraform validate
 }
 
