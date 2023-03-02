@@ -50,3 +50,7 @@ Write-Output '=========='
 
 $sw.Stop()
 Write-Output "Job duration: $($sw.Elapsed.ToString("c"))"
+
+if ($LASTEXITCODE -ne 0) {
+  exit $LASTEXITCODE
+}
