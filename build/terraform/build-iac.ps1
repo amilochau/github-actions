@@ -45,7 +45,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
   if ($?) {
       Write-Output "Terraform initialization has succedeed."
   } else {
-      Write-Output "Terraform initialization has failed!"
+      Write-Output "::error title=Terraform failed::Terraform initialization failed"
       exit 1
   }
   
@@ -53,7 +53,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
   if ($?) {
       Write-Output "Terraform format has succedeed."
   } else {
-      Write-Output "Terraform format has failed!"
+      Write-Output "::error title=Terraform failed::Terraform format failed"
       exit 1
   }
 
@@ -61,7 +61,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
   if ($?) {
       Write-Output "Terraform validation has succedeed."
   } else {
-      Write-Output "Terraform validation has failed!"
+      Write-Output "::error title=Terraform failed::Terraform validation failed"
       exit 1
   }
 }
