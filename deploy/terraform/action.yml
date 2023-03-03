@@ -1,0 +1,29 @@
+name: Deploy Terraform projects
+description: Deploy Terraform projects
+author: Antoine Milochau
+inputs:
+  modulePath:
+    description: The path to the Terraform module to deploy
+    default: '.tf'
+  workspaceName:
+    description: The name of the Terraform workspace
+    default: default
+  verbosity:
+    description: The verbosity of the scripts
+    default: minimal
+    options:
+    - minimal
+    - normal
+    - detailed
+runs:
+  using: composite
+  steps:
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+    - name: Build Terraform modules with script
+      shell: pwsh
+      run: ${{ github.action_path }}/deploy-terraform.ps1 `
+        -modulePath ${{ inputs.modulePath }}
+        -workspaceName ${{ inputs.workspaceName }}
+        -verbosity ${{ inputs.verbosity }}
+      working-directory: ${{ inputs.modulePath }}
