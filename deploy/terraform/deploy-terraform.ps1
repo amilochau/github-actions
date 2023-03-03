@@ -47,21 +47,21 @@ if (!$?) {
 }
 
 Write-Output "Terraform format..."
-terraform fmt -check -recursive -no-color
+terraform fmt -check -recursive -no-color 2>&1
 if (!$?) {
   Write-Output "::error title=Terraform failed::Terraform format failed"
   throw 1
 }
 
 Write-Output "Terraform validation..."
-terraform validate -json -no-color
+terraform validate -no-color 2>&1 # -json @todo Add -json back when ConvertFrom-Json works
 if (!$?) {
   Write-Output "::error title=Terraform failed::Terraform validation failed"
   throw 1
 }
 
 Write-Output "Terraform plan..."
-$planResult = terraform plan -var-file="hosts/$workspaceName.tfvars" -input=false -no-color # -json @todo Add -json back when ConvertFrom-Json works
+$planResult = terraform plan -var-file="hosts/$workspaceName.tfvars" -input=false -no-color 2>&1 # -json @todo Add -json back when ConvertFrom-Json works
 if (!$?) {
   Write-Output "::error title=Terraform failed::Terraform plan failed"
   throw 1
@@ -76,7 +76,7 @@ Write-Output $planResult
 #Write-Output "  Remove: $($planResultJson.changes.remove.Count)"
  
 Write-Output "Terraform apply..."
-$applyResult = terraform apply -var-file="hosts/$workspaceName.tfvars" -input=false -auto-approve -no-color # -json @todo Add -json back when ConvertFrom-Json works
+$applyResult = terraform apply -var-file="hosts/$workspaceName.tfvars" -input=false -auto-approve -no-color 2>&1 # -json @todo Add -json back when ConvertFrom-Json works
 if (!$?) {
   Write-Output "::error title=Terraform failed::Terraform apply failed"
   throw 1
