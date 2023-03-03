@@ -66,7 +66,7 @@ if (!$?) {
     Write-Output "::error title=Terraform failed::Terraform plan failed"
     throw 1
 }
-
+$planResult
 $planResultJson = $planResult | ConvertFrom-Json
 
 Write-Output "  Add: $($planResultJson.changes.add.Count)"
