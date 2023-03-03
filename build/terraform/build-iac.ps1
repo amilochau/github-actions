@@ -46,7 +46,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
       Write-Output "Terraform initialization has succedeed."
   } else {
       Write-Output "::error title=Terraform failed::Terraform initialization failed"
-      exit 1
+      throw 1
   }
   
   terraform fmt -check -recursive -no-color
@@ -54,7 +54,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
       Write-Output "Terraform format has succedeed."
   } else {
       Write-Output "::error title=Terraform failed::Terraform format failed"
-      exit 1
+      throw 1
   }
 
   terraform validate -json -no-color
@@ -62,7 +62,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
       Write-Output "Terraform validation has succedeed."
   } else {
       Write-Output "::error title=Terraform failed::Terraform validation failed"
-      exit 1
+      throw 1
   }
 }
 
