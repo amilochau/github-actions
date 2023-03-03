@@ -44,22 +44,22 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
   Write-Output "[$directoryRelativePath] Terraform initialisation..."
   terraform init -input=false -backend=false -upgrade -no-color
   if (!$?) {
-      Write-Output "::error title=Terraform failed::Terraform initialization failed"
-      throw 1
+    Write-Output "::error title=Terraform failed::Terraform initialization failed"
+    throw 1
   }
   
   Write-Output "[$directoryRelativePath] Terraform format..."
   terraform fmt -check -recursive -no-color
   if (!$?) {
-      Write-Output "::error title=Terraform failed::Terraform format failed"
-      throw 1
+    Write-Output "::error title=Terraform failed::Terraform format failed"
+    throw 1
   }
 
   Write-Output "[$directoryRelativePath] Terraform validation..."
   terraform validate -json -no-color
   if (!$?) {
-      Write-Output "::error title=Terraform failed::Terraform validation failed"
-      throw 1
+    Write-Output "::error title=Terraform failed::Terraform validation failed"
+    throw 1
   }
 }
 
