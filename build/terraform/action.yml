@@ -18,6 +18,8 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
     - name: Build Terraform modules with script
       shell: pwsh
       run: ${{ github.action_path }}/build-iac.ps1 `
