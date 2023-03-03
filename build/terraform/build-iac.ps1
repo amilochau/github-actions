@@ -42,25 +42,19 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
   Set-Location $directoryAbsolutePath
 
   terraform init -input=false -backend=false -upgrade -no-color
-  if ($?) {
-      Write-Output "Terraform initialization has succedeed."
-  } else {
+  if (!$?) {
       Write-Output "::error title=Terraform failed::Terraform initialization failed"
       throw 1
   }
   
   terraform fmt -check -recursive -no-color
-  if ($?) {
-      Write-Output "Terraform format has succedeed."
-  } else {
+  if (!$?) {
       Write-Output "::error title=Terraform failed::Terraform format failed"
       throw 1
   }
 
   terraform validate -json -no-color
-  if ($?) {
-      Write-Output "Terraform validation has succedeed."
-  } else {
+  if (!$?) {
       Write-Output "::error title=Terraform failed::Terraform validation failed"
       throw 1
   }
