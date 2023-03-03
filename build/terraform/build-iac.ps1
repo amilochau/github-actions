@@ -41,9 +41,26 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
   Write-Output "[$directoryRelativePath] Starting..."
   Set-Location $directoryAbsolutePath
 
-  terraform init -input=false -backend=false
-  terraform fmt -check
-  terraform validate
+  terraform init -input=false -backend=false -upgrade -no-color
+  if ($?) {
+      Write-Output "Terraform initialization has succedeed."
+  } else {
+      Write-Output "Terraform initialization has failed!"
+  }
+  
+  terraform fmt -check -recursive -no-color
+  if ($?) {
+      Write-Output "Terraform format has succedeed."
+  } else {
+      Write-Output "Terraform format has failed!"
+  }
+
+  terraform validate -json -no-color
+  if ($?) {
+      Write-Output "Terraform validation has succedeed."
+  } else {
+      Write-Output "Terraform validation has failed!"
+  }
 }
 
 Write-Output '=========='
