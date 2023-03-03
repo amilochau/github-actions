@@ -61,7 +61,7 @@ if (!$?) {
 }
 
 Write-Output "Terraform plan..."
-$planResult = terraform plan -var-file="hosts/$workspaceName.tfvars" -input=false -json -no-color
+$planResult = terraform plan -var-file="hosts/$workspaceName.tfvars" -input=false -no-color # -json @todo Add -json back when ConvertFrom-Json works
 if (!$?) {
   Write-Output "::error title=Terraform failed::Terraform plan failed"
   throw 1
@@ -76,11 +76,13 @@ Write-Output $planResult
 #Write-Output "  Remove: $($planResultJson.changes.remove.Count)"
  
 Write-Output "Terraform apply..."
-terraform apply -var-file="hosts/$workspaceName.tfvars" -input=false -json -auto-approve -no-color
+$applyResult = terraform apply -var-file="hosts/$workspaceName.tfvars" -input=false -auto-approve -no-color # -json @todo Add -json back when ConvertFrom-Json works
 if (!$?) {
   Write-Output "::error title=Terraform failed::Terraform apply failed"
   throw 1
 }
+
+Write-Output $applyResult
 
 Write-Output "Terraform deployment done."
 
