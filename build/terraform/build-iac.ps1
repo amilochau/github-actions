@@ -46,6 +46,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
       Write-Output "Terraform initialization has succedeed."
   } else {
       Write-Output "Terraform initialization has failed!"
+      exit 1
   }
   
   terraform fmt -check -recursive -no-color
@@ -53,6 +54,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
       Write-Output "Terraform format has succedeed."
   } else {
       Write-Output "Terraform format has failed!"
+      exit 1
   }
 
   terraform validate -json -no-color
@@ -60,6 +62,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
       Write-Output "Terraform validation has succedeed."
   } else {
       Write-Output "Terraform validation has failed!"
+      exit 1
   }
 }
 
@@ -67,8 +70,3 @@ Write-Output '=========='
 
 $sw.Stop()
 Write-Output "Job duration: $($sw.Elapsed.ToString("c"))"
-
-Write-Output "Last exit code: $LASTEXITCODE"
-if ($LASTEXITCODE -ne $null -AND $LASTEXITCODE -ne 0) {
-  exit 1 # Used to force GitHub Action to fail if an error occurs in the script
-}
