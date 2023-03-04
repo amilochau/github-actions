@@ -2,12 +2,9 @@ name: Build AWS Lambda functions
 description: Build AWS Lambda functions
 author: Antoine Milochau
 inputs:
-  functionsPath:
-    description: The path to the functions to deploy
+  solutionPath:
+    description: The path to the solution file, with functions to deploy
     required: true
-  functionsPathFilter:
-    description: The path filter to find the functions to deploy
-    default: '*.csproj'
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -21,6 +18,5 @@ runs:
     - name: Build AWS Lambda functions with script
       shell: pwsh
       run: ${{ github.action_path }}/build-lambda-functions.ps1 `
-        -functionsPath "${{ inputs.functionsPath }}" `
-        -functionsPathFilter "${{ inputs.functionsPathFilter }}" `
+        -solutionPath "${{ inputs.solutionPath }}" `
         -verbosity ${{ inputs.verbosity }}

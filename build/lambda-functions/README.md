@@ -25,14 +25,15 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build AWS Lambda functions
         uses: amilochau/github-actions/build/lambda-functions@v3
+        with:
+          solutionPath: './api/Functions.sln'
 ```
 
 ### Inputs
 
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
-| `functionsPath` | The path to the functions to deploy | **true** |
-| `functionsPathFilter` | The path filter to find the functions to deploy | *false* | `*.csproj` |
+| `solutionPath` | The path to the solution file, with functions to deploy | **true** |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
