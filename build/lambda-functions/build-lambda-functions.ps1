@@ -84,7 +84,7 @@ foreach ($childItem in $childItems) {
 
   Write-Output "[$fileRelativePath] Creating compressed file..."
   $compressedFilePath = "$destinationPath.zip"
-  [System.IO.Compression.ZipFile]::CreateFromDirectory($destinationPath, $compressedFilePath)
+  [System.IO.Compression.ZipFile]::CreateFromDirectory($directoryDestinationPath, $compressedFilePath)
   Write-Output "[$fileRelativePath] Compressed file created."
 
   Write-Output "-----"
