@@ -22,8 +22,12 @@ Write-Output '=========='
 Write-Output 'Getting artifacts from current run...'
 $url = "/repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID/artifacts"
 Write-Output "Url is: $url"
-$c = $env:GITHUB_TOKEN.Length
-Write-Output "GitHub token characters: $c"
+
+Write-Output "Actions runtime URL: $env:ACTIONS_RUNTIME_URL"
+$uri = "$($env:ACTIONS_RUNTIME_URL)_apis/pipelines/workflows/$env:GITHUB_RUN_ID/artifacts?api-version=2022-11-28"
+Write-Output "Uri: $uri"
+            
+
 
 $headers = @{
   Accept = 'application/vnd.github.v3+json'
