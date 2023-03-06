@@ -12,7 +12,7 @@
 [CmdletBinding()]
 Param(
   [parameter(Mandatory = $true)]
-  [string]$solutionPath,
+  [string]$solutionPath, # Typically './src/proto-api/Milochau.Proto.Functions.sln'
 
   [parameter(Mandatory = $true)]
   [string]$publishPathFilter, # Typically '*/bin/Release/net7.0/linux-x64/publish/bootstrap'
