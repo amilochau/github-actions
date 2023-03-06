@@ -17,10 +17,7 @@ Write-Output "Verbosity is: $verbosity"
 Write-Output '=========='
 
 Write-Output 'Getting artifacts from current run...'
-$artifactsResponse = gh api \
--H "Accept: application/vnd.github+json" \
--H "X-GitHub-Api-Version: 2022-11-28" \
-/repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID/artifacts
+$artifactsResponse = gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID/artifacts
 
 $artifacts = ($artifactsResponse | ConvertFrom-Json).artifacts
 Write-Output 'Getting artifacts from current run...'
