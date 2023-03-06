@@ -2,6 +2,9 @@ name: Clean artifacts
 description: Clean GitHub Actions artifacts
 author: Antoine Milochau
 inputs:
+  githubToken:
+    description: The GitHub token, typically get from secrets.GITHUB_TOKEN
+    required: true
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -19,4 +22,4 @@ runs:
           -verbosity ${{ inputs.verbosity }}
         azPSVersion: 7.1.0
       env:
-        GH_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{ inputs.githubToken }}
