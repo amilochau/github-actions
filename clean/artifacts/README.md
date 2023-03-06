@@ -32,6 +32,7 @@ jobs:
 
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
+| `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs

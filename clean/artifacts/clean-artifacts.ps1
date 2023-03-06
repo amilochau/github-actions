@@ -24,7 +24,18 @@ $url = "/repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID/artifacts"
 Write-Output "Url is: $url"
 $c = $env:GITHUB_TOKEN.Length
 Write-Output "GitHub token characters: $c"
-$artifactsResponse = gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $url
+
+$headers = @{
+  Accept = 'application/vnd.github.v3+json'
+  Authorization = "token $env:GITHUB_TOKEN"
+  'Content-Type' = 'application/json'
+}
+
+$artifactsResponse = Invoke-RestMethod "https://api.github.com/repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
+Write-Output $artifactsResponse
+
+$artifactsResponse2 = gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $url
+Write-Output $artifactsResponse2
 
 $artifacts = ($artifactsResponse | ConvertFrom-Json).artifacts
 $artifactsCount = $artifacts.Count
