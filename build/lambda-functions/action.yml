@@ -5,6 +5,9 @@ inputs:
   solutionPath:
     description: The path to the solution file, with functions to deploy
     required: true
+  publishPathFilter:
+    description: The path of the files to publish, as a filter to be tested to determine the files to add in the artifact
+    required: true
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -19,4 +22,5 @@ runs:
       shell: pwsh
       run: ${{ github.action_path }}/build-lambda-functions.ps1 `
         -solutionPath "${{ inputs.solutionPath }}" `
+        -publishPathFilter "${{ inputs.publishPathFilter }}" `
         -verbosity ${{ inputs.verbosity }}
