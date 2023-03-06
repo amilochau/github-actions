@@ -24,14 +24,20 @@ $url = "/repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID/artifacts"
 Write-Output "Url is: $url"
 
 Write-Output "Actions runtime URL: $env:ACTIONS_RUNTIME_URL"
-$uri = "$($env:ACTIONS_RUNTIME_URL)_apis/pipelines/workflows/$env:GITHUB_RUN_ID/artifacts?api-version=2022-11-28"
+$uri = "$($env:ACTIONS_RUNTIME_URL)_apis/pipelines/workflows/$env:GITHUB_RUN_ID/artifacts?api-version=6.0-preview"
 Write-Output "Uri: $uri"
-            
+    
+$headers = @{
+  Accept = 'application/vnd.github.v3+json'
+  Authorization = "Bearer $env:ACTIONS_RUNTIME_TOKEN"
+  'Content-Type' = 'application/json'
+}
+$artifactsResponse3 = Invoke-RestMethod $uri -Method 'GET' -Headers $headers -SkipHttpErrorCheck        
 
 
 $headers = @{
   Accept = 'application/vnd.github.v3+json'
-  Authorization = "token $env:GITHUB_TOKEN"
+  Authorization = "Bearer $env:GITHUB_TOKEN"
   'Content-Type' = 'application/json'
 }
 
