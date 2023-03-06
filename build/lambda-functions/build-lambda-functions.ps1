@@ -79,7 +79,7 @@ foreach ($childItem in $childItems) {
   if (-not (Test-Path $directoryDestinationPath)) {
     New-Item -Path $directoryDestinationPath -ItemType Directory | Out-Null
   }
-  Move-Item -Path $childItem -Destination $destinationPath
+  Copy-Item -Path $childItem -Destination $destinationPath
   Write-Output "[$fileRelativePath] File moved to output."
   
   Write-Output "-----"
