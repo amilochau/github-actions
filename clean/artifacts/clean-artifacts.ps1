@@ -32,7 +32,8 @@ $headers = @{
   Authorization = "Bearer $env:ACTIONS_RUNTIME_TOKEN"
   'Content-Type' = 'application/json'
 }
-$artifactsResponse3 = Invoke-RestMethod $uri -Method 'GET' -Headers $headers -SkipHttpErrorCheck        
+$artifactsResponse3 = Invoke-RestMethod $uri -Method 'GET' -Headers $headers -SkipHttpErrorCheck
+Write-Output $artifactsResponse3
 
 
 $headers = @{
