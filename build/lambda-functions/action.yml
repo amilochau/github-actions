@@ -28,6 +28,6 @@ runs:
       uses: actions/upload-artifact@v3
       with:
         name: build-lambda-functions-compressed
-        path: ./output
+        path: ./output-compressed
         if-no-files-found: error
         retention-days: 1
