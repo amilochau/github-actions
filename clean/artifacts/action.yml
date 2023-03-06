@@ -18,3 +18,5 @@ runs:
         inlineScript: ${{ github.action_path }}/clean-artifacts.ps1 `
           -verbosity ${{ inputs.verbosity }}
         azPSVersion: 7.1.0
+      env:
+        GH_TOKEN: ${{ github.token }}
