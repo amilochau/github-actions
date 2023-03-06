@@ -34,6 +34,7 @@ jobs:
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
 | `solutionPath` | The path to the solution file, with functions to deploy | **true** |
+| `publishPathFilter` | The path of the files to publish, as a filter to be tested to determine the files to add in the artifact | **true** |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
