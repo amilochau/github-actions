@@ -73,14 +73,14 @@ foreach ($childItem in $childItems) {
     continue
   }
 
-  Write-Output "[$fileRelativePath] Moving file to output..."
+  Write-Output "[$fileRelativePath] Copying file to output..."
   $directoryDestinationPath = Join-Path "$PWD/output" "$directoryRelativePath"
   $destinationPath = Join-Path $directoryDestinationPath $childItem.Name
   if (-not (Test-Path $directoryDestinationPath)) {
     New-Item -Path $directoryDestinationPath -ItemType Directory | Out-Null
   }
   Copy-Item -Path $childItem -Destination $destinationPath
-  Write-Output "[$fileRelativePath] File moved to output."
+  Write-Output "[$fileRelativePath] File copied to output."
   
   Write-Output "-----"
 }
