@@ -1,0 +1,20 @@
+name: Clean artifacts
+description: Clean GitHub Actions artifacts
+author: Antoine Milochau
+inputs:
+  verbosity:
+    description: The verbosity of the scripts
+    default: minimal
+    options:
+    - minimal
+    - normal
+    - detailed
+runs:
+  using: composite
+  steps:
+    - name: Deploy Functions application
+      uses: azure/powershell@v1
+      with:
+        inlineScript: ${{ github.action_path }}/clean-artifacts.ps1 `
+          -verbosity ${{ inputs.verbosity }}
+        azPSVersion: 7.1.0

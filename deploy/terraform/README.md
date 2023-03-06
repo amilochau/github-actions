@@ -8,7 +8,7 @@
 
 ## Usage
 
-Use this GitHub action if you want have a Terraform module that you want to deploy, typically in a Continuous Deployment process.
+Use this GitHub action if you have a Terraform module that you want to deploy, typically in a Continuous Deployment process.
 
 ### Example workflow
 

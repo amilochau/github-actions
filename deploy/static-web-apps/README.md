@@ -8,7 +8,7 @@
 
 ## Usage
 
-Use this GitHub action if you want have one Azure Static Web Apps application that you want to publish, typically in a Continuous Delivery process.
+Use this GitHub action if you have one Azure Static Web Apps application that you want to publish, typically in a Continuous Delivery process.
 
 ### Example workflow
 

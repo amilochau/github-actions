@@ -8,7 +8,7 @@
 
 ## Usage
 
-Use this GitHub action if you want have one Web application that you want to deploy from a Docker image, typically in a Continuous Delivery process.
+Use this GitHub action if you have one Web application that you want to deploy from a Docker image, typically in a Continuous Delivery process.
 
 ### Example workflow
 

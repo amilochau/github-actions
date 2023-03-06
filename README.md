@@ -16,6 +16,7 @@ The following actions are proposed, and can be freely used:
 
 | Path | Usage | Readme |
 | ---- | ----- | ------ |
+| `clean/artifacts` | Clean GitHub Actions artifacts | [README.md](./clean/artifacts/README.md) |
 | `build/netcore` | Build and Test .NET projects | [README.md](./build/netcore/README.md) |
 | `build/node` | Build and Test Node.js projects | [README.md](./build/node/README.md) |
 | `build/docker` | Build a Docker application | [README.md](./build/docker/README.md) |
