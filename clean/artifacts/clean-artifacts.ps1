@@ -31,7 +31,7 @@ $headers = @{
   'Content-Type' = 'application/json'
 }
 
-$artifactsResponse1 = Invoke-RestMethod "https://api.github.com/repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
+$artifactsResponse1 = Invoke-RestMethod "https://api.github.com/repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID/artifacts" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
 Write-Output '----- Response 1'
 Write-Output $artifactsResponse1
 Write-Output '----- Response 1'
