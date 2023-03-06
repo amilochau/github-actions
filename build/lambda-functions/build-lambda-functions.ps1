@@ -84,7 +84,10 @@ foreach ($childItem in $childItems) {
 
   Write-Output "[$fileRelativePath] Creating compressed file..."
   $directoryDestinationPathCompressed = Join-Path "$PWD/output-compressed" "$directoryRelativePath"
-  $compressedFilePath = "$directoryDestinationPathCompressed.zip"
+  if (-not (Test-Path $directoryDestinationPathCompressed)) {
+    New-Item -Path $directoryDestinationPathCompressed -ItemType Directory | Out-Null
+  }
+  $compressedFilePath = Join-Path $directoryDestinationPathCompressed "$($childItem.Name).zip"
   [System.IO.Compression.ZipFile]::CreateFromDirectory($directoryDestinationPath, $compressedFilePath)
   Write-Output "[$fileRelativePath] Compressed file created."
 
