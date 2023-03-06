@@ -31,13 +31,17 @@ $headers = @{
   'Content-Type' = 'application/json'
 }
 
-$artifactsResponse = Invoke-RestMethod "https://api.github.com/repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
-Write-Output $artifactsResponse
+$artifactsResponse1 = Invoke-RestMethod "https://api.github.com/repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
+Write-Output '----- Response 1'
+Write-Output $artifactsResponse1
+Write-Output '----- Response 1'
 
 $artifactsResponse2 = gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $url
+Write-Output '----- Response 2'
 Write-Output $artifactsResponse2
+Write-Output '----- Response 2'
 
-$artifacts = ($artifactsResponse | ConvertFrom-Json).artifacts
+$artifacts = ($artifactsResponse2 | ConvertFrom-Json).artifacts
 $artifactsCount = $artifacts.Count
 Write-Output "Items found: $artifactsCount"
 
