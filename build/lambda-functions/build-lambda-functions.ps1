@@ -83,8 +83,10 @@ foreach ($childItem in $childItems) {
   Write-Output "[$fileRelativePath] File copied to output."
 
   Write-Output "[$fileRelativePath] Creating compressed file..."
+  $tmpCompressedFilePath = "$directoryDestinationPath.zip"
   $compressedFilePath = "$destinationPath.zip"
-  [System.IO.Compression.ZipFile]::CreateFromDirectory($directoryDestinationPath, $compressedFilePath)
+  [System.IO.Compression.ZipFile]::CreateFromDirectory($directoryDestinationPath, $tmpCompressedFilePath)
+  Move-Item -Path $tmpCompressedFilePath -Destination $compressedFilePath
   Write-Output "[$fileRelativePath] Compressed file created."
 
   Write-Output "-----"
