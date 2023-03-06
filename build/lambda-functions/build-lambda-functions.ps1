@@ -81,17 +81,15 @@ foreach ($childItem in $childItems) {
   }
   Copy-Item -Path $childItem -Destination $destinationPath
   Write-Output "[$fileRelativePath] File copied to output."
-  
+
+  Write-Output "[$fileRelativePath] Creating compressed file..."
+  $compressedFilePath = "$destinationPath.zip"
+  [System.IO.Compression.ZipFile]::CreateFromDirectory($destinationPath, $compressedFilePath)
+  Write-Output "[$fileRelativePath] Compressed file created."
+
   Write-Output "-----"
 }
 
-Write-Output '=========='
-
-if ($childItemsCount -gt 0) {
-  Write-Output "Creating compressed file..."
-  $compressedFilePath = './output-compressed/functions.zip'
-  [System.IO.Compression.ZipFile]::CreateFromDirectory("./output", $compressedFilePath)
-}
 Write-Output '=========='
 
 $sw.Stop()
