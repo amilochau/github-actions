@@ -33,8 +33,9 @@ $headers = @{
   'Content-Type' = 'application/json'
 }
 $artifactsResponse3 = Invoke-RestMethod $uri -Method 'GET' -Headers $headers -SkipHttpErrorCheck
-Write-Output $artifactsResponse3
-
+Write-Output '----- Response 3'
+$artifactsResponse3
+Write-Output '----- Response 3'
 
 $headers = @{
   Accept = 'application/vnd.github.v3+json'
@@ -44,12 +45,12 @@ $headers = @{
 
 $artifactsResponse1 = Invoke-RestMethod "https://api.github.com/repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID/artifacts" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
 Write-Output '----- Response 1'
-Write-Output $artifactsResponse1
+$artifactsResponse1
 Write-Output '----- Response 1'
 
 $artifactsResponse2 = gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $url
 Write-Output '----- Response 2'
-Write-Output $artifactsResponse2
+$artifactsResponse2
 Write-Output '----- Response 2'
 
 $artifacts = ($artifactsResponse2 | ConvertFrom-Json).artifacts
