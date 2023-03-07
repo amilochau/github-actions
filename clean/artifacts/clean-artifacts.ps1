@@ -28,7 +28,6 @@ $url = "/repos/$env:GITHUB_REPOSITORY/actions/runs/$runId/artifacts"
 Write-Output "Url is: $url"
 
 $artifactsResponse = gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $url
-$artifactsResponse
 
 $artifacts = ($artifactsResponse | ConvertFrom-Json).artifacts
 $artifactsCount = $artifacts.Count
@@ -37,6 +36,15 @@ Write-Output "Items found: $artifactsCount"
 foreach ($artifact in $artifacts) {
   $artifactName = $artifact.name
   Write-Output "[$artifactName] Removing artifact..."
+
+  $artifactId = $artifact.id
+  $url = "/repos/$env:GITHUB_REPOSITORY/actions/artifacts/$artifactId"
+  Write-Output "[$artifactName] Url is: $url"
+
+  $artifactsRemoveResponse = gh api --method DELETE -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $url
+
+  $artifactsRemoveResponse
+  Write-Output "[$artifactName] Artifact removed."
 }
 
 Write-Output '=========='
