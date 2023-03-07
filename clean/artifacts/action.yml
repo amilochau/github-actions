@@ -22,3 +22,5 @@ runs:
           -runId ${{ inputs.runId }} `
           -verbosity ${{ inputs.verbosity }}
         azPSVersion: 7.1.0
+      env:
+        GH_TOKEN: ${{ github.token }}
