@@ -2,8 +2,8 @@ name: Clean artifacts
 description: Clean GitHub Actions artifacts
 author: Antoine Milochau
 inputs:
-  githubToken:
-    description: The GitHub token, typically get from secrets.GITHUB_TOKEN
+  runId:
+    description: The id of the GitHub Actions run from which to clean artifacts
     required: true
   verbosity:
     description: The verbosity of the scripts
@@ -19,7 +19,6 @@ runs:
       uses: azure/powershell@v1
       with:
         inlineScript: ${{ github.action_path }}/clean-artifacts.ps1 `
+          -runId ${{ inputs.runId }} `
           -verbosity ${{ inputs.verbosity }}
         azPSVersion: 7.1.0
-      env:
-        GITHUB_TOKEN: ${{ inputs.githubToken }}
