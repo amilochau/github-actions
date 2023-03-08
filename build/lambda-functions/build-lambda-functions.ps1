@@ -64,34 +64,35 @@ Write-Output '=========='
 $childItemsCount = $childItems.Count
 Write-Output "Items found: $childItemsCount"
 
-foreach ($childItem in $childItems) {
+$childItems | Foreach-Object -Parallel {
+  $childItem = $PSItem
   $directoryRelativePath = $childItem.Directory.FullName | Resolve-Path -Relative
   $fileRelativePath = $childItem.FullName | Resolve-Path -Relative
 
   if ($fileRelativePath -inotlike $publishPathFilterLinux -and $fileRelativePath -inotlike $publishPathFilterWindows) {
     Write-Output "[$fileRelativePath] Not treated."
     continue
+  } else {
+    Write-Output "[$fileRelativePath] Copying file to output..."
+    $directoryDestinationPath = Join-Path "$PWD/output" "$directoryRelativePath"
+    $destinationPath = Join-Path $directoryDestinationPath $childItem.Name
+    if (-not (Test-Path $directoryDestinationPath)) {
+      New-Item -Path $directoryDestinationPath -ItemType Directory | Out-Null
+    }
+    Copy-Item -Path $childItem -Destination $destinationPath
+    Write-Output "[$fileRelativePath] File copied to output."
+  
+    Write-Output "[$fileRelativePath] Creating compressed file..."
+    $directoryDestinationPathCompressed = Join-Path "$PWD/output-compressed" "$directoryRelativePath"
+    if (-not (Test-Path $directoryDestinationPathCompressed)) {
+      New-Item -Path $directoryDestinationPathCompressed -ItemType Directory | Out-Null
+    }
+    $compressedFilePath = Join-Path $directoryDestinationPathCompressed "$($childItem.Name).zip"
+    [System.IO.Compression.ZipFile]::CreateFromDirectory($directoryDestinationPath, $compressedFilePath)
+    Write-Output "[$fileRelativePath] Compressed file created."
+  
+    Write-Output "-----"
   }
-
-  Write-Output "[$fileRelativePath] Copying file to output..."
-  $directoryDestinationPath = Join-Path "$PWD/output" "$directoryRelativePath"
-  $destinationPath = Join-Path $directoryDestinationPath $childItem.Name
-  if (-not (Test-Path $directoryDestinationPath)) {
-    New-Item -Path $directoryDestinationPath -ItemType Directory | Out-Null
-  }
-  Copy-Item -Path $childItem -Destination $destinationPath
-  Write-Output "[$fileRelativePath] File copied to output."
-
-  Write-Output "[$fileRelativePath] Creating compressed file..."
-  $directoryDestinationPathCompressed = Join-Path "$PWD/output-compressed" "$directoryRelativePath"
-  if (-not (Test-Path $directoryDestinationPathCompressed)) {
-    New-Item -Path $directoryDestinationPathCompressed -ItemType Directory | Out-Null
-  }
-  $compressedFilePath = Join-Path $directoryDestinationPathCompressed "$($childItem.Name).zip"
-  [System.IO.Compression.ZipFile]::CreateFromDirectory($directoryDestinationPath, $compressedFilePath)
-  Write-Output "[$fileRelativePath] Compressed file created."
-
-  Write-Output "-----"
 }
 
 Write-Output '=========='
