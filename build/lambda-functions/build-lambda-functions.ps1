@@ -36,7 +36,7 @@ Write-Output "Pull Docker image, used to build functions"
 #docker pull $image -q
 
 #docker run --rm -v "$($dir):/src" -w /src $image dotnet publish "$solutionPath" -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd
-dotnet publish "$solutionPath" -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd
+dotnet publish "$solutionPath" -c Release -f net7.0 -r linux-x64 --sc true -p:BuildSource=AwsCmd /p:GenerateRuntimeConfigurationFiles=true /p:StripSymbols=true
 if (!$?) {
   Write-Output "::error title=Build failed::Build failed"
   throw 1
