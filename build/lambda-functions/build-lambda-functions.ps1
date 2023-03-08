@@ -69,9 +69,8 @@ $childItems | Foreach-Object -Parallel {
   $directoryRelativePath = $childItem.Directory.FullName | Resolve-Path -Relative
   $fileRelativePath = $childItem.FullName | Resolve-Path -Relative
 
-  if ($fileRelativePath -inotlike $publishPathFilterLinux -and $fileRelativePath -inotlike $publishPathFilterWindows) {
+  if ($fileRelativePath -inotlike $using:publishPathFilterLinux -and $fileRelativePath -inotlike $using:publishPathFilterWindows) {
     Write-Output "[$fileRelativePath] Not treated."
-    continue
   } else {
     Write-Output "[$fileRelativePath] Copying file to output..."
     $directoryDestinationPath = Join-Path "$PWD/output" "$directoryRelativePath"
