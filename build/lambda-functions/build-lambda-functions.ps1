@@ -35,7 +35,7 @@ $dir = (Get-Location).Path
 Write-Output "Pull Docker image, used to build functions"
 docker pull $image -q
 
-docker run --rm -v "$($dir):/src" -w /src $image dotnet publish "$solutionPath" -c Release -f net7.0 -r linux-x64 --sc true -p:BuildSource=AwsCmd /p:GenerateRuntimeConfigurationFiles=true /p:StripSymbols=true
+docker run --rm -v "$($dir):/src" -w /src $image dotnet publish "$solutionPath" -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd
 if (!$?) {
   Write-Output "::error title=Build failed::Build failed"
   throw 1
@@ -64,34 +64,34 @@ Write-Output '=========='
 $childItemsCount = $childItems.Count
 Write-Output "Items found: $childItemsCount"
 
-foreach ($childItem in $childItems) {
+$childItems | Foreach-Object -Parallel {
+  $childItem = $PSItem
   $directoryRelativePath = $childItem.Directory.FullName | Resolve-Path -Relative
   $fileRelativePath = $childItem.FullName | Resolve-Path -Relative
 
-  if ($fileRelativePath -inotlike $publishPathFilterLinux -and $fileRelativePath -inotlike $publishPathFilterWindows) {
+  if ($fileRelativePath -inotlike $using:publishPathFilterLinux -and $fileRelativePath -inotlike $using:publishPathFilterWindows) {
     Write-Output "[$fileRelativePath] Not treated."
-    continue
+  } else {
+    Write-Output "[$fileRelativePath] Copying file to output..."
+    $directoryDestinationPath = Join-Path "$PWD/output" "$directoryRelativePath"
+    $destinationPath = Join-Path $directoryDestinationPath $childItem.Name
+    if (-not (Test-Path $directoryDestinationPath)) {
+      New-Item -Path $directoryDestinationPath -ItemType Directory | Out-Null
+    }
+    Copy-Item -Path $childItem -Destination $destinationPath
+    Write-Output "[$fileRelativePath] File copied to output."
+  
+    Write-Output "[$fileRelativePath] Creating compressed file..."
+    $directoryDestinationPathCompressed = Join-Path "$PWD/output-compressed" "$directoryRelativePath"
+    if (-not (Test-Path $directoryDestinationPathCompressed)) {
+      New-Item -Path $directoryDestinationPathCompressed -ItemType Directory | Out-Null
+    }
+    $compressedFilePath = Join-Path $directoryDestinationPathCompressed "$($childItem.Name).zip"
+    [System.IO.Compression.ZipFile]::CreateFromDirectory($directoryDestinationPath, $compressedFilePath)
+    Write-Output "[$fileRelativePath] Compressed file created."
+  
+    Write-Output "-----"
   }
-
-  Write-Output "[$fileRelativePath] Copying file to output..."
-  $directoryDestinationPath = Join-Path "$PWD/output" "$directoryRelativePath"
-  $destinationPath = Join-Path $directoryDestinationPath $childItem.Name
-  if (-not (Test-Path $directoryDestinationPath)) {
-    New-Item -Path $directoryDestinationPath -ItemType Directory | Out-Null
-  }
-  Copy-Item -Path $childItem -Destination $destinationPath
-  Write-Output "[$fileRelativePath] File copied to output."
-
-  Write-Output "[$fileRelativePath] Creating compressed file..."
-  $directoryDestinationPathCompressed = Join-Path "$PWD/output-compressed" "$directoryRelativePath"
-  if (-not (Test-Path $directoryDestinationPathCompressed)) {
-    New-Item -Path $directoryDestinationPathCompressed -ItemType Directory | Out-Null
-  }
-  $compressedFilePath = Join-Path $directoryDestinationPathCompressed "$($childItem.Name).zip"
-  [System.IO.Compression.ZipFile]::CreateFromDirectory($directoryDestinationPath, $compressedFilePath)
-  Write-Output "[$fileRelativePath] Compressed file created."
-
-  Write-Output "-----"
 }
 
 Write-Output '=========='
