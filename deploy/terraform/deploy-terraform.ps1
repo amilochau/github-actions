@@ -40,7 +40,7 @@ if (!$?) {
 }
 
 Write-Output "Terraform workspace selection..."
-terraform workspace select $workspaceName -no-color -or-create 2>&1
+terraform workspace select -or-create $workspaceName -no-color 2>&1
 if (!$?) {
   Write-Output "::error title=Terraform failed::Terraform workspace selection failed"
   throw 1
