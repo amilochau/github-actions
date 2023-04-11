@@ -33,14 +33,14 @@ $sw = [Diagnostics.Stopwatch]::StartNew()
 Write-Output "Starting..."
 
 Write-Output "Terraform initialisation..."
-terraform init -input=false -upgrade -no-color
+terraform init -input=false -upgrade -no-color 2>&1
 if (!$?) {
   Write-Output "::error title=Terraform failed::Terraform initialization failed"
   throw 1
 }
 
 Write-Output "Terraform workspace selection..."
-terraform workspace select $workspaceName -no-color
+terraform workspace select -or-create $workspaceName -no-color 2>&1
 if (!$?) {
   Write-Output "::error title=Terraform failed::Terraform workspace selection failed"
   throw 1
