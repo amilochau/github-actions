@@ -170,7 +170,7 @@ $rawBody = @{
   tag_name = "$version";
   name = "Version $version";
   body = $releaseNote;
-  draft = $true;
+  draft = $false;
   prerelease = $false;
 }
 
