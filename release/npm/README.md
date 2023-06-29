@@ -27,7 +27,6 @@ jobs:
         with:
           versionFile: ${{ env.VERSION_FILE }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          avoidGitHubPrerelease: true
 ```
 
 ### Inputs
@@ -39,7 +38,7 @@ jobs:
 | `npmBuildScript` | The npm script to run, to build the application | *false* | `build` |
 | `npmPublishCommand` | The npm command to run, to publish the application | *false* | `publish` |
 | `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
-| `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
+| `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `true` |
 | `npmjsComToken` |  The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com | *false* | `''` |
 | `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
