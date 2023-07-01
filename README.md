@@ -1,6 +1,14 @@
-# Readme - github-actions
-
-## Introduction
+<p align="center">
+  <a href="https://github.com/amilochau/github-actions/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/amilochau/github-actions" alt="License">
+  </a>
+  <a href="https://github.com/amilochau/github-actions/releases">
+    <img src="https://img.shields.io/github/v/release/amilochau/github-actions" alt="Release">
+  </a>
+</p>
+<h1 align="center">
+  amilochau/github-actions
+</h1>
 
 `github-actions` is a set of GitHub Actions developed to help defining workflows for `amilochau` projects.
 
@@ -31,3 +39,9 @@ The following actions are proposed, and can be freely used:
 | `release/nuget` | Release .NET libraries as NuGet packages into nuget.org and GitHub Packages | [README.md](./release/nuget/README.md) |
 
 *Note that all actions must start with the prefix `amilochau/github-actions/`*
+
+--- 
+
+## Contribute
+
+Feel free to push your code if you agree with publishing under the [MIT license](./LICENSE).
