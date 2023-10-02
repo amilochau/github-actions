@@ -20,7 +20,7 @@ ENV DOTNET_ROOT=/var/lang/bin \
 
 RUN curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
 RUN chmod +x ./dotnet-install.sh
-RUN ./dotnet-install.sh -c 7.0 -i "${DOTNET_ROOT}"
+RUN ./dotnet-install.sh -c 8.0 -i "${DOTNET_ROOT}"
 
 ENV PATH=~/.dotnet/tools:$PATH
 ENV DOTNET_CLI_HOME=/tmp/dotnet
