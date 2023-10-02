@@ -33,7 +33,7 @@ $dir = (Get-Location).Path
 $imageTag = "temp"
 
 Write-Output "Pull Docker image, used to build functions"
-docker build --pull --rm "$dir" -t $imageTag
+docker build --pull --rm -f "$dir/Dockerfile" "$dir" -t $imageTag
 
 docker run --rm -v "$($dir):/src" -w /src $imageTag dotnet publish "$solutionPath" -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd
 if (!$?) {
