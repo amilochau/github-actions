@@ -32,6 +32,8 @@ $sw = [Diagnostics.Stopwatch]::StartNew()
 $dir = (Get-Location).Path
 $imageTag = "temp"
 
+dir
+
 Write-Output "Pull Docker image, used to build functions"
 docker build --pull --rm -f "$dir/Dockerfile" "$dir" -t $imageTag
 
