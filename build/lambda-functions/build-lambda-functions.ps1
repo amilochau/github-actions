@@ -16,6 +16,9 @@ Param(
 
   [parameter(Mandatory = $true)]
   [string]$publishPathFilter, # Typically '*/bin/Release/net7.0/linux-x64/publish/bootstrap'
+
+  [parameter(Mandatory = $true)]
+  [string]$dockerfilePath,
   
   [parameter(Mandatory = $true)]
   [ValidateSet('minimal', 'normal', 'detailed')]
@@ -24,6 +27,7 @@ Param(
 
 Write-Output "Solution path is: $solutionPath"
 Write-Output "Publish path filter is: $publishPathFilter"
+Write-Output "Dockerfile path is: $dockerfilePath"
 Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
@@ -32,10 +36,8 @@ $sw = [Diagnostics.Stopwatch]::StartNew()
 $dir = (Get-Location).Path
 $imageTag = "temp"
 
-Get-ChildItem
-
 Write-Output "Pull Docker image, used to build functions"
-docker build --pull --rm -f "Dockerfile" "$dir" -t $imageTag
+docker build --pull --rm -f "$dockerfilePath" "$dir" -t $imageTag
 
 docker run --rm -v "$($dir):/src" -w /src $imageTag dotnet publish "$solutionPath" -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd
 if (!$?) {

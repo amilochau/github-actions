@@ -23,6 +23,7 @@ runs:
       run: ${{ github.action_path }}/build-lambda-functions.ps1 `
         -solutionPath "${{ inputs.solutionPath }}" `
         -publishPathFilter "${{ inputs.publishPathFilter }}" `
+        -dockerfilePath "${{ github.action_path }}/Dockerfile" `
         -verbosity ${{ inputs.verbosity }}
     - name: Upload artifact (compressed)
       uses: actions/upload-artifact@v3
