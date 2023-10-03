@@ -36,7 +36,7 @@ $sw = [Diagnostics.Stopwatch]::StartNew()
 $dir = (Get-Location).Path
 $imageTag = "temp"
 
-Write-Output "Pull Docker image, used to build functions"
+Write-Output "Build Docker image, used to build functions"
 docker build --pull --rm -f "$dockerfilePath" "$dir" -t $imageTag
 
 docker run --rm -v "$($dir):/src" -w /src $imageTag dotnet publish "$solutionPath" -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd

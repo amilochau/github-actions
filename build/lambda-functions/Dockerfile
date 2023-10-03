@@ -12,19 +12,21 @@ RUN yum groupinstall -y development && \
 
 # Set up .NET root
 
-ENV LANG=en_US.UTF-8
-
 ENV DOTNET_ROOT=/var/lang/bin \
     DOTNET_CLI_TELEMETRY_OPTOUT=1 \
     DOTNET_NOLOGO=1
 
-RUN curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
-RUN chmod +x ./dotnet-install.sh
-RUN ./dotnet-install.sh -c 8.0 -i "${DOTNET_ROOT}"
+RUN curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh && \
+    chmod +x ./dotnet-install.sh && \
+    ./dotnet-install.sh -c 7.0 -i "${DOTNET_ROOT}"
 
-ENV PATH=~/.dotnet/tools:$PATH
-ENV DOTNET_CLI_HOME=/tmp/dotnet
-ENV XDG_DATA_HOME=/tmp/xdg
+RUN curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh && \
+    chmod +x ./dotnet-install.sh && \
+    ./dotnet-install.sh -c 8.0 -i "${DOTNET_ROOT}"
+
+ENV PATH=~/.dotnet/tools:$PATH \
+    DOTNET_CLI_HOME=/tmp/dotnet \
+    XDG_DATA_HOME=/tmp/xdg
 
 ENTRYPOINT []
 CMD ["/bin/bash"]
