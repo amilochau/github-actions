@@ -17,9 +17,6 @@ inputs:
   npmTestScript:
     description: The npm script to run, to test the application
     default: 'test --if-present'
-  relativeOutputPath:
-    description: The path of the built application, relative to the 'projectsToPublishPath'
-    default: '/dist'
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -36,14 +33,21 @@ runs:
         node-version: ${{ inputs.nodeVersion }}
         cache: 'npm'
         cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
-    - name: Build Node.js application with script
+    - name: Install packages
       shell: pwsh
-      run: ${{ github.action_path }}/build-node.ps1 `
-        -npmBuildScript "${{ inputs.npmBuildScript }}" `
-        -npmLintScript "${{ inputs.npmLintScript }}" `
-        -npmTestScript "${{ inputs.npmTestScript }}" `
-        -relativeOutputPath ${{ inputs.relativeOutputPath }} `
-        -verbosity ${{ inputs.verbosity }}
+      run: npm ci
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Build application
+      shell: pwsh
+      run: npm run ${{ npmBuildScript }}
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Lint application
+      shell: pwsh
+      run: npm run ${{ npmLintScript }}
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Test application
+      shell: pwsh
+      run: npm run ${{ npmTestScript }}
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Upload artifact (compressed)
       uses: actions/upload-artifact@v3

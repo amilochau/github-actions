@@ -25,8 +25,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build and test projects
         uses: amilochau/github-actions/build/node@v3
-        with:
-          projectWorkspace: ${{ env.PROJECT_WORKSPACE }}
 ```
 
 ### Inputs
@@ -38,7 +36,6 @@ jobs:
 | `npmBuildScript` | The npm script to run, to build the application | *false* | `build` |
 | `npmLintScript` | The npm script to run, to lint the application | *false* | `lint` |
 | `npmTestScript` | The npm script to run, to test the application | *false* | `test` |
-| `relativeOutputPath` | The path to the output of the build project | *false* | `./dist` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
