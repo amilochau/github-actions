@@ -34,14 +34,18 @@ runs:
         cache: 'npm'
         cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
     - name: Install packages
+      shell: bash
       run: npm ci
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Build application
+      shell: bash
       run: npm run ${{ inputs.npmBuildScript }}
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Lint application
+      shell: bash
       run: npm run ${{ inputs.npmLintScript }}
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Test application
+      shell: bash
       run: npm run ${{ inputs.npmTestScript }}
       working-directory: ${{ inputs.projectWorkspace }}
