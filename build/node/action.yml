@@ -39,20 +39,13 @@ runs:
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Build application
       shell: pwsh
-      run: npm run ${{ npmBuildScript }}
+      run: npm run ${{ inputs.npmBuildScript }}
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Lint application
       shell: pwsh
-      run: npm run ${{ npmLintScript }}
+      run: npm run ${{ inputs.npmLintScript }}
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Test application
       shell: pwsh
-      run: npm run ${{ npmTestScript }}
+      run: npm run ${{ inputs.npmTestScript }}
       working-directory: ${{ inputs.projectWorkspace }}
-    - name: Upload artifact (compressed)
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-node-compressed
-        path: ${{ inputs.projectWorkspace }}/output-compressed
-        if-no-files-found: error
-        retention-days: 1
