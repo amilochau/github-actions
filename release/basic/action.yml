@@ -19,13 +19,6 @@ inputs:
     description: Disable GitHub Release creation for unstable version
     required: false
     default: false
-  githubToken:
-    description: The GitHub token, typically get from secrets.GITHUB_TOKEN
-    required: true
-  mainBranch:
-    description: The name of the main branch
-    default: 'refs/heads/main'
-    required: false
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -54,10 +47,6 @@ runs:
         -versionMinor ${{ inputs.versionMinor }} `
         -versionPatch ${{ inputs.versionPatch }} `
         -versionUnstableSuffix "${{ inputs.versionUnstableSuffix }}" `
-        -mainBranch ${{ inputs.mainBranch }} `
         -currentBranch ${{ github.ref }} `
-        -githubToken ${{ inputs.githubToken }} `
         -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
         -verbosity ${{ inputs.verbosity }}
-      env:
-        GITHUB_TOKEN: ${{ inputs.githubToken }}

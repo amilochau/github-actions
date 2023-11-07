@@ -291,11 +291,11 @@ Write-Output '=========='
 Write-Output 'Setting outputs...'
 
 $resourceId = $result.Outputs.resourceId.Value
-Write-Host "::set-output name=resourceId::$resourceId"
+Write-Host "resourceId=$resourceId" >> $Env:GITHUB_OUTPUT
 Write-Host "[Output] resourceId: $resourceId"
 
 $resourceName = $result.Outputs.resourceName.Value
-Write-Host "::set-output name=resourceName::$resourceName"
+Write-Host "resourceName=$resourceName" >> $Env:GITHUB_OUTPUT
 Write-Host "[Output] resourceName: $resourceName"
 
 Write-Output '=========='

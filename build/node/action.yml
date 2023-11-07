@@ -8,14 +8,14 @@ inputs:
   nodeVersion:
     description: The Node.js version to use
     default: 16.x
-  npmBuildScript:
-    description: The npm script to run, to build the application
+  npmBuildCommand:
+    description: The npm command to run, to build the application
     default: 'build --if-present'
-  npmLintScript:
-    description: The npm script to run, to lint the application
+  npmLintCommand:
+    description: The npm command to run, to lint the application
     default: 'lint --if-present'
-  npmTestScript:
-    description: The npm script to run, to test the application
+  npmTestCommand:
+    description: The npm command to run, to test the application
     default: 'test --if-present'
   verbosity:
     description: The verbosity of the scripts
@@ -39,13 +39,13 @@ runs:
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Lint application
       shell: pwsh
-      run: npm run ${{ inputs.npmLintScript }}
+      run: npm run ${{ inputs.npmLintCommand }}
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Build application
       shell: pwsh
-      run: npm run ${{ inputs.npmBuildScript }}
+      run: npm run ${{ inputs.npmBuildCommand }}
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Test application
       shell: pwsh
-      run: npm run ${{ inputs.npmTestScript }}
+      run: npm run ${{ inputs.npmTestCommand }}
       working-directory: ${{ inputs.projectWorkspace }}

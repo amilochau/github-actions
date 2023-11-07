@@ -14,20 +14,10 @@ inputs:
   dotnetVersion:
     description: The .NET version to use
     default: ''
-  githubPackagesUrl:
-    description: The GitHub Packages URL where to push packages
-    default: ''
   avoidGitHubPrerelease:
     description: Disable GitHub Release creation for unstable version
     required: false
     default: true
-  githubToken:
-    description: The GitHub token, typically get from secrets.GITHUB_TOKEN
-    required: true
-  mainBranch:
-    description: The name of the main branch
-    default: 'refs/heads/main'
-    required: false
   nugetOrgToken:
     description: The nuget.org token, typically get from a secret; used to publish projects to nuget.org
     default: ''
@@ -54,22 +44,16 @@ runs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ inputs.dotnetVersion }}
-        source-url: ${{ inputs.githubPackagesUrl }}
-      env:
-        NUGET_AUTH_TOKEN: ${{ inputs.githubToken }}
     - name: Release NuGet with script
       id: release
       shell: pwsh
       run: ${{ github.action_path }}/release-nuget.ps1 `
         -versionFile ${{ inputs.versionFile }} `
-        -mainBranch ${{ inputs.mainBranch }} `
         -currentBranch ${{ github.ref }} `
         -projectsToBuild ${{ inputs.projectsToBuild }} `
         -projectsToPublish ${{ inputs.projectsToPublish }} `
         -nugetOrgToken "${{ inputs.nugetOrgToken }}" `
-        -githubToken ${{ inputs.githubToken }} `
         -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
+        -githubOrganization ${{ github.repository_owner }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
-      env:
-        GITHUB_TOKEN: ${{ inputs.githubToken }}

@@ -29,6 +29,8 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     environment: RELEASE
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - name: Set up a GitHub Release

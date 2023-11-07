@@ -24,9 +24,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Deploy libraries
         uses: amilochau/github-actions/release/npm@v3
-        with:
-          versionFile: ${{ env.VERSION_FILE }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Inputs
@@ -35,18 +32,15 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectWorkspace` | The path to the project workspace | *false* | `.` |
 | `nodeVersion` | The Node.js version to use | *false* | `16.x` |
-| `npmBuildScript` | The npm script to run, to build the application | *false* | `build` |
+| `npmBuildCommand` | The npm command to run, to build the application | *false* | `build` |
 | `npmPublishCommand` | The npm command to run, to publish the application | *false* | `publish` |
-| `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `true` |
 | `npmjsComToken` |  The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com | *false* | `''` |
-| `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
 
 | Output | Description |
 | ------ | ----------- |
-| `versionLong` | The long version as defined in the long Git tag |
-| `versionShort` | The short version as defined in the short Git tag |
+| `versionNumber` | The version as defined in the Git tag |
 | `versionPrerelease` | If the version is recognized as a prerelease |

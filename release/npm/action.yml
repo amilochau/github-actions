@@ -8,8 +8,8 @@ inputs:
   nodeVersion:
     description: The Node.js version to use
     default: 16.x
-  npmBuildScript:
-    description: The npm script to run, to build the application
+  npmBuildCommand:
+    description: The npm command to run, to build the application
     default: 'build --if-present'
   npmPublishCommand:
     description: The npm command to run, to publish the application
@@ -18,13 +18,6 @@ inputs:
     description: Disable GitHub Release creation for unstable version
     required: false
     default: true
-  githubToken:
-    description: The GitHub token, typically get from secrets.GITHUB_TOKEN
-    required: true
-  mainBranch:
-    description: The name of the main branch
-    default: 'refs/heads/main'
-    required: false
   npmjsComToken:
     description: The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com
     default: ''
@@ -52,18 +45,21 @@ runs:
         node-version: ${{ inputs.nodeVersion }}
         cache: 'npm'
         cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
+    - num: Install packages
+      shell: pwsh
+      run: npm ci
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Build application
+      shell: pwsh
+      run: npm run ${{ inputs.npmBuildCommand }}
+      working-directory: ${{ inputs.projectWorkspace }}
     - name: Release npm with script
       id: release
       shell: pwsh
       run: ${{ github.action_path }}/release-npm.ps1 `
-        -mainBranch ${{ inputs.mainBranch }} `
         -currentBranch ${{ github.ref }} `
-        -npmBuildScript "${{ inputs.npmBuildScript }}" `
         -npmPublishCommand "${{ inputs.npmPublishCommand }}" `
         -npmjsToken "${{ inputs.npmjsComToken }}" `
-        -githubToken ${{ inputs.githubToken }} `
         -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
-      env:
-        GITHUB_TOKEN: ${{ inputs.githubToken }}

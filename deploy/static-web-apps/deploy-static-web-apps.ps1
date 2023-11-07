@@ -54,7 +54,7 @@ Write-Output '=========='
 Write-Output 'Determining source source...'
 if ($distSource -eq 'build') {
   Write-Output "Source has to be built. App location will be '$projectsToPublishPath$relativeOutputPath'"
-  Write-Output "::set-output name=app_location::$projectsToPublishPath$relativeOutputPath"
+  Write-Output "app_location=$projectsToPublishPath$relativeOutputPath" >> $Env:GITHUB_OUTPUT
 
   Write-Output '=========='
   Write-Output 'Moving into projects to publish path...'
@@ -77,7 +77,7 @@ if ($distSource -eq 'build') {
   [System.IO.Compression.ZipFile]::ExtractToDirectory($compressedFilePath, "$projectsToPublishPath$relativeOutputPath")
 
   Write-Output "Source has already been extracted. App location is '$projectsToPublishPath$relativeOutputPath'"
-  Write-Output "::set-output name=app_location::$projectsToPublishPath$relativeOutputPath"
+  Write-Output "app_location=$projectsToPublishPath$relativeOutputPath" >> $Env:GITHUB_OUTPUT
 }
 
 Write-Output '=========='
@@ -88,7 +88,7 @@ Write-Output '=========='
 Write-Output 'Determine Static Web Apps deployment token'
 $swaSecrets = Get-AzStaticWebAppSecret -ResourceGroupName $resourceGroupName -Name $applicationName
 $token = $swaSecrets.Property['apiKey']
-Write-Output "::set-output name=token::$token"
+Write-Output "token=$token" >> $Env:GITHUB_OUTPUT
 Write-Output "Deployment token found ($($token.Length) characters)."
 
 Write-Output '=========='
