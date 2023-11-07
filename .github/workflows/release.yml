@@ -40,5 +40,4 @@ jobs:
           versionMinor: ${{ github.event.inputs.versionMinor }}
           versionPatch: ${{ github.event.inputs.versionPatch }}
           versionUnstableSuffix: ${{ github.event.inputs.versionUnstableSuffix }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
           avoidGitHubPrerelease: ${{ github.event.inputs.avoidGitHubPrerelease }}

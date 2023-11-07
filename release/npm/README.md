@@ -2,7 +2,7 @@
 
 ## Introduction
 
-`amilochau/github-actions/release/npm` is a GitHub Action developed to pack Node.js libraries as npm packages, publish them into GitHub Packages and npmjs.com, and create a custom Release in the GitHub repository.
+`amilochau/github-actions/release/npm` is a GitHub Action developed to pack Node.js libraries as npm packages, publish them into npmjs.com, and create a custom Release in the GitHub repository.
 
 ---
 
@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Deploy libraries
-        uses: amilochau/github-actions/release/npm@v3
+        uses: amilochau/github-actions/release/npm@v4
 ```
 
 ### Inputs
@@ -31,11 +31,11 @@ jobs:
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectWorkspace` | The path to the project workspace | *false* | `.` |
-| `nodeVersion` | The Node.js version to use | *false* | `16.x` |
+| `nodeVersion` | The Node.js version to use | *false* | `18.x` |
 | `npmBuildCommand` | The npm command to run, to build the application | *false* | `build` |
 | `npmPublishCommand` | The npm command to run, to publish the application | *false* | `publish` |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `true` |
-| `npmjsComToken` |  The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com | *false* | `''` |
+| `npmjsComToken` |  The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com | **true** |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs

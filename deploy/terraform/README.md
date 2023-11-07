@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Deploy a Terraform module
-        uses: amilochau/github-actions/deploy/terraform@v3
+        uses: amilochau/github-actions/deploy/terraform@v4
 ```
 
 ### Inputs

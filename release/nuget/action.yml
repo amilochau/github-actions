@@ -1,5 +1,5 @@
 name: Release NuGet packages
-description: Package, publish and release .NET libraries as NuGet packages into GitHub Packages and nuget.org
+description: Package, publish and release .NET libraries as NuGet packages into nuget.org
 author: Antoine Milochau
 inputs:
   versionFile:
@@ -8,20 +8,19 @@ inputs:
   projectsToBuild:
     description: The path to the projects to build - can be a .csproj or a .sln file
     required: true
-  projectsToPublish:
-    description: The path to the projects to publish - can be a .csproj or a .sln file
+  projectsToPack:
+    description: The path to the projects to pack - can be a .csproj or a .sln file
     required: true
   dotnetVersion:
     description: The .NET version to use
-    default: ''
+    default: '7.0.x'
   avoidGitHubPrerelease:
     description: Disable GitHub Release creation for unstable version
     required: false
     default: true
   nugetOrgToken:
     description: The nuget.org token, typically get from a secret; used to publish projects to nuget.org
-    default: ''
-    required: false
+    required: TRUE
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -40,20 +39,28 @@ runs:
   using: composite
   steps:
     - name: Setup .NET Core
-      if: ${{ inputs.dotnetVersion != '' }}
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ inputs.dotnetVersion }}
+    - name: Restore packages
+      shell: pwsh
+      run: dotnet restore ${{ inputs.projectsToBuild }} --verbosity ${{ inputs.VERBOSITY }}
+    - name: Build application
+      shell: pwsh
+      run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --no-restore --verbosity ${{ inputs.VERBOSITY }}
+    - name: Pack application
+      shell: pwsh
+      run: dotnet pack ${{ inputs.projectsToPack }} --configuration Release --no-restore --no-build --output ./build --verbosity ${{ inputs.VERBOSITY }}
     - name: Release NuGet with script
       id: release
       shell: pwsh
       run: ${{ github.action_path }}/release-nuget.ps1 `
         -versionFile ${{ inputs.versionFile }} `
         -currentBranch ${{ github.ref }} `
-        -projectsToBuild ${{ inputs.projectsToBuild }} `
-        -projectsToPublish ${{ inputs.projectsToPublish }} `
-        -nugetOrgToken "${{ inputs.nugetOrgToken }}" `
+        -nugetOrgToken ${{ inputs.nugetOrgToken }} `
         -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
-        -githubOrganization ${{ github.repository_owner }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
+    - name: Publish packages to nuget.org
+      shell: pwsh
+      run: dotnet nuget push ./build/*.nupkg --api-key ${{ inputs.nugetOrgToken }} --source https://api.nuget.org/v3/index.json

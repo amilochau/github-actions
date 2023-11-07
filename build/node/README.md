@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build and test projects
-        uses: amilochau/github-actions/build/node@v3
+        uses: amilochau/github-actions/build/node@v4
 ```
 
 ### Inputs
@@ -32,7 +32,7 @@ jobs:
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectWorkspace` | The path to the project to build | *false* | `.` |
-| `nodeVersion` | The Node.js version to use | *false* | `16.x` |
+| `nodeVersion` | The Node.js version to use | *false* | `18.x` |
 | `npmBuildCommand` | The npm command to run, to build the application | *false* | `build` |
 | `npmLintCommand` | The npm command to run, to lint the application | *false* | `lint` |
 | `npmTestCommand` | The npm command to run, to test the application | *false* | `test` |

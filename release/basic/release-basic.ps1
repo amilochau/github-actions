@@ -105,14 +105,14 @@ Write-Output 'Create GitHub Release...'
 if ($match -eq $false) {
   Write-Output 'A stable release must be created.'
   gh release create "$version" --generate-notes --title "Version $version"
+  Write-Output 'Release has been created.'
 } elseif ($avoidGithubPrerelease -eq $false) {
   Write-Output 'A prerelease must be created.'
   gh release create "$version" --generate-notes --title "Version $version" --prerelease
   $rawBody.prerelease = $true;
+  Write-Output 'Release has been created.'
 } else {
-  Write-Output 'No release has been created!'
-  return
+  Write-Output 'No release has been created.'
 }
 
-Write-Output 'Release has been created.'
 Write-Output "=========="

@@ -5,16 +5,10 @@
   The file where to get version (XML file)
   .PARAMETER currentBranch
   The current branch
-  .PARAMETER projectsToBuild
-  The projects to build
-  .PARAMETER projectsToPublish
-  The projects to publish
   .PARAMETER nugetOrgToken
   The nuget.org token
   .PARAMETER avoidGithubPrerelease
   Avoid creating GitHub release for prerelease versions
-  .PARAMETER githubOrganization
-  Name of the GitHub organization
   .PARAMETER verbosity
   The verbosity level
 #>
@@ -28,20 +22,11 @@ Param(
   [string]$currentBranch,
   
   [parameter(Mandatory = $true)]
-  [string]$projectsToBuild,
-
-  [parameter(Mandatory = $true)]
-  [string]$projectsToPublish,
-
-  [parameter(Mandatory = $true)]
   [string]$nugetOrgToken,
 
   [parameter(Mandatory = $true)]
   [string]$avoidGithubPrerelease,
 
-  [parameter(Mandatory = $true)]
-  [string]$githubOrganization,
-  
   [parameter(Mandatory = $true)]
   [ValidateSet('minimal', 'normal', 'detailed')]
   [string]$verbosity
@@ -49,9 +34,6 @@ Param(
 
 Write-Output "Version file is: $versionFile"
 Write-Output "Current branch is: $currentBranch"
-Write-Output "Projects to build are: $projectsToBuild"
-Write-Output "Projects to publish are: $projectsToPublish"
-Write-Output "GitHub organization is: $githubOrganization"
 Write-Output "Verbosity is: $verbosity"
 
 $avoidGithubPrerelease = [System.Convert]::ToBoolean($avoidGithubPrerelease)
@@ -84,29 +66,6 @@ if ( ($currentBranch -ne $mainBranch) -And ($match -ne $true)) {
 }
 
 Write-Output '=========='
-Write-Output 'Install packages...'
-dotnet restore $projectsToBuild --verbosity $verbosity
-
-Write-Output '=========='
-Write-Output 'Build application...'
-dotnet build $projectsToBuild --configuration Release --no-restore --verbosity $verbosity
-
-Write-Output '=========='
-Write-Output 'Pack projects...'
-dotnet pack $projectsToPublish --configuration Release --no-restore --no-build --output ./build --verbosity $verbosity
-
-Write-Output '=========='
-Write-Output 'Publish projects to nuget.org...'
-if ($nugetOrgToken.length -gt 0) {
-  Write-Output 'Token for nuget.org is found.'
-  dotnet nuget push ./build/*.nupkg --api-key $nugetOrgToken --source https://api.nuget.org/v3/index.json
-}
-
-Write-Output '=========='
-Write-Output 'Publish projects to GitHub Packages...'
-dotnet nuget push ./build/*.nupkg --api-key="$($Env:GH_TOKEN)" --source="https://nuget.pkg.github.com/$githubOrganization/index.json"
-
-Write-Output '=========='
 Write-Output 'Remove precedent tags for short and long versions...'
 if ($match -ne $true) {
   git push origin :refs/tags/$versionShort
@@ -135,14 +94,14 @@ Write-Output 'Create GitHub Release...'
 if ($match -eq $false) {
   Write-Output 'A stable release must be created.'
   gh release create "$version" --generate-notes --title "Version $version"
+  Write-Output 'Release has been created.'
 } elseif ($avoidGithubPrerelease -eq $false) {
   Write-Output 'A prerelease must be created.'
   gh release create "$version" --generate-notes --title "Version $version" --prerelease
   $rawBody.prerelease = $true;
+  Write-Output 'Release has been created.'
 } else {
-  Write-Output 'No release has been created!'
-  return
+  Write-Output 'No release has been created.'
 }
 
-Write-Output 'Release has been created.'
 Write-Output "=========="

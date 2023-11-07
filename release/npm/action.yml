@@ -7,7 +7,7 @@ inputs:
     default: '.'
   nodeVersion:
     description: The Node.js version to use
-    default: 16.x
+    default: 18.x
   npmBuildCommand:
     description: The npm command to run, to build the application
     default: 'build --if-present'
@@ -20,8 +20,7 @@ inputs:
     default: true
   npmjsComToken:
     description: The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com
-    default: ''
-    required: false
+    required: true
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -40,12 +39,12 @@ runs:
   using: composite
   steps:
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.nodeVersion }}
         cache: 'npm'
         cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
-    - num: Install packages
+    - name: Install packages
       shell: pwsh
       run: npm ci
       working-directory: ${{ inputs.projectWorkspace }}
@@ -58,8 +57,12 @@ runs:
       shell: pwsh
       run: ${{ github.action_path }}/release-npm.ps1 `
         -currentBranch ${{ github.ref }} `
-        -npmPublishCommand "${{ inputs.npmPublishCommand }}" `
-        -npmjsToken "${{ inputs.npmjsComToken }}" `
         -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
+    - name: Publish npm
+      shell: pwsh
+      run: |
+        npm set registry "https://registry.npmjs.org"
+        npm set //registry.npmjs.org/:_authToken ${{ inputs.npmjsComToken }}
+        npm ${{ inputs.npmPublishCommand }}

@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build and test Terraform modules
-        uses: amilochau/github-actions/build/terraform@v3
+        uses: amilochau/github-actions/build/terraform@v4
 ```
 
 ### Inputs

@@ -3,10 +3,6 @@
   This script creates a new release on GitHub and publishes a workspace as npm packages
   .PARAMETER currentBranch
   The current branch
-  .PARAMETER npmPublishCommand
-  The npm command to publish
-  .PARAMETER npmjsToken
-  The npmjs.com token
   .PARAMETER avoidGithubPrerelease
   Avoid creating GitHub release for prerelease versions
   .PARAMETER verbosity
@@ -19,15 +15,6 @@ Param(
   [string]$currentBranch,
   
   [parameter(Mandatory = $true)]
-  [string]$npmBuildScript,
-  
-  [parameter(Mandatory = $true)]
-  [string]$npmPublishCommand,
-  
-  [parameter(Mandatory = $false)]
-  [string]$npmjsToken,
-  
-  [parameter(Mandatory = $true)]
   [string]$avoidGithubPrerelease,
   
   [parameter(Mandatory = $true)]
@@ -36,7 +23,6 @@ Param(
 )
 
 Write-Output "Current branch is: $currentBranch"
-Write-Output "npm publish command is: $npmPublishCommand"
 Write-Output "Verbosity is: $verbosity"
 
 $avoidGithubPrerelease = [System.Convert]::ToBoolean($avoidGithubPrerelease)
@@ -70,21 +56,6 @@ if ( ($currentBranch -ne $mainBranch) -And ($match -ne $true)) {
 }
 
 Write-Output '=========='
-Write-Output 'Publish projects to GitHub Packages...'
-npm set registry "https://npm.pkg.github.com"
-npm set //npm.pkg.github.com/:_authToken $githubToken
-Invoke-Expression "npm $npmPublishCommand"
-
-Write-Output '=========='
-Write-Output 'Publish projects to npmjs.com...'
-if ($npmjsToken) {
-  Write-Output 'Token for npmjs.com is found.'
-  npm set registry "https://registry.npmjs.org"
-  npm set //registry.npmjs.org/:_authToken $npmjsToken
-  Invoke-Expression "npm $npmPublishCommand"
-}
-
-Write-Output '=========='
 Write-Output 'Remove precedent tags for short and long versions...'
 if ($match -ne $true) {
   git push origin :refs/tags/$versionShort
@@ -113,14 +84,14 @@ Write-Output 'Create GitHub Release...'
 if ($match -eq $false) {
   Write-Output 'A stable release must be created.'
   gh release create "$version" --generate-notes --title "Version $version"
+  Write-Output 'Release has been created.'
 } elseif ($avoidGithubPrerelease -eq $false) {
   Write-Output 'A prerelease must be created.'
   gh release create "$version" --generate-notes --title "Version $version" --prerelease
   $rawBody.prerelease = $true;
+  Write-Output 'Release has been created.'
 } else {
-  Write-Output 'No release has been created!'
-  return
+  Write-Output 'No release has been created.'
 }
 
-Write-Output 'Release has been created.'
 Write-Output "=========="
