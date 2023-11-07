@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build and test projects
-        uses: amilochau/github-actions/build/netcore@v3
+        uses: amilochau/github-actions/build/netcore@v4
         with:
           projectsToBuild: ${{ env.PROJECTS_BUILD }}
           projectsToTest: ${{ env.PROJECTS_TESTS }}

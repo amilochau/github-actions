@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clean artifacts
-        uses: amilochau/github-actions/clean/artifacts@v3
+        uses: amilochau/github-actions/clean/artifacts@v4
 ```
 
 ### Inputs

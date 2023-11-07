@@ -7,9 +7,9 @@ inputs:
     default: '.'
   nodeVersion:
     description: The Node.js version to use
-    default: 16.x
-  npmBuildScript:
-    description: The npm script to run, to build the application
+    default: 18.x
+  npmBuildCommand:
+    description: The npm command to run, to build the application
     default: 'build --if-present'
   npmPublishCommand:
     description: The npm command to run, to publish the application
@@ -18,17 +18,9 @@ inputs:
     description: Disable GitHub Release creation for unstable version
     required: false
     default: true
-  githubToken:
-    description: The GitHub token, typically get from secrets.GITHUB_TOKEN
-    required: true
-  mainBranch:
-    description: The name of the main branch
-    default: 'refs/heads/main'
-    required: false
   npmjsComToken:
     description: The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com
-    default: ''
-    required: false
+    required: true
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -47,23 +39,30 @@ runs:
   using: composite
   steps:
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.nodeVersion }}
         cache: 'npm'
         cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
+    - name: Install packages
+      shell: pwsh
+      run: npm ci
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Build application
+      shell: pwsh
+      run: npm run ${{ inputs.npmBuildCommand }}
+      working-directory: ${{ inputs.projectWorkspace }}
     - name: Release npm with script
       id: release
       shell: pwsh
       run: ${{ github.action_path }}/release-npm.ps1 `
-        -mainBranch ${{ inputs.mainBranch }} `
         -currentBranch ${{ github.ref }} `
-        -npmBuildScript "${{ inputs.npmBuildScript }}" `
-        -npmPublishCommand "${{ inputs.npmPublishCommand }}" `
-        -npmjsToken "${{ inputs.npmjsComToken }}" `
-        -githubToken ${{ inputs.githubToken }} `
         -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
-      env:
-        GITHUB_TOKEN: ${{ inputs.githubToken }}
+    - name: Publish npm
+      shell: pwsh
+      run: |
+        npm set registry "https://registry.npmjs.org"
+        npm set //registry.npmjs.org/:_authToken ${{ inputs.npmjsComToken }}
+        npm ${{ inputs.npmPublishCommand }}

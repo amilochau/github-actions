@@ -29,6 +29,8 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     environment: RELEASE
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - name: Set up a GitHub Release
@@ -38,5 +40,4 @@ jobs:
           versionMinor: ${{ github.event.inputs.versionMinor }}
           versionPatch: ${{ github.event.inputs.versionPatch }}
           versionUnstableSuffix: ${{ github.event.inputs.versionUnstableSuffix }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
           avoidGitHubPrerelease: ${{ github.event.inputs.avoidGitHubPrerelease }}

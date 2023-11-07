@@ -42,13 +42,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up a GitHub Release
-        uses: amilochau/github-actions/release/basic@v3
+        uses: amilochau/github-actions/release/basic@v4
         with:
           versionMajor: ${{ github.event.inputs.versionMajor }}
           versionMinor: ${{ github.event.inputs.versionMinor }}
           versionPatch: ${{ github.event.inputs.versionPatch }}
           versionUnstableSuffix: ${{ github.event.inputs.versionUnstableSuffix }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
           avoidGitHubPrerelease: ${{ github.event.inputs.avoidGitHubPrerelease }}
 ```
 
@@ -60,9 +59,7 @@ jobs:
 | `versionMinor` | The minor version - must be changed when you add functionality in a backward compatible manner | **true** |
 | `versionPatch` | The patch version - must be changed when you make backwards compatible bug fixes | **true** |
 | `versionUnstableSuffix` | The unstable suffix version - must be added when you want to create a pre-release | *false* | `''` |
-| `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
 | `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
-| `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs

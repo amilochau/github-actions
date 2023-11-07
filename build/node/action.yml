@@ -7,19 +7,16 @@ inputs:
     default: '.'
   nodeVersion:
     description: The Node.js version to use
-    default: 16.x
-  npmBuildScript:
-    description: The npm script to run, to build the application
+    default: 18.x
+  npmBuildCommand:
+    description: The npm command to run, to build the application
     default: 'build --if-present'
-  npmLintScript:
-    description: The npm script to run, to lint the application
+  npmLintCommand:
+    description: The npm command to run, to lint the application
     default: 'lint --if-present'
-  npmTestScript:
-    description: The npm script to run, to test the application
+  npmTestCommand:
+    description: The npm command to run, to test the application
     default: 'test --if-present'
-  relativeOutputPath:
-    description: The path of the built application, relative to the 'projectsToPublishPath'
-    default: '/dist'
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -31,24 +28,24 @@ runs:
   using: composite
   steps:
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v
       with:
         node-version: ${{ inputs.nodeVersion }}
         cache: 'npm'
         cache-dependency-path: "${{ inputs.projectWorkspace }}/package-lock.json"
-    - name: Build Node.js application with script
+    - name: Install packages
       shell: pwsh
-      run: ${{ github.action_path }}/build-node.ps1 `
-        -npmBuildScript "${{ inputs.npmBuildScript }}" `
-        -npmLintScript "${{ inputs.npmLintScript }}" `
-        -npmTestScript "${{ inputs.npmTestScript }}" `
-        -relativeOutputPath ${{ inputs.relativeOutputPath }} `
-        -verbosity ${{ inputs.verbosity }}
+      run: npm ci
       working-directory: ${{ inputs.projectWorkspace }}
-    - name: Upload artifact (compressed)
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-node-compressed
-        path: ${{ inputs.projectWorkspace }}/output-compressed
-        if-no-files-found: error
-        retention-days: 1
+    - name: Lint application
+      shell: pwsh
+      run: npm run ${{ inputs.npmLintCommand }}
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Build application
+      shell: pwsh
+      run: npm run ${{ inputs.npmBuildCommand }}
+      working-directory: ${{ inputs.projectWorkspace }}
+    - name: Test application
+      shell: pwsh
+      run: npm run ${{ inputs.npmTestCommand }}
+      working-directory: ${{ inputs.projectWorkspace }}
