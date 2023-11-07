@@ -20,6 +20,11 @@ on: workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v3
       - name: Deploy libraries

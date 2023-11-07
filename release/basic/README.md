@@ -39,6 +39,10 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - name: Set up a GitHub Release
