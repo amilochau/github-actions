@@ -9,14 +9,10 @@
   The patch version
   .PARAMETER versionUnstableSuffix
   The unstable suffix version
-  .PARAMETER mainBranch
-  The main branch
   .PARAMETER currentBranch
   The current branch
-  .PARAMETER githubToken
-  The GitHub token
-  .PARAMETER avoidGithubPrerelease
-  Avoid creating GitHub release for prerelease versions
+  .PARAMETER createGithubPrerelease
+  Create GitHub release for prerelease versions
   .PARAMETER verbosity
   The verbosity level
 #>
@@ -36,28 +32,21 @@ Param(
   [string]$versionUnstableSuffix,
 
   [parameter(Mandatory = $true)]
-  [string]$mainBranch,
-
-  [parameter(Mandatory = $true)]
   [string]$currentBranch,
   
   [parameter(Mandatory = $true)]
-  [string]$githubToken,
-  
-  [parameter(Mandatory = $true)]
-  [string]$avoidGithubPrerelease,
+  [string]$createGithubPrerelease,
   
   [parameter(Mandatory = $true)]
   [ValidateSet('minimal', 'normal', 'detailed')]
   [string]$verbosity
 )
 
-Write-Output "Main branch is: $mainBranch"
 Write-Output "Current branch is: $currentBranch"
 Write-Output "Verbosity is: $verbosity"
 
-$avoidGithubPrerelease = [System.Convert]::ToBoolean($avoidGithubPrerelease)
-Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
+$createGithubPrerelease = [System.Convert]::ToBoolean($createGithubPrerelease)
+Write-Output "Create GitHub prerelease is: $createGithubPrerelease"
 
 
 Write-Output '=========='
@@ -65,31 +54,31 @@ Write-Output 'Get current version...'
 
 if ($versionUnstableSuffix) {
   $version="v$versionMajor.$versionMinor.$versionPatch-$versionUnstableSuffix"
-  $match = $true
-  Write-Host "::set-output name=versionPrerelease::$true"
+  $isPrerelease = $true
+  Write-Host "versionPrerelease=$true" >> $Env:GITHUB_OUTPUT
 } else {
   $version="v$versionMajor.$versionMinor.$versionPatch"
-  $match = $false
-  Write-Host "::set-output name=versionPrerelease::$false"
+  $isPrerelease = $false
+  Write-Host "versionPrerelease=$false" >> $Env:GITHUB_OUTPUT
 }
 Write-Output "Set long version to $version"
-Write-Output "::set-output name=versionLong::$version"
+Write-Output "versionLong=$version" >> $Env:GITHUB_OUTPUT
 
 $versionShort="v$versionMajor"
 Write-Output "Set short version to $versionShort"
-Write-Output "::set-output name=versionShort::$versionShort"
+Write-Output "versionShort=$versionShort" >> $Env:GITHUB_OUTPUT
 
 Write-Output '=========='
 Write-Output 'Check prerelease if not main branch...'
-
-if ( ($currentBranch -ne $mainBranch) -And ($match -ne $true)) {
+$mainBranch = 'refs/heads/main'
+if ( ($currentBranch -ne $mainBranch) -And ($isPrerelease -ne $true)) {
   Write-Output 'You can not publish a stable release package if you are not in the main branch'
   throw 'You can not publish a stable release package if you are not in the main branch'
 }
 
 Write-Output '=========='
 Write-Output 'Remove precedent tags for short and long versions...'
-if ($match -ne $true) {
+if ($isPrerelease -ne $true) {
   git push origin :refs/tags/$versionShort
   Write-Output "Precedent tag for short version has been removed ($versionShort)."
 }
@@ -101,7 +90,7 @@ Write-Output 'Set short and long versions tags...'
 git config --global user.email "actions@github.com"
 git config --global user.name "Github Actions"
 
-if ($match -ne $true) {
+if ($isPrerelease -ne $true) {
   git tag -fa $versionShort -m "Version $versionShort"
   Write-Output "Short version tag has been set ($versionShort)."
 }
@@ -112,61 +101,17 @@ git push origin --tags
 
 Write-Output '=========='
 Write-Output 'Create GitHub Release...'
-if ($match -And $avoidGithubPrerelease) {
-  Write-Output 'No release must be created.'
-  return
-}
 
-$headers = @{
-  Accept = 'application/vnd.github.v3+json'
-  Authorization = "token $githubToken"
-  'Content-Type' = 'application/json'
-}
-
-Write-Output 'Generating release notes...'
-$releaseNote = '...'
-
-$response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/latest" -Method 'GET' -Headers $headers -SkipHttpErrorCheck
-if ($response.tag_name) {
-  $lastRelease = $response.tag_name
-  Write-Output "Latest release is $($lastRelease)."
-
-  $body = @{
-    tag_name = "$version";
-    previous_tag_name = $lastRelease;
-  } | ConvertTo-Json
-
-  $response = Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases/generate-notes" -Method 'POST' -Headers $headers -Body $body
-  $releaseNote = $response.body
-  
-  Write-Output 'Release note has been generated.'
-} else {
-  Write-Output 'No release has been found, release note can''t be generated.'
-}
-
-Write-Debug $releaseNote
-
-Write-Output 'Creating release...'
-$rawBody = @{
-  tag_name = "$version";
-  name = "Version $version";
-  body = $releaseNote;
-  draft = $false;
-  prerelease = $false;
-}
-
-if ($match -eq $false) {
+if ($isPrerelease -eq $false) {
   Write-Output 'A stable release must be created.'
-} elseif ($avoidGithubPrerelease -eq $false) {
+  gh release create "$version" --generate-notes --title "Version $version"
+  Write-Output 'Release has been created.'
+} elseif ($createGithubPrerelease -eq $true) {
   Write-Output 'A prerelease must be created.'
-  $rawBody.prerelease = $true;
+  gh release create "$version" --generate-notes --title "Version $version" --prerelease
+  Write-Output 'Release has been created.'
 } else {
-  Write-Output 'No release has been created!'
-  return
+  Write-Output 'No release has been created.'
 }
-
-$body = $rawBody | ConvertTo-Json
-Invoke-RestMethod "https://api.github.com/repos/$Env:GITHUB_REPOSITORY/releases" -Method 'POST' -Headers $headers -Body $body
-Write-Output 'Release has been created.'
 
 Write-Output "=========="

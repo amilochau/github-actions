@@ -41,6 +41,7 @@ foreach ($artifact in $artifacts) {
   $url = "/repos/$env:GITHUB_REPOSITORY/actions/artifacts/$artifactId"
   Write-Output "[$artifactName] Url is: $url"
 
+  # https://docs.github.com/en/rest/actions/artifacts#delete-an-artifact
   gh api --method DELETE -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $url | Out-Null
 
   Write-Output "[$artifactName] Artifact removed."
