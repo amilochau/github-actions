@@ -5,10 +5,8 @@
   The file where to get version (XML file)
   .PARAMETER currentBranch
   The current branch
-  .PARAMETER nugetOrgToken
-  The nuget.org token
-  .PARAMETER avoidGithubPrerelease
-  Avoid creating GitHub release for prerelease versions
+  .PARAMETER createGithubPrerelease
+  Create GitHub release for prerelease versions
   .PARAMETER verbosity
   The verbosity level
 #>
@@ -22,10 +20,7 @@ Param(
   [string]$currentBranch,
   
   [parameter(Mandatory = $true)]
-  [string]$nugetOrgToken,
-
-  [parameter(Mandatory = $true)]
-  [string]$avoidGithubPrerelease,
+  [string]$createGithubPrerelease,
 
   [parameter(Mandatory = $true)]
   [ValidateSet('minimal', 'normal', 'detailed')]
@@ -36,8 +31,8 @@ Write-Output "Version file is: $versionFile"
 Write-Output "Current branch is: $currentBranch"
 Write-Output "Verbosity is: $verbosity"
 
-$avoidGithubPrerelease = [System.Convert]::ToBoolean($avoidGithubPrerelease)
-Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
+$createGithubPrerelease = [System.Convert]::ToBoolean($createGithubPrerelease)
+Write-Output "Create GitHub prerelease is: $createGithubPrerelease"
 
 
 Write-Output '=========='
@@ -95,7 +90,7 @@ if ($match -eq $false) {
   Write-Output 'A stable release must be created.'
   gh release create "$version" --generate-notes --title "Version $version"
   Write-Output 'Release has been created.'
-} elseif ($avoidGithubPrerelease -eq $false) {
+} elseif ($createGithubPrerelease -eq $true) {
   Write-Output 'A prerelease must be created.'
   gh release create "$version" --generate-notes --title "Version $version" --prerelease
   $rawBody.prerelease = $true;

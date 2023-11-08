@@ -3,8 +3,8 @@
   This script creates a new release on GitHub and publishes a workspace as npm packages
   .PARAMETER currentBranch
   The current branch
-  .PARAMETER avoidGithubPrerelease
-  Avoid creating GitHub release for prerelease versions
+  .PARAMETER createGithubPrerelease
+  Create GitHub release for prerelease versions
   .PARAMETER verbosity
   The verbosity level
 #>
@@ -15,7 +15,7 @@ Param(
   [string]$currentBranch,
   
   [parameter(Mandatory = $true)]
-  [string]$avoidGithubPrerelease,
+  [string]$createGithubPrerelease,
   
   [parameter(Mandatory = $true)]
   [ValidateSet('minimal', 'normal', 'detailed')]
@@ -25,8 +25,8 @@ Param(
 Write-Output "Current branch is: $currentBranch"
 Write-Output "Verbosity is: $verbosity"
 
-$avoidGithubPrerelease = [System.Convert]::ToBoolean($avoidGithubPrerelease)
-Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
+$createGithubPrerelease = [System.Convert]::ToBoolean($createGithubPrerelease)
+Write-Output "Create GitHub prerelease is: $createGithubPrerelease"
 
 
 Write-Output '=========='
@@ -85,7 +85,7 @@ if ($match -eq $false) {
   Write-Output 'A stable release must be created.'
   gh release create "$version" --generate-notes --title "Version $version"
   Write-Output 'Release has been created.'
-} elseif ($avoidGithubPrerelease -eq $false) {
+} elseif ($createGithubPrerelease -eq $true) {
   Write-Output 'A prerelease must be created.'
   gh release create "$version" --generate-notes --title "Version $version" --prerelease
   $rawBody.prerelease = $true;

@@ -14,13 +14,12 @@ inputs:
   dotnetVersion:
     description: The .NET version to use
     default: '7.0.x'
-  avoidGitHubPrerelease:
-    description: Disable GitHub Release creation for unstable version
-    required: false
-    default: true
+  createGithubPrerelease:
+    description: Create GitHub Release for unstable version
+    default: false
   nugetOrgToken:
     description: The nuget.org token, typically get from a secret; used to publish projects to nuget.org
-    required: TRUE
+    required: true
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -57,8 +56,7 @@ runs:
       run: ${{ github.action_path }}/release-nuget.ps1 `
         -versionFile ${{ inputs.versionFile }} `
         -currentBranch ${{ github.ref }} `
-        -nugetOrgToken ${{ inputs.nugetOrgToken }} `
-        -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
+        -createGithubPrerelease ${{ inputs.createGithubPrerelease }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Publish packages to nuget.org

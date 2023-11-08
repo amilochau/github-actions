@@ -7,17 +7,16 @@ inputs:
     default: '.'
   nodeVersion:
     description: The Node.js version to use
-    default: 18.x
+    default: 20.x
   npmBuildCommand:
     description: The npm command to run, to build the application
     default: 'build --if-present'
   npmPublishCommand:
     description: The npm command to run, to publish the application
     default: 'publish'
-  avoidGitHubPrerelease:
-    description: Disable GitHub Release creation for unstable version
-    required: false
-    default: true
+  createGithubPrerelease:
+    description: Create GitHub Release for unstable version
+    default: false
   npmjsComToken:
     description: The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com
     required: true
@@ -57,7 +56,7 @@ runs:
       shell: pwsh
       run: ${{ github.action_path }}/release-npm.ps1 `
         -currentBranch ${{ github.ref }} `
-        -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
+        -createGithubPrerelease ${{ inputs.createGithubPrerelease }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Publish npm

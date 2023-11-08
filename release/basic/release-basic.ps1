@@ -11,8 +11,8 @@
   The unstable suffix version
   .PARAMETER currentBranch
   The current branch
-  .PARAMETER avoidGithubPrerelease
-  Avoid creating GitHub release for prerelease versions
+  .PARAMETER createGithubPrerelease
+  Create GitHub release for prerelease versions
   .PARAMETER verbosity
   The verbosity level
 #>
@@ -35,7 +35,7 @@ Param(
   [string]$currentBranch,
   
   [parameter(Mandatory = $true)]
-  [string]$avoidGithubPrerelease,
+  [string]$createGithubPrerelease,
   
   [parameter(Mandatory = $true)]
   [ValidateSet('minimal', 'normal', 'detailed')]
@@ -45,8 +45,8 @@ Param(
 Write-Output "Current branch is: $currentBranch"
 Write-Output "Verbosity is: $verbosity"
 
-$avoidGithubPrerelease = [System.Convert]::ToBoolean($avoidGithubPrerelease)
-Write-Output "Avoid GitHub prerelease is: $avoidGithubPrerelease"
+$createGithubPrerelease = [System.Convert]::ToBoolean($createGithubPrerelease)
+Write-Output "Create GitHub prerelease is: $createGithubPrerelease"
 
 
 Write-Output '=========='
@@ -54,11 +54,11 @@ Write-Output 'Get current version...'
 
 if ($versionUnstableSuffix) {
   $version="v$versionMajor.$versionMinor.$versionPatch-$versionUnstableSuffix"
-  $match = $true
+  $isPrerelease = $true
   Write-Host "versionPrerelease=$true" >> $Env:GITHUB_OUTPUT
 } else {
   $version="v$versionMajor.$versionMinor.$versionPatch"
-  $match = $false
+  $isPrerelease = $false
   Write-Host "versionPrerelease=$false" >> $Env:GITHUB_OUTPUT
 }
 Write-Output "Set long version to $version"
@@ -71,14 +71,14 @@ Write-Output "versionShort=$versionShort" >> $Env:GITHUB_OUTPUT
 Write-Output '=========='
 Write-Output 'Check prerelease if not main branch...'
 $mainBranch = 'refs/heads/main'
-if ( ($currentBranch -ne $mainBranch) -And ($match -ne $true)) {
+if ( ($currentBranch -ne $mainBranch) -And ($isPrerelease -ne $true)) {
   Write-Output 'You can not publish a stable release package if you are not in the main branch'
   throw 'You can not publish a stable release package if you are not in the main branch'
 }
 
 Write-Output '=========='
 Write-Output 'Remove precedent tags for short and long versions...'
-if ($match -ne $true) {
+if ($isPrerelease -ne $true) {
   git push origin :refs/tags/$versionShort
   Write-Output "Precedent tag for short version has been removed ($versionShort)."
 }
@@ -90,7 +90,7 @@ Write-Output 'Set short and long versions tags...'
 git config --global user.email "actions@github.com"
 git config --global user.name "Github Actions"
 
-if ($match -ne $true) {
+if ($isPrerelease -ne $true) {
   git tag -fa $versionShort -m "Version $versionShort"
   Write-Output "Short version tag has been set ($versionShort)."
 }
@@ -102,14 +102,13 @@ git push origin --tags
 Write-Output '=========='
 Write-Output 'Create GitHub Release...'
 
-if ($match -eq $false) {
+if ($isPrerelease -eq $false) {
   Write-Output 'A stable release must be created.'
   gh release create "$version" --generate-notes --title "Version $version"
   Write-Output 'Release has been created.'
-} elseif ($avoidGithubPrerelease -eq $false) {
+} elseif ($createGithubPrerelease -eq $true) {
   Write-Output 'A prerelease must be created.'
   gh release create "$version" --generate-notes --title "Version $version" --prerelease
-  $rawBody.prerelease = $true;
   Write-Output 'Release has been created.'
 } else {
   Write-Output 'No release has been created.'

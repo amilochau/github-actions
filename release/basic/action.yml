@@ -15,9 +15,8 @@ inputs:
     description: The unstable suffix version - must be added when you want to create a pre-release
     required: false
     default: ''
-  avoidGitHubPrerelease:
-    description: Disable GitHub Release creation for unstable version
-    required: false
+  createGithubPrerelease:
+    description: Create GitHub Release for unstable version
     default: false
   verbosity:
     description: The verbosity of the scripts
@@ -48,5 +47,5 @@ runs:
         -versionPatch ${{ inputs.versionPatch }} `
         -versionUnstableSuffix "${{ inputs.versionUnstableSuffix }}" `
         -currentBranch ${{ github.ref }} `
-        -avoidGithubPrerelease ${{ inputs.avoidGitHubPrerelease }} `
+        -createGithubPrerelease ${{ inputs.createGithubPrerelease }} `
         -verbosity ${{ inputs.verbosity }}

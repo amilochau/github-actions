@@ -31,10 +31,6 @@ on:
         description: Unstable suffix version - must be added when you want to create a pre-release
         required: false
         default: ''
-      avoidGitHubPrerelease:
-        description: Disable GitHub Release creation for unstable version
-        type: boolean
-        default: true
 
 jobs:
   release:
@@ -44,7 +40,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up a GitHub Release
         uses: amilochau/github-actions/release/basic@v4
         with:
@@ -52,7 +48,6 @@ jobs:
           versionMinor: ${{ github.event.inputs.versionMinor }}
           versionPatch: ${{ github.event.inputs.versionPatch }}
           versionUnstableSuffix: ${{ github.event.inputs.versionUnstableSuffix }}
-          avoidGitHubPrerelease: ${{ github.event.inputs.avoidGitHubPrerelease }}
 ```
 
 ### Inputs
@@ -63,7 +58,7 @@ jobs:
 | `versionMinor` | The minor version - must be changed when you add functionality in a backward compatible manner | **true** |
 | `versionPatch` | The patch version - must be changed when you make backwards compatible bug fixes | **true** |
 | `versionUnstableSuffix` | The unstable suffix version - must be added when you want to create a pre-release | *false* | `''` |
-| `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
+| `createGithubPrerelease` | Create GitHub Release for unstable version | *false* | `false` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs

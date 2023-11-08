@@ -19,7 +19,7 @@ runs:
   using: composite
   steps:
     - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
+      uses: hashicorp/setup-terraform@v3
     - name: Build Terraform modules with script
       shell: pwsh
       run: ${{ github.action_path }}/build-terraform.ps1 `

@@ -15,12 +15,10 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Deploy Functions application
-      uses: azure/powershell@v1
-      with:
-        inlineScript: ${{ github.action_path }}/clean-artifacts.ps1 `
+    - name: Clean artifacts
+      shell: pwsh
+      run: ${{ github.action_path }}/clean-artifacts.ps1 `
           -runId ${{ inputs.runId }} `
           -verbosity ${{ inputs.verbosity }}
-        azPSVersion: 7.1.0
       env:
         GH_TOKEN: ${{ github.token }}

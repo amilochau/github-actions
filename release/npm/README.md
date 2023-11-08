@@ -26,7 +26,7 @@ jobs:
       contents: write
       id-token: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Deploy libraries
         uses: amilochau/github-actions/release/npm@v4
 ```
@@ -36,10 +36,10 @@ jobs:
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectWorkspace` | The path to the project workspace | *false* | `.` |
-| `nodeVersion` | The Node.js version to use | *false* | `18.x` |
+| `nodeVersion` | The Node.js version to use | *false* | `20.x` |
 | `npmBuildCommand` | The npm command to run, to build the application | *false* | `build` |
 | `npmPublishCommand` | The npm command to run, to publish the application | *false* | `publish` |
-| `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `true` |
+| `createGithubPrerelease` | Create GitHub Release for unstable version | *false* | `false` |
 | `npmjsComToken` |  The npmjs.com token, typically get from a secret; used to publish projects to npmjs.com | **true** |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 

@@ -22,7 +22,7 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Deploy a Terraform module
         uses: amilochau/github-actions/deploy/terraform@v4
 ```
