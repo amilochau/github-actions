@@ -2,7 +2,7 @@
 
 ## Introduction
 
-`amilochau/github-actions/release/nuget` is a GitHub Action developed to pack .NET libraries as NuGet packages, publish them into GitHub Packages and nuget.org, and create a custom Release in the GitHub repository.
+`amilochau/github-actions/release/nuget` is a GitHub Action developed to pack .NET libraries as NuGet packages, publish them into nuget.org, and create a custom Release in the GitHub repository.
 
 ---
 
@@ -20,18 +20,19 @@ on: workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Deploy libraries
-        uses: amilochau/github-actions/release/nuget@v3
+        uses: amilochau/github-actions/release/nuget@v4
         with:
           projectsToBuild: ${{ env.PROJECTS_BUILD }}
           projectsToPublish: ${{ env.PROJECTS_SDK }}
-          dotnetVersion: ${{ env.DOTNET_VERSION }}
-          githubPackagesUrl: ${{ env.NUGET_URL }}
           versionFile: ${{ env.VERSION_FILE }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          avoidGitHubPrerelease: true
+          nugetOrgToken: ${{ secrets.NUGETORG_TOKEN }}
 ```
 
 ### Inputs
@@ -42,11 +43,8 @@ jobs:
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
 | `projectsToPublish` | The path to the projects to publish - can be a .csproj or a .sln file | **true** |
 | `dotnetVersion` | The .NET version to use | *false* | `''` | If you don't specify this, you should use your own `actions/setup-dotnet` task before |
-| `githubPackagesUrl` | The GitHub Packages URL where to push packages | *false* | `''` |
-| `githubToken` | The GitHub token, typically get from `secrets.GITHUB_TOKEN` | **true** |
-| `avoidGitHubPrerelease` | Disable GitHub Release creation for unstable version | *false* | `false` |
-| `nugetOrgToken` | The nuget.org token, typically get from a secret; used to publish projects to nuget.org | *false* | `''` |
-| `mainBranch` | The name of the main branch | *false* | `refs/heads/main` |
+| `createGithubPrerelease` | Create GitHub Release for unstable version | *false* | `false` |
+| `nugetOrgToken` | The nuget.org token, typically get from a secret; used to publish projects to nuget.org | **true** |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs

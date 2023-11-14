@@ -23,9 +23,11 @@ jobs:
   clean:
     name: Clean
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - name: Clean artifacts
-        uses: amilochau/github-actions/clean/artifacts@v3
+        uses: amilochau/github-actions/clean/artifacts@v4
 ```
 
 ### Inputs

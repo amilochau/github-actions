@@ -22,9 +22,9 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build AWS Lambda functions
-        uses: amilochau/github-actions/build/lambda-functions@v3
+        uses: amilochau/github-actions/build/lambda-functions@v4
         with:
           solutionPath: './api/Functions.sln'
 ```
