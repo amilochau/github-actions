@@ -27,7 +27,8 @@ runs:
     - name: Build Terraform modules with script
       shell: pwsh
       run: ${{ github.action_path }}/build-terraform.ps1 `
-        -modulesPath "${{ inputs.modulesPath }}" `
         -modulesPathDepth "${{ inputs.modulesPathDepth }}" `
         -workspaceName "${{ inputs.workspaceName }}" `
         -verbosity ${{ inputs.verbosity }}
+      working-directory: ${{ inputs.modulePath }}
+      

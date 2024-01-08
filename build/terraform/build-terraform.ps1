@@ -1,8 +1,6 @@
 <#
   .SYNOPSIS
   This script builds and tests Terraform modules
-  .PARAMETER modulesPath
-  The path to the Terraform modules to build
   .PARAMETER modulesPathDepth
   The depth of the path search, to find the Terraform modules to build
   .PARAMETER workspaceName
@@ -14,9 +12,6 @@
 [CmdletBinding()]
 Param(
   [parameter(Mandatory = $true)]
-  [string]$modulesPath,
-  
-  [parameter(Mandatory = $true)]
   [int]$modulesPathDepth,
 
   [parameter(Mandatory = $false)]
@@ -27,7 +22,6 @@ Param(
   [string]$verbosity
 )
 
-Write-Output "Modules path is: $modulesPath"
 Write-Output "Modules path depth is: $modulesPathDepth"
 Write-Output "Workspace name is: $workspaceName"
 Write-Output "Verbosity is: $verbosity"
@@ -36,7 +30,7 @@ Write-Output '=========='
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $pathFilter = 'main.tf'
-$childItems = Get-ChildItem -Path $modulesPath -Recurse -Depth $modulesPathDepth -Filter $pathFilter -Force
+$childItems = Get-ChildItem -Recurse -Depth $modulesPathDepth -Filter $pathFilter -Force
 $childItemsCount = $childItems.Count
 Write-Output "Items found: $childItemsCount"
 

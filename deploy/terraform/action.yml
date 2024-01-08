@@ -23,7 +23,6 @@ runs:
     - name: Build Terraform modules with script
       shell: pwsh
       run: ${{ github.action_path }}/deploy-terraform.ps1 `
-        -modulePath ${{ inputs.modulePath }} `
         -workspaceName ${{ inputs.workspaceName }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.modulePath }}
