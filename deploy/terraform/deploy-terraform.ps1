@@ -1,8 +1,6 @@
 <#
   .SYNOPSIS
   This script deploy a Terraform module
-  .PARAMETER modulePath
-  The path to the Terraform module to deploy
   .PARAMETER workspaceName
   The name of the Terraform workspace
   .PARAMETER verbosity
@@ -12,9 +10,6 @@
 [CmdletBinding()]
 Param(
   [parameter(Mandatory = $true)]
-  [string]$modulePath,
-
-  [parameter(Mandatory = $true)]
   [string]$workspaceName,
   
   [parameter(Mandatory = $true)]
@@ -22,7 +17,6 @@ Param(
   [string]$verbosity
 )
 
-Write-Output "Modules path is: $modulesPath"
 Write-Output "Workspace name is: $workspaceName"
 Write-Output "Verbosity is: $verbosity"
 
