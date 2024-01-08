@@ -19,7 +19,7 @@ Param(
   [parameter(Mandatory = $true)]
   [int]$modulesPathDepth,
 
-  [parameter(Mandatory = $true)]
+  [parameter(Mandatory = $false)]
   [string]$workspaceName,
   
   [parameter(Mandatory = $true)]
@@ -29,6 +29,7 @@ Param(
 
 Write-Output "Modules path is: $modulesPath"
 Write-Output "Modules path depth is: $modulesPathDepth"
+Write-Output "Workspace name is: $workspaceName"
 Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
