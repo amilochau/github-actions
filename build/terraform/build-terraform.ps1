@@ -68,8 +68,8 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
     throw 1
   }
 
-  Write-Output $workspaceName
-  if (-not ([string]::IsNullOrWhiteSpace($workspaceName))) {   
+  Write-Output "$workspaceName"
+  if (-not ([string]::IsNullOrWhiteSpace("$workspaceName"))) {   
     Write-Output "Terraform workspace selection..."
     terraform workspace select $workspaceName -no-color 2>&1 # @todo Add ' -or-create' back
     if (!$?) {
@@ -88,7 +88,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
     Write-Output $planResult
   } else {
     Write-Output "No workspace defined: no plan performed."
-    Write-Output $workspaceName
+    Write-Output "$workspaceName"
   }
 }
 
