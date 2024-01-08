@@ -29,5 +29,5 @@ runs:
       run: ${{ github.action_path }}/build-terraform.ps1 `
         -modulesPath "${{ inputs.modulesPath }}" `
         -modulesPathDepth "${{ inputs.modulesPathDepth }}" `
-        -workspaceName ${{ inputs.workspaceName }} `
+        -workspaceName "${{ inputs.workspaceName }}" `
         -verbosity ${{ inputs.verbosity }}

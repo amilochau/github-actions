@@ -19,7 +19,7 @@ Param(
   [parameter(Mandatory = $true)]
   [int]$modulesPathDepth,
 
-  [parameter(Mandatory = $true)]
+  [parameter(Mandatory = $false)]
   [string]$workspaceName,
   
   [parameter(Mandatory = $true)]
@@ -29,7 +29,6 @@ Param(
 
 Write-Output "Modules path is: $modulesPath"
 Write-Output "Modules path depth is: $modulesPathDepth"
-Write-Output "Workspace name is: $workspaceName"
 Write-Output "Workspace name is: $workspaceName"
 Write-Output "Verbosity is: $verbosity"
 
@@ -68,29 +67,27 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
     Write-Output "::error title=Terraform failed::Terraform validation failed"
     throw 1
   }
-
-  Write-Output "$workspaceName"
-  if (-not ([string]::IsNullOrWhiteSpace($workspaceName))) {   
-    Write-Output "Terraform workspace selection..."
-    terraform workspace select $workspaceName -no-color 2>&1 # @todo Add ' -or-create' back
-    if (!$?) {
-      Write-Output "::error title=Terraform failed::Terraform workspace selection failed"
-      throw 1
-    }
-
-    Write-Output "Terraform plan..."
-    $planResult = terraform plan -var-file="hosts/$workspaceName.tfvars" -input=false -no-color -lock=false 2>&1
-    if (!$?) {
-      Write-Output $planResult
-      Write-Output "::error title=Terraform failed::Terraform plan failed"
-      throw 1
-    }
-    
-    Write-Output $planResult
-  } else {
-    Write-Output "No workspace defined: no plan performed."
-    Write-Output "$workspaceName"
+}
+  
+if (-not ([string]::IsNullOrWhiteSpace($workspaceName))) {   
+  Write-Output "Terraform workspace selection..."
+  terraform workspace select $workspaceName -no-color 2>&1 # @todo Add ' -or-create' back
+  if (!$?) {
+    Write-Output "::error title=Terraform failed::Terraform workspace selection failed"
+    throw 1
   }
+
+  Write-Output "Terraform plan..."
+  $planResult = terraform plan -var-file="hosts/$workspaceName.tfvars" -input=false -no-color -lock=false 2>&1
+  if (!$?) {
+    Write-Output $planResult
+    Write-Output "::error title=Terraform failed::Terraform plan failed"
+    throw 1
+  }
+  
+  Write-Output $planResult
+} else {
+  Write-Output "No workspace defined: no plan performed."
 }
 
 Write-Output '=========='
