@@ -68,7 +68,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
     throw 1
   }
 
-  if ($workspaceName) {   
+  if (!!$workspaceName) {   
     Write-Output "Terraform workspace selection..."
     terraform workspace select $workspaceName -no-color 2>&1 # @todo Add ' -or-create' back
     if (!$?) {
