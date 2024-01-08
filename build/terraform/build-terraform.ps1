@@ -5,6 +5,8 @@
   The path to the Terraform modules to build
   .PARAMETER modulesPathDepth
   The depth of the path search, to find the Terraform modules to build
+  .PARAMETER workspaceName
+  The name of the Terraform workspace
   .PARAMETER verbosity
   The verbosity level
 #>
@@ -16,6 +18,9 @@ Param(
   
   [parameter(Mandatory = $true)]
   [int]$modulesPathDepth,
+
+  [parameter(Mandatory = $true)]
+  [string]$workspaceName,
   
   [parameter(Mandatory = $true)]
   [ValidateSet('minimal', 'normal', 'detailed')]
@@ -60,6 +65,25 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
   if (!$?) {
     Write-Output "::error title=Terraform failed::Terraform validation failed"
     throw 1
+  }
+
+  if ($workspaceName) {   
+    Write-Output "Terraform workspace selection..."
+    terraform workspace select $workspaceName -no-color 2>&1 # @todo Add ' -or-create' back
+    if (!$?) {
+      Write-Output "::error title=Terraform failed::Terraform workspace selection failed"
+      throw 1
+    }
+
+    Write-Output "Terraform plan..."
+    $planResult = terraform plan -var-file="hosts/$workspaceName.tfvars" -input=false -no-color -lock=false 2>&1
+    if (!$?) {
+      Write-Output $planResult
+      Write-Output "::error title=Terraform failed::Terraform plan failed"
+      throw 1
+    }
+    
+    Write-Output $planResult  
   }
 }
 

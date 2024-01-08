@@ -8,6 +8,9 @@ inputs:
   modulesPathDepth:
     description: The depth of the path search, to find the Terraform modules to build
     default: '1'
+  workspaceName:
+    description: The name of the Terraform workspace where to plan changes
+    default: ''
   verbosity:
     description: The verbosity of the scripts
     default: minimal
@@ -25,4 +28,5 @@ runs:
       run: ${{ github.action_path }}/build-terraform.ps1 `
         -modulesPath "${{ inputs.modulesPath }}" `
         -modulesPathDepth "${{ inputs.modulesPathDepth }}" `
+        -workspaceName "${{ inputs.workspaceName }}" `
         -verbosity ${{ inputs.verbosity }}
