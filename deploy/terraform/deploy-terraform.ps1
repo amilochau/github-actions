@@ -24,7 +24,6 @@ Param(
 
 Write-Output "Modules path is: $modulesPath"
 Write-Output "Workspace name is: $workspaceName"
-Write-Output "Workspace name is: $workspaceName"
 Write-Output "Verbosity is: $verbosity"
 
 Write-Output '=========='
