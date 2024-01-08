@@ -71,7 +71,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
   
 if (-not ([string]::IsNullOrWhiteSpace($workspaceName))) {   
   Write-Output "Terraform workspace selection..."
-  terraform workspace select $workspaceName -no-color 2>&1 # @todo Add ' -or-create' back
+  terraform workspace select -or-create $workspaceName -no-color 2>&1 # @todo Add ' -or-create' back
   if (!$?) {
     Write-Output "::error title=Terraform failed::Terraform workspace selection failed"
     throw 1
