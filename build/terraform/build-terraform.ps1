@@ -84,7 +84,10 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
       throw 1
     }
     
-    Write-Output $planResult  
+    Write-Output $planResult
+  } else {
+    Write-Output "No workspace defined."
+    Write-Output $workspaceName
   }
 }
 
