@@ -19,7 +19,7 @@ Param(
   [parameter(Mandatory = $true)]
   [int]$modulesPathDepth,
 
-  [parameter(Mandatory = $false)]
+  [parameter(Mandatory = $true)]
   [string]$workspaceName,
   
   [parameter(Mandatory = $true)]
@@ -69,7 +69,7 @@ $childItems | Foreach-Object -ThrottleLimit 5 -Parallel {
   }
 
   Write-Output "$workspaceName"
-  if (-not ([string]::IsNullOrWhiteSpace("$workspaceName"))) {   
+  if (-not ([string]::IsNullOrWhiteSpace($workspaceName))) {   
     Write-Output "Terraform workspace selection..."
     terraform workspace select $workspaceName -no-color 2>&1 # @todo Add ' -or-create' back
     if (!$?) {
