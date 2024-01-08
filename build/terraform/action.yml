@@ -30,5 +30,5 @@ runs:
         -modulesPathDepth "${{ inputs.modulesPathDepth }}" `
         -workspaceName "${{ inputs.workspaceName }}" `
         -verbosity ${{ inputs.verbosity }}
-      working-directory: ${{ inputs.modulePath }}
+      working-directory: ${{ inputs.modulesPath }}
       
