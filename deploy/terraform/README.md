@@ -31,7 +31,7 @@ jobs:
 
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
-| `modulePath` | The path to the Terraform module to deploy | *false* | `.tf` |
+| `modulePath` | The path to the Terraform module to deploy | *false* | `infra` |
 | `workspaceName` | The name of the Terraform workspace | *false* | `default` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
