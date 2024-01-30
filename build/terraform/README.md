@@ -31,7 +31,7 @@ jobs:
 
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
-| `modulesPath` | The path to the Terraform modules to build | *false* | `.tf` |
+| `modulesPath` | The path to the Terraform modules to build | *false* | `infra` |
 | `modulesPathDepth` | The path to the projects to test - can be a .csproj or a .sln file | *false* | `1` |
 | `workspaceName` | The name of the Terraform workspace where to plan changes | *false* | `""` | Requires valid credentials to access the state file |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |

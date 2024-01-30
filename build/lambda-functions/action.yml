@@ -25,7 +25,7 @@ runs:
         -publishPathFilter "${{ inputs.publishPathFilter }}" `
         -verbosity ${{ inputs.verbosity }}
     - name: Upload artifact (compressed)
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-lambda-functions-compressed
         path: ./output-compressed

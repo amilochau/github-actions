@@ -4,7 +4,7 @@ author: Antoine Milochau
 inputs:
   modulePath:
     description: The path to the Terraform module to deploy
-    default: '.tf'
+    default: 'infra'
   workspaceName:
     description: The name of the Terraform workspace
     default: default
