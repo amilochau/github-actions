@@ -10,7 +10,7 @@ inputs:
     default: default
   verbosity:
     description: The verbosity of the scripts
-    default: minimal
+    default: quiet
     options:
     - quiet
     - minimal

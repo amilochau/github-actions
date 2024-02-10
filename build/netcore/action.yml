@@ -13,7 +13,7 @@ inputs:
     default: '8.0.x'
   verbosity:
     description: The verbosity of the scripts
-    default: minimal
+    default: quiet
     options:
     - quiet
     - minimal
