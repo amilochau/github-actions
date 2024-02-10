@@ -24,9 +24,11 @@ inputs:
     description: The verbosity of the scripts
     default: minimal
     options:
+    - quiet
     - minimal
     - normal
     - detailed
+    - diagnostic
 outputs:
   versionNumber:
     description: The version as defined in the Git tag

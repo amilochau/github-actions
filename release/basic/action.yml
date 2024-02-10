@@ -22,9 +22,11 @@ inputs:
     description: The verbosity of the scripts
     default: minimal
     options:
+    - quiet
     - minimal
     - normal
     - detailed
+    - diagnostic
 outputs:
   versionLong:
     description: The long version as defined in the long Git tag
