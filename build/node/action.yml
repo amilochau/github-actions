@@ -21,9 +21,11 @@ inputs:
     description: The verbosity of the scripts
     default: minimal
     options:
+    - quiet
     - minimal
     - normal
     - detailed
+    - diagnostic
 runs:
   using: composite
   steps:

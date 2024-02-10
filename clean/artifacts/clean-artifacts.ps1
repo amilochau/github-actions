@@ -13,7 +13,7 @@ Param(
   [string]$runId,
 
   [parameter(Mandatory = $true)]
-  [ValidateSet('minimal', 'normal', 'detailed')]
+  [ValidateSet('quiet', 'minimal', 'normal', 'detailed', 'diagnostic')]
   [string]$verbosity
 )
 

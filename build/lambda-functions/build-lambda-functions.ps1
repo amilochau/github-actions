@@ -18,7 +18,7 @@ Param(
   [string]$publishPathFilter, # Typically '*/bin/Release/net7.0/linux-x64/publish/bootstrap'
   
   [parameter(Mandatory = $true)]
-  [ValidateSet('minimal', 'normal', 'detailed')]
+  [ValidateSet('quiet', 'minimal', 'normal', 'detailed', 'diagnostic')]
   [string]$verbosity
 )
 
