@@ -30,9 +30,18 @@ runs:
     - name: Restore packages
       shell: pwsh
       run: dotnet restore ${{ inputs.projectsToBuild }} --verbosity ${{ inputs.VERBOSITY }}
+      env:
+        DOTNET_NOLOGO: true
+        DOTNET_CLI_TELEMETRY_OPTOUT: true
     - name: Build application
       shell: pwsh
       run: dotnet build ${{ inputs.projectsToBuild }} --configuration Release --no-restore --verbosity ${{ inputs.VERBOSITY }}
+      env:
+        DOTNET_NOLOGO: true
+        DOTNET_CLI_TELEMETRY_OPTOUT: true
     - name: Test application
       shell: pwsh
       run: dotnet test ${{ inputs.projectsToTest }} --configuration Release --no-restore --no-build --verbosity ${{ inputs.VERBOSITY }}
+      env:
+        DOTNET_NOLOGO: true
+        DOTNET_CLI_TELEMETRY_OPTOUT: true
