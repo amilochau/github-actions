@@ -15,7 +15,7 @@ Param(
   [string]$solutionPath, # Typically './src/proto-api/Milochau.Proto.Functions.sln'
 
   [parameter(Mandatory = $true)]
-  [string]$publishPathFilter, # Typically '*/bin/Release/net7.0/linux-x64/publish/bootstrap'
+  [string]$publishPathFilter, # Typically '*/bin/Release/net8.0/linux-arm64/publish/bootstrap'
   
   [parameter(Mandatory = $true)]
   [ValidateSet('quiet', 'minimal', 'normal', 'detailed', 'diagnostic')]
@@ -35,7 +35,7 @@ $dir = (Get-Location).Path
 Write-Output "Pull Docker image, used to build functions"
 docker pull $image -q
 
-docker run --rm -v "$($dir):/src" -w /src $image dotnet publish "$solutionPath" -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd
+docker run --rm -v "$($dir):/src" -w /src $image dotnet publish "$solutionPath" -c Release -r linux-arm64 --sc true -p:BuildSource=AwsCmd
 if (!$?) {
   Write-Output "::error title=Build failed::Build failed"
   throw 1
