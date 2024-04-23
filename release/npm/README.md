@@ -29,6 +29,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Deploy libraries
         uses: amilochau/github-actions/release/npm@v4
+        with:
+          npmjsComToken: ${{ secrets.NPMJSCOM_TOKEN }}
 ```
 
 ### Inputs
