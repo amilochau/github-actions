@@ -44,7 +44,8 @@ jobs:
 | `projectsToPublish` | The path to the projects to publish - can be a .csproj or a .sln file | **true** |
 | `dotnetVersion` | The .NET version to use | *false* | `''` | If you don't specify this, you should use your own `actions/setup-dotnet` task before |
 | `createGithubPrerelease` | Create GitHub Release for unstable version | *false* | `false` |
-| `nugetOrgToken` | The nuget.org token, typically get from a secret; used to publish projects to nuget.org | **true** |
+| `destination` | The destination of the package | *false* | `nugetorg` |
+| `nugetOrgToken` | The nuget.org token, typically get from a secret; used to publish projects to nuget.org | *false* | Required if `destination` is set to `nugetorg` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
