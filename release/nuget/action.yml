@@ -17,9 +17,14 @@ inputs:
   createGithubPrerelease:
     description: Create GitHub Release for unstable version
     default: false
+  destination:
+    description: The destination of the package
+    default: nugetorg
+    options:
+    - nugetorg
+    - githubpackages
   nugetOrgToken:
     description: The nuget.org token, typically get from a secret; used to publish projects to nuget.org
-    required: true
   verbosity:
     description: The verbosity of the scripts
     default: quiet
@@ -71,6 +76,14 @@ runs:
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Publish packages to nuget.org
+      if: inputs.destination == 'nugetorg'
+      shell: pwsh
+      run: dotnet nuget push ./build/*.nupkg --api-key ${{ inputs.nugetOrgToken }} --source https://api.nuget.org/v3/index.json
+      env:
+        DOTNET_NOLOGO: true
+        DOTNET_CLI_TELEMETRY_OPTOUT: true
+    - name: Publich packages to GitHub Packages
+      if: inputs.destination == 'githubpackages'
       shell: pwsh
       run: dotnet nuget push ./build/*.nupkg --api-key ${{ inputs.nugetOrgToken }} --source https://api.nuget.org/v3/index.json
       env:
