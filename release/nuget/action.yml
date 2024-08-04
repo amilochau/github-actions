@@ -44,6 +44,10 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v4
       with:
