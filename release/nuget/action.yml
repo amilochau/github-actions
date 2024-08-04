@@ -13,7 +13,7 @@ inputs:
     required: true
   dotnetVersion:
     description: The .NET version to use
-    default: '7.0.x'
+    default: '8.0.x'
   createGithubPrerelease:
     description: Create GitHub Release for unstable version
     default: false
