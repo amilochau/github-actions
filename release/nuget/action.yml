@@ -87,7 +87,7 @@ runs:
       shell: pwsh
       run: |
         dotnet nuget add source --username ${{ github.repository_owner }} --password ${{ env.GH_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
-        dotnet nuget push --source github
+        dotnet nuget push ./build/*.nupkg --source github
       env:
         DOTNET_NOLOGO: true
         DOTNET_CLI_TELEMETRY_OPTOUT: true
