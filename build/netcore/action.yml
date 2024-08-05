@@ -11,6 +11,9 @@ inputs:
   dotnetVersion:
     description: The .NET version to use
     default: '8.0.x'
+  useGitHubPackages:
+    description: Whether to use GitHub Packages
+    default: true
   verbosity:
     description: The verbosity of the scripts
     default: quiet
@@ -27,6 +30,10 @@ runs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ inputs.dotnetVersion }}
+    - name: Add GitHub Packages as NuGet feed
+      if: inputs.useGitHubPackages
+      shell: pwsh
+      run: dotnet nuget add source --username ${{ github.repository_owner }} --password ${{ env.GH_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
     - name: Restore packages
       shell: pwsh
       run: dotnet restore ${{ inputs.projectsToBuild }} --verbosity ${{ inputs.VERBOSITY }}
