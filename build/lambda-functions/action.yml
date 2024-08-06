@@ -20,9 +20,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Get .NET version
-      shell: pwsh
-      run: dotnet --version
     - name: Add GitHub Packages as NuGet feed
       shell: pwsh
       run: dotnet nuget add source --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
