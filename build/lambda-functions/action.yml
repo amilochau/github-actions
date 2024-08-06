@@ -25,7 +25,7 @@ runs:
       run: dotnet nuget add source --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
     - name: Restore packages
       shell: pwsh
-      run: dotnet restore ${{ inputs.solutionPath }} --verbosity ${{ inputs.VERBOSITY }}
+      run: dotnet restore ${{ inputs.solutionPath }} --runtime linux-x64 --verbosity ${{ inputs.VERBOSITY }}
       env:
         DOTNET_NOLOGO: true
         DOTNET_CLI_TELEMETRY_OPTOUT: true
