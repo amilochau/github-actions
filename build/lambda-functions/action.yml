@@ -29,8 +29,6 @@ runs:
         -solutionPath "${{ inputs.solutionPath }}" `
         -publishPathFilter "${{ inputs.publishPathFilter }}" `
         -verbosity ${{ inputs.verbosity }}
-      #env: # @todo Clean that
-      #  GH_TOKEN: ${{ github.token }}
     - name: Upload artifact (compressed)
       uses: actions/upload-artifact@v4
       with:
