@@ -35,8 +35,7 @@ Write-Output '=========='
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $image = "public.ecr.aws/sam/build-dotnet8:latest-x86_64"
-$solutionDir = [System.IO.Path]::GetDirectoryName($solutionPath)
-$dir = $solutionDir # (Get-Location).Path
+$dir = (Get-Location).Path
 
 Write-Output "Pull Docker image, used to build functions"
 docker pull $image -q
