@@ -22,23 +22,18 @@ Param(
   [string]$verbosity
 )
 
-$repositoryOwner = $env:GITHUB_REPOSITORY_OWNER
-$githubToken = $env:GH_TOKEN
-
 Write-Output "Solution path is: $solutionPath"
 Write-Output "Publish path filter is: $publishPathFilter"
 Write-Output "Verbosity is: $verbosity"
-Write-Output "Token length is: $($githubToken.length)"
-Write-Output "Repository owner is: $repositoryOwner"
 
 Write-Output '=========='
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
-$image = "public.ecr.aws/sam/build-dotnet8:latest-x86_64"
-$solutionDir = [System.IO.Path]::GetDirectoryName($solutionPath)
-$dir = $solutionDir # (Get-Location).Path
+#$image = "public.ecr.aws/sam/build-dotnet8:latest-x86_64"  @todo Clean that
+#$solutionDir = [System.IO.Path]::GetDirectoryName($solutionPath)
+#$dir = $solutionDir # (Get-Location).Path
 
-Write-Output "Pull Docker image, used to build functions"
+#Write-Output "Pull Docker image, used to build functions"
 #docker pull $image -q
 
 #docker run --rm -v "$($dir):/src" -w /src $image ; 
