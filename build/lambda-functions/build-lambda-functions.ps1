@@ -41,7 +41,7 @@ Write-Output "Pull Docker image, used to build functions"
 docker pull $image -q
 
 
-$commandAddSource = "dotnet nuget add source --username $repositoryOwner --password $githubToken --store-password-in-clear-text --name github https://nuget.pkg.github.com/$repositoryOwner/index.json"
+$commandAddSource = "dotnet new nugetconfig && dotnet nuget add source --username $repositoryOwner --password $githubToken --store-password-in-clear-text --name github https://nuget.pkg.github.com/$repositoryOwner/index.json"
 $commandPublish = "dotnet publish $solutionPath -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd"
 
 docker run --rm -v "$($dir):/src" -w /src $image $commandAddSource && $commandPublish
