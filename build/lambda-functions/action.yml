@@ -20,9 +20,9 @@ inputs:
 runs:
   using: composite
   steps:
-    #- name: Add GitHub Packages as NuGet feed
-    #  shell: pwsh
-    #  run: dotnet nuget add source --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+    - name: Add GitHub Packages as NuGet feed
+      shell: pwsh
+      run: dotnet nuget add source --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
     - name: Build AWS Lambda functions with script
       shell: pwsh
       run: ${{ github.action_path }}/build-lambda-functions.ps1 `
