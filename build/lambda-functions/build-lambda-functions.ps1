@@ -25,6 +25,7 @@ Param(
 Write-Output "Solution path is: $solutionPath"
 Write-Output "Publish path filter is: $publishPathFilter"
 Write-Output "Verbosity is: $verbosity"
+Write-Output "Token is: $($env:GH_TOKEN)"
 
 Write-Output '=========='
 

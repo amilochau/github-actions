@@ -20,12 +20,17 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Add GitHub Packages as NuGet feed
+      shell: pwsh
+      run: dotnet nuget add source --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
     - name: Build AWS Lambda functions with script
       shell: pwsh
       run: ${{ github.action_path }}/build-lambda-functions.ps1 `
         -solutionPath "${{ inputs.solutionPath }}" `
         -publishPathFilter "${{ inputs.publishPathFilter }}" `
         -verbosity ${{ inputs.verbosity }}
+      env:
+        GH_TOKEN: ${{ github.token }}
     - name: Upload artifact (compressed)
       uses: actions/upload-artifact@v4
       with:
