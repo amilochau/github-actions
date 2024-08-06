@@ -22,10 +22,14 @@ Param(
   [string]$verbosity
 )
 
+$repositoryOwner = $env:GITHUB_REPOSITORY_OWNER
+$githubToken = $env:GH_TOKEN
+
 Write-Output "Solution path is: $solutionPath"
 Write-Output "Publish path filter is: $publishPathFilter"
 Write-Output "Verbosity is: $verbosity"
-Write-Output "Token is: $($env:GH_TOKEN)"
+Write-Output "Token length is: $($githubToken.length)"
+Write-Output "Repository owner is: $repositoryOwner"
 
 Write-Output '=========='
 
@@ -36,7 +40,11 @@ $dir = (Get-Location).Path
 Write-Output "Pull Docker image, used to build functions"
 docker pull $image -q
 
-docker run --rm -v "$($dir):/src" -w /src $image dotnet publish "$solutionPath" -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd
+
+$commandAddSource = "dotnet nuget add source --username $repositoryOwner --password ""$githubToken"" --store-password-in-clear-text --name github ""https://nuget.pkg.github.com/$repositoryOwner/index.json"""
+$commandPublish = "dotnet publish ""$solutionPath"" -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd"
+
+docker run --rm -v "$($dir):/src" -w /src $image "$commandAddSource && $commandPublish"
 if (!$?) {
   Write-Output "::error title=Build failed::Build failed"
   throw 1
