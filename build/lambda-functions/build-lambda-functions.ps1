@@ -44,7 +44,7 @@ docker pull $image -q
 $commandAddSource = "dotnet nuget add source --username $repositoryOwner --password $githubToken --store-password-in-clear-text --name github https://nuget.pkg.github.com/$repositoryOwner/index.json"
 $commandPublish = "dotnet publish $solutionPath -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd"
 
-docker run --rm -v "$($dir):/src" -w /src $image "$commandAddSource && $commandPublish"
+docker run --rm -v "$($dir):/src" -w /src $image $commandAddSource && $commandPublish
 if (!$?) {
   Write-Output "::error title=Build failed::Build failed"
   throw 1
