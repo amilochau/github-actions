@@ -42,7 +42,7 @@ Write-Output "Pull Docker image, used to build functions"
 docker pull $image -q
 
 docker run --rm -v "$($dir):/src" -w /src $image `
-  dotnet nuget add source --username $repositoryOwner --password $githubToken --store-password-in-clear-text --name github https://nuget.pkg.github.com/$repositoryOwner/index.json ; `
+  ; `
   dotnet publish $solutionPath -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd
 if (!$?) {
   Write-Output "::error title=Build failed::Build failed"
