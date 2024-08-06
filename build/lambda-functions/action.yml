@@ -29,6 +29,12 @@ runs:
       env:
         DOTNET_NOLOGO: true
         DOTNET_CLI_TELEMETRY_OPTOUT: true
+    - name: Build application
+      shell: pwsh
+      run: dotnet build ${{ inputs.solutionPath }} --configuration Release --no-restore --runtime linux-x64 --verbosity ${{ inputs.VERBOSITY }}
+      env:
+        DOTNET_NOLOGO: true
+        DOTNET_CLI_TELEMETRY_OPTOUT: true
     - name: Build AWS Lambda functions with script
       shell: pwsh
       run: ${{ github.action_path }}/build-lambda-functions.ps1 `
