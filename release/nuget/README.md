@@ -23,7 +23,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     permissions:
-      contents: write
+      contents: write # Required to checkout repository and create release
+      packages: write # Required to fetch and push NuGet packages
     steps:
       - uses: actions/checkout@v4
       - name: Deploy libraries

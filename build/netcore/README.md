@@ -21,6 +21,9 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # Required to checkout repository
+      packages: read # Required to fetch NuGet packages
     steps:
       - uses: actions/checkout@v4
       - name: Build and test projects

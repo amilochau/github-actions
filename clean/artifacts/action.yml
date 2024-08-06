@@ -22,5 +22,3 @@ runs:
       run: ${{ github.action_path }}/clean-artifacts.ps1 `
           -runId ${{ inputs.runId }} `
           -verbosity ${{ inputs.verbosity }}
-      env:
-        GH_TOKEN: ${{ github.token }}
