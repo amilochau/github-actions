@@ -61,6 +61,8 @@ runs:
         -createGithubPrerelease ${{ inputs.createGithubPrerelease }} `
         -verbosity ${{ inputs.verbosity }}
       working-directory: ${{ inputs.projectWorkspace }}
+      env:
+        GH_TOKEN: ${{ github.token }} # Required by GitHub CLI
     - name: Publish npm
       shell: pwsh
       run: |

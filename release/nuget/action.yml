@@ -80,6 +80,8 @@ runs:
         -currentBranch ${{ github.ref }} `
         -createGithubPrerelease ${{ inputs.createGithubPrerelease }} `
         -verbosity ${{ inputs.verbosity }}
+      env:
+        GH_TOKEN: ${{ github.token }} # Required by GitHub CLI
       working-directory: ${{ inputs.projectWorkspace }}
     - name: Publish packages to nuget.org
       if: inputs.destination == 'nugetorg'
