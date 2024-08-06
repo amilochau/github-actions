@@ -39,10 +39,16 @@ $solutionDir = [System.IO.Path]::GetDirectoryName($solutionPath)
 $solutionFileName = [System.IO.Path]::GetFileName($solutionPath)
 $dir = $solutionDir # (Get-Location).Path
 
+Write-Output "Old dir: $((Get-Location).Path)"
+Write-Output "New dir: $dir"
+
+
 Write-Output "Pull Docker image, used to build functions"
 docker pull $image -q
 
-docker run --rm -v "$($dir):/src" -w /src $image dotnet publish $solutionFileName -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd
+docker run --rm -v "$($dir):/src" -w /src $image `
+  dotnet nuget add source --username $repositoryOwner --password $githubToken --store-password-in-clear-text --name github https://nuget.pkg.github.com/$repositoryOwner/index.json --configfile nuget.config ; `
+  dotnet publish $solutionFileName -c Release -r linux-x64 --sc true -p:BuildSource=AwsCmd
 if (!$?) {
   Write-Output "::error title=Build failed::Build failed"
   throw 1
