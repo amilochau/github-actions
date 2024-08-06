@@ -22,8 +22,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: read
+      contents: read # Required to checkout repository
+      packages: read # Required to fetch NuGet packages
     steps:
       - uses: actions/checkout@v4
       - name: Build and test projects
@@ -41,7 +41,6 @@ jobs:
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
 | `projectsToTest` | The path to the projects to test - can be a .csproj or a .sln file | **true** |
 | `dotnetVersion` | The .NET version to use | *false* | `''` | If you don't specify this, you should use your own `actions/setup-dotnet` task before |
-| `useGitHubPackages` | Whether to use GitHub Packages | *false* | `true` | Use the GitHub packages from current owner or organization |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
