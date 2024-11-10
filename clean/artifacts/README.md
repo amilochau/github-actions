@@ -28,13 +28,16 @@ jobs:
     steps:
       - name: Clean artifacts
         uses: amilochau/github-actions/clean/artifacts@v4
+        with:
+          runId: ${{ github.event.workflow_run.id }}
 ```
 
 ### Inputs
 
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
-| `runId` | The id of the GitHub Actions run from which to clean artifacts | **true** |
+| `runId` | The id of the GitHub Actions run from which to clean artifacts | *false* |
+| `artifactId` | The id of the GitHub Actions artifact to remove | *false* |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs

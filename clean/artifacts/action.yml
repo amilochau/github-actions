@@ -4,7 +4,10 @@ author: Antoine Milochau
 inputs:
   runId:
     description: The id of the GitHub Actions run from which to clean artifacts
-    required: true
+    required: false
+  artifactId:
+    description: The id of the GitHub Actions artifact to remove
+    required: false
   verbosity:
     description: The verbosity of the scripts
     default: quiet
@@ -20,7 +23,8 @@ runs:
     - name: Clean artifacts
       shell: pwsh
       run: ${{ github.action_path }}/clean-artifacts.ps1 `
-        -runId ${{ inputs.runId }} `
+        -runId "${{ inputs.runId }}" `
+        -artifactId "${{ inputs.artifactId }}" `
         -verbosity ${{ inputs.verbosity }}
       env:
         GH_TOKEN: ${{ github.token }} # Required by GitHub CLI
