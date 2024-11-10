@@ -40,7 +40,7 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectsToBuild` | The path to the projects to build - can be a .csproj or a .sln file | **true** |
 | `projectsToTest` | The path to the projects to test - can be a .csproj or a .sln file | **true** |
-| `dotnetVersion` | The .NET version to use | *false* | `''` | If you don't specify this, you should use your own `actions/setup-dotnet` task before |
+| `dotnetVersion` | The .NET version to use | *false* | `'9.0.x'` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs

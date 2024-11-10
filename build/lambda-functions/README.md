@@ -30,6 +30,7 @@ jobs:
         uses: amilochau/github-actions/build/lambda-functions@v4
         with:
           solutionPath: './api/Functions.sln'
+          dotnetVersion: ${{ env.DOTNET_VERSION }}
 ```
 
 ### Inputs
@@ -38,6 +39,7 @@ jobs:
 | ----- | ----------- | -------- | ------------- | ------- |
 | `solutionPath` | The path to the solution file, with functions to deploy | **true** |
 | `publishPathFilter` | The path of the files to publish, as a filter to be tested to determine the files to add in the artifact | **true** |
+| `dotnetVersion` | The .NET version to use | *false* | `'9.0.x'` |
 | `verbosity` | The verbosity of the scripts | *false* | `minimal` | Set to `minimal`, `normal` or `detailed` |
 
 ### Outputs
