@@ -15,7 +15,7 @@ Param(
   [string]$solutionPath, # Typically './src/proto-api/Milochau.Proto.Functions.sln'
 
   [parameter(Mandatory = $true)]
-  [string]$publishPathFilter, # Typically '*/bin/Release/net8.0/linux-x64/publish/bootstrap'
+  [string]$publishPathFilter, # Typically '*/bin/Release/net9.0/linux-x64/publish/bootstrap'
   
   [parameter(Mandatory = $true)]
   [ValidateSet('quiet', 'minimal', 'normal', 'detailed', 'diagnostic')]

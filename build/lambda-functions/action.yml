@@ -10,7 +10,7 @@ inputs:
     required: true
   dotnetVersion:
     description: The .NET version to use
-    default: '8.0.x'
+    default: '9.0.x'
   verbosity:
     description: The verbosity of the scripts
     default: quiet
