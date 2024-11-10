@@ -7,7 +7,7 @@ inputs:
     default: '.'
   nodeVersion:
     description: The Node.js version to use
-    default: 20.x
+    default: 22.x
   npmBuildCommand:
     description: The npm command to run, to build the application
     default: 'build --if-present'

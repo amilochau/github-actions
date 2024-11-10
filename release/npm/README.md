@@ -38,7 +38,7 @@ jobs:
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectWorkspace` | The path to the project workspace | *false* | `.` |
-| `nodeVersion` | The Node.js version to use | *false* | `20.x` |
+| `nodeVersion` | The Node.js version to use | *false* | `22.x` |
 | `npmBuildCommand` | The npm command to run, to build the application | *false* | `build` |
 | `npmPublishCommand` | The npm command to run, to publish the application | *false* | `publish` |
 | `createGithubPrerelease` | Create GitHub Release for unstable version | *false* | `false` |
