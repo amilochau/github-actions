@@ -8,6 +8,9 @@ inputs:
   publishPathFilter:
     description: The path of the files to publish, as a filter to be tested to determine the files to add in the artifact
     required: true
+  dotnetVersion:
+    description: The .NET version to use
+    default: '8.0.x'
   verbosity:
     description: The verbosity of the scripts
     default: quiet
@@ -20,6 +23,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ inputs.dotnetVersion }}
     - name: Add GitHub Packages as NuGet feed
       shell: pwsh
       run: dotnet nuget add source --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
