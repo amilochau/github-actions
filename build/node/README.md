@@ -32,7 +32,7 @@ jobs:
 | Input | Description | Required | Default value | Comment |
 | ----- | ----------- | -------- | ------------- | ------- |
 | `projectWorkspace` | The path to the project to build | *false* | `.` |
-| `nodeVersion` | The Node.js version to use | *false* | `20.x` |
+| `nodeVersion` | The Node.js version to use | *false* | `22.x` |
 | `npmBuildCommand` | The npm command to run, to build the application | *false* | `build` |
 | `npmLintCommand` | The npm command to run, to lint the application | *false* | `lint` |
 | `npmTestCommand` | The npm command to run, to test the application | *false* | `test` |
