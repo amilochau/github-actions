@@ -51,3 +51,10 @@ runs:
       env:
         DOTNET_NOLOGO: true
         DOTNET_CLI_TELEMETRY_OPTOUT: true
+    - name: Submit dependencies to GitHub Dependency Graph
+      uses: advanced-security/component-detection-dependency-submission-action@v0.0.4
+    - name: Review changes in dependencies
+      uses: actions/dependency-review-action@v4
+      if: github.event_name == 'pull_request'
+      with:
+        fail-on-severity: high
