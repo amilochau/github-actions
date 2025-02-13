@@ -22,7 +22,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     permissions:
-      contents: read # Required to checkout repository
+      id-token: write # Required for Dependency Submission
+      contents: write # Required to checkout repository, and post Dependency Review results
       packages: read # Required to fetch NuGet packages
     steps:
       - uses: actions/checkout@v4
